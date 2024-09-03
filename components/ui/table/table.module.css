@@ -1,7 +1,6 @@
 .vandMenuCategoryTable {
-    @apply bg-vand-primary-2/95 /* sticky bottom-0 */ overflow-auto
-    flex items-center justify-evenly gap-6
-    rounded-t-2xl px-6 py-4 w-full;
+    @apply bg-vand-primary-2/95 sticky bottom-0 overflow-auto
+    rounded-t-2xl p-5 w-full;
 
     /*  scrollbarWidth: "none"*/ /* For Firefox */
     /*  msOverflowStyle: "none"  */ /* For Internet Explorer and Edge */

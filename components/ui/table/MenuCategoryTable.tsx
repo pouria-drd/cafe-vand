@@ -8,17 +8,24 @@ const MenuCategoryTable = async () => {
 
     return (
         <div className={`${styles.vandMenuCategoryTable} glass`}>
-            {/* Display an error message if there was an error fetching data */}
-            {result.error && <p className="text-red-500">{result.error}</p>}
+            <div className="overflow-auto flex items-center justify-evenly gap-6 w-full">
+                {/* Display an error message if there was an error fetching data */}
+                {result.error && <p className="text-red-500">{result.error}</p>}
 
-            {/* Map over the categories and render a MenuCategoryCard for each one */}
-            {result.data && result.data.length > 0 ? (
-                result.data.map((category) => (
-                    <MenuCategoryCard key={category.id} category={category} />
-                ))
-            ) : (
-                <p className="text-center">هیچ دسته ای در سایت موجود نیست</p>
-            )}
+                {/* Map over the categories and render a MenuCategoryCard for each one */}
+                {result.data && result.data.length > 0 ? (
+                    result.data.map((category) => (
+                        <MenuCategoryCard
+                            key={category.id}
+                            category={category}
+                        />
+                    ))
+                ) : (
+                    <p className="text-center">
+                        هیچ دسته ای در سایت موجود نیست
+                    </p>
+                )}
+            </div>
         </div>
     );
 };

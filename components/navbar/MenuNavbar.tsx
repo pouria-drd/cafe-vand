@@ -1,13 +1,10 @@
-import Link from "next/link";
-import { VandIcon } from "../icons";
+import { CafeVandLogo } from "../ui";
 import styles from "./navbar.module.css";
 
 const MenuNavbar = () => {
     return (
         <nav className={`${styles.vandMenuNavbar} glass`}>
-            <Link href={"/"}>
-                <VandIcon className="size-14" />
-            </Link>
+            <CafeVandLogo />
         </nav>
     );
 };

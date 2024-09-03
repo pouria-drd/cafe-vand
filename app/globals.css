@@ -17,6 +17,10 @@
     @apply bg-vand-primary-4;
 }
 
+body {
+    @apply bg-vand-primary-1/95;
+}
+
 * {
     scroll-behavior: smooth;
     @apply font-yekanX;
@@ -30,6 +34,11 @@
 .green-glow:hover {
     transition: all 0.2s ease-in-out;
     filter: drop-shadow(0px 0px 10px rgba(38, 140, 67, 0.4));
+}
+
+.pattern {
+    background-image: radial-gradient(#268c43 0.5px, #0b140c 0.5px);
+    background-size: 15px 15px;
 }
 
 /* ---------------------------------------------------------------------- */

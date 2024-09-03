@@ -1,5 +1,5 @@
 .vandMenuNavbar {
     @apply bg-vand-primary-2/95 sticky top-0 rounded-b-2xl
-    flex items-center justify-center
+    flex items-center justify-self-end
     px-4 py-8 h-20 w-full;
 }
