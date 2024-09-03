@@ -6,15 +6,15 @@
 /* Scroll area */
 
 ::-webkit-scrollbar {
-    @apply bg-gray-200;
+    @apply bg-vand-primary-1 w-1 h-2;
 }
 
 ::-webkit-scrollbar-thumb:horizontal {
-    @apply bg-gray-400;
+    @apply bg-vand-primary-4;
 }
 
 ::-webkit-scrollbar-thumb:vertical {
-    @apply bg-slate-400;
+    @apply bg-vand-primary-4;
 }
 
 * {
@@ -27,8 +27,9 @@
     -webkit-backdrop-filter: blur(20px) saturate(150%);
 }
 
-.app-px {
-    @apply px-4 sm:px-12 md:px-20 lg:px-28 xl:px-36 2xl:px-48;
+.green-glow:hover {
+    transition: all 0.2s ease-in-out;
+    filter: drop-shadow(0px 0px 10px rgba(38, 140, 67, 0.4));
 }
 
 /* ---------------------------------------------------------------------- */
