@@ -18,7 +18,7 @@ const MenuCategoryCard = (props: MenuCategoryProps) => {
                 src={category.icon}
                 alt={`${category.name} icon`}
             />
-            <h2 className="text-vand-secondary text-center text-xs truncate">
+            <h2 className="text-vand-secondary-main text-center text-xs truncate">
                 {category.name}
             </h2>
         </div>

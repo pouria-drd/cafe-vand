@@ -8,7 +8,7 @@ const CafeVandLogo = () => {
                 <VandIcon className="size-12" />
             </span>
 
-            <h1 className="text-vand-secondary text-3xl font-bold font-sans">
+            <h1 className="text-vand-secondary-main text-3xl font-bold font-sans">
                 Cafe Vand
             </h1>
         </Link>
