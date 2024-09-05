@@ -1,0 +1,13 @@
+.vandMenu {
+    @apply bg-vand-primary-2 sticky bottom-0 z-10 px-4 py-6 w-full;
+}
+
+.vandMenuProductList {
+    @apply bg-vand-primary-2/75 flex flex-col items-center gap-4
+    text-vand-secondary-main
+    size-full flex-1 overflow-auto py-4;
+}
+
+.vandMenuProductCard {
+    @apply flex justify-between items-center bg-vand-primary-1 px-6 py-6 w-full;
+}

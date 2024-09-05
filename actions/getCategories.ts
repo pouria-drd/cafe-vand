@@ -6,7 +6,7 @@ import { MenuCategory } from "@/types/menu";
  * Interface representing the result of the getCategories function.
  * Contains either the fetched data or an error message.
  */
-export interface GetCategoriesResult {
+export interface FetchMenuResult {
     /** The array of Category objects if the fetch is successful */
     data?: MenuCategory[];
 
@@ -18,7 +18,7 @@ export interface GetCategoriesResult {
  * Fetches categories data from the specified URL in the environment variable BASE_MENU_API.
  * The function returns either the data fetched or an error message if the fetch fails.
  *
- * @returns {Promise<GetCategoriesResult>} An object containing either the array of categories or an error message.
+ * @returns {Promise<FetchMenuResult>} An object containing either the array of categories or an error message.
  *
  * @example
  * ```typescript
@@ -30,7 +30,7 @@ export interface GetCategoriesResult {
  * }
  * ```
  */
-export async function getCategories(): Promise<GetCategoriesResult> {
+export async function getCategories(): Promise<FetchMenuResult> {
     // Retrieve the BASE_MENU_API from environment variables. If not defined, use an empty string.
     const url: string = process.env.BASE_MENU_API || "";
 
@@ -55,7 +55,6 @@ export async function getCategories(): Promise<GetCategoriesResult> {
 
         // Parse the JSON response into an array of Category objects.
         const data: MenuCategory[] = await response.json();
-
         // Return the data if the fetch and parsing were successful.
         return { data };
     } catch (error) {

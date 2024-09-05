@@ -14,14 +14,5 @@ export interface MenuCategory {
     icon: string;
     createdAt: Date;
     updatedAt: Date;
-}
-
-export interface MenuCategoryDetail {
-    id: number;
-    name: string;
-    slug: string;
-    icon: string;
-    createdAt: Date;
-    updatedAt: Date;
     products: MenuProduct[];
 }
