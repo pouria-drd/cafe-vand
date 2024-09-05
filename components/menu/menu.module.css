@@ -9,5 +9,5 @@
 }
 
 .vandMenuProductCard {
-    @apply flex justify-between items-center bg-vand-primary-1 px-6 py-6 w-full;
+    @apply flex justify-between items-center bg-vand-primary-2 px-6 py-6 w-full;
 }
