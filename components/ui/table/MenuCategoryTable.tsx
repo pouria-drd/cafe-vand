@@ -10,10 +10,12 @@ const MenuCategoryTable = async () => {
         <div className={`${styles.vandMenuCategoryTable} glass`}>
             <div className="overflow-auto flex items-center justify-evenly gap-6 w-full">
                 {/* Display an error message if there was an error fetching data */}
-                {result.error && <p className="text-red-500">{result.error}</p>}
-
-                {/* Map over the categories and render a MenuCategoryCard for each one */}
-                {result.data && result.data.length > 0 ? (
+                {result.error ? (
+                    <p className="text-red-500 text-center r2l">
+                        {result.error}
+                    </p>
+                ) : /* Check if there are categories and render them */
+                result.data && result.data.length > 0 ? (
                     result.data.map((category) => (
                         <MenuCategoryCard
                             key={category.id}
@@ -21,8 +23,8 @@ const MenuCategoryTable = async () => {
                         />
                     ))
                 ) : (
-                    <p className="text-center">
-                        هیچ دسته ای در سایت موجود نیست
+                    <p className="text-center text-vand-secondary-main r2l">
+                        هیچ دسته ای یافت نشد!
                     </p>
                 )}
             </div>

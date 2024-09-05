@@ -9,7 +9,7 @@ const config: Config = {
     theme: {
         extend: {
             backgroundImage: {
-                bg1: "url('/images/bg1.jpg')",
+                bgImage: "url('/images/bgImage.jpg')",
             },
             fontFamily: {
                 yekanX: "IRANYekanX",
