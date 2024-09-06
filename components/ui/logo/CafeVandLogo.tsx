@@ -13,7 +13,7 @@ const CafeVandLogo = (props: CafeVandLogoProps) => {
             href={props.href || "/"}
             className="flex items-center gap-2 w-fit">
             <span>
-                <VandIcon className="size-11 sm:size-12 transition-all" />
+                <VandIcon className="size-10 sm:size-12 transition-all" />
             </span>
 
             <h1
