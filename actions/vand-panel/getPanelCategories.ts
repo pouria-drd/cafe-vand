@@ -1,18 +1,6 @@
 "use server";
 
-import { PanelCategory } from "@/types/panel";
-
-/**
- * Interface representing the result of the getPanelCategories function.
- * Contains either the fetched data or an error message.
- */
-export interface getPanelCategoryResult {
-    /** The array of Category objects if the fetch is successful */
-    data?: PanelCategory[];
-
-    /** The error message if the fetch fails */
-    error?: string;
-}
+import { getPanelCategoryResult, PanelCategory } from "@/types/panel";
 
 /**
  * Fetches categories data.
@@ -31,21 +19,25 @@ export interface getPanelCategoryResult {
  * ```
  */
 export async function getPanelCategories(): Promise<getPanelCategoryResult> {
-    // Retrieve the BASE_MENU_API from environment variables. If not defined, use an empty string.
-    const url: string = process.env.BASE_MENU_API || "";
-
     // Introduce a delay for testing purposes (e.g., 2 seconds)
     // await new Promise((resolve) => setTimeout(resolve, 2000));
 
-    // Check if the URL is available; return an error if not.
-    if (!url || url === "") {
-        return { error: "آدرسی برای دریافت داده از سرور وجود ندارد!" };
+    // Retrieve the API base URL from environment variables
+    const baseUrl: string | undefined = process.env.Base_API;
+
+    // Validate if the API base URL is properly set
+    if (!baseUrl) {
+        return { error: "آدرس API برای دریافت داده از سرور تعریف نشده است!" };
     }
+
+    const url = `${baseUrl}/panel/categories/`;
 
     try {
         // Attempt to fetch data from the URL.
         const response = await fetch(url);
-        // const response = await fetch(url, { cache: "no-cache" }); // Disable caching for real-time data
+        // const response = await fetch(url, {
+        //     cache: "no-cache",// Disable caching for real-time data
+        // });
 
         // If the response is not successful, return an error.
         if (!response.ok) {

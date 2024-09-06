@@ -5,7 +5,7 @@
 /* ---------------------------------------------------------------------- */
 /* Scroll area */
 
-::-webkit-scrollbar {
+/* ::-webkit-scrollbar {
     @apply bg-vand-primary-1 w-1 h-2;
 }
 
@@ -15,7 +15,7 @@
 
 ::-webkit-scrollbar-thumb:vertical {
     @apply bg-vand-primary-4;
-}
+} */
 
 * {
     scroll-behavior: smooth;

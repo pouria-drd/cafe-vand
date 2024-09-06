@@ -1,18 +1,6 @@
 "use server";
 
-import { MenuCategory } from "@/types/menu";
-
-/**
- * Interface representing the result of the fetchMenu function.
- * Contains either the fetched data or an error message.
- */
-export interface FetchMenuResult {
-    /** The array of Category objects if the fetch is successful */
-    data?: MenuCategory[];
-
-    /** The error message if the fetch fails */
-    error?: string;
-}
+import { FetchMenuResult, MenuCategory } from "@/types/menu";
 
 /**
  * Fetches menu data.
@@ -31,16 +19,18 @@ export interface FetchMenuResult {
  * ```
  */
 export async function fetchMenu(): Promise<FetchMenuResult> {
-    // Retrieve the BASE_MENU_API from environment variables. If not defined, use an empty string.
-    const url: string = process.env.BASE_MENU_API || "";
-
     // Introduce a delay for testing purposes (e.g., 2 seconds)
     // await new Promise((resolve) => setTimeout(resolve, 2000));
 
-    // Check if the URL is available; return an error if not.
-    if (!url || url === "") {
-        return { error: "آدرسی برای دریافت داده از سرور وجود ندارد!" };
+    // Retrieve the API base URL from environment variables
+    const baseUrl: string | undefined = process.env.Base_API;
+
+    // Validate if the API base URL is properly set
+    if (!baseUrl) {
+        return { error: "آدرس API برای دریافت داده از سرور تعریف نشده است!" };
     }
+
+    const url = `${baseUrl}/menu/`;
 
     try {
         // Attempt to fetch data from the URL.
