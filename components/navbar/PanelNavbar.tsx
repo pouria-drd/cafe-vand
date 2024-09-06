@@ -12,7 +12,10 @@ const PanelNavbar = () => {
     return (
         <>
             <nav className={`${styles.vandPanelNavbar}`}>
-                <CafeVandLogo className="text-vand-secondary-2" />
+                <CafeVandLogo
+                    href="/vand-panel"
+                    className="text-vand-secondary-2"
+                />
                 <NavLinks />
                 <MenuButton onClick={() => setIsOpen(true)} />
             </nav>

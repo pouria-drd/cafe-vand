@@ -3,12 +3,15 @@ import { cn } from "@/lib/utils";
 import { VandIcon } from "@/components/icons";
 
 interface CafeVandLogoProps {
+    href?: string;
     className?: string;
 }
 
 const CafeVandLogo = (props: CafeVandLogoProps) => {
     return (
-        <Link href={"/"} className="flex items-center gap-2 w-fit">
+        <Link
+            href={props.href || "/"}
+            className="flex items-center gap-2 w-fit">
             <span>
                 <VandIcon className="size-11 sm:size-12 transition-all" />
             </span>
