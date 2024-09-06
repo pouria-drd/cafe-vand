@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { MenuCategoryList, MenuProductList } from ".";
 import styles from "./menu.module.css";
-import { MenuCategory, MenuProduct } from "@/types/menu";
+import { MenuCategory } from "@/types/menu";
+import { MenuCategoryList, MenuProductList } from ".";
 import { FetchMenuResult } from "@/actions/getCategories";
 
 interface MenuProps {

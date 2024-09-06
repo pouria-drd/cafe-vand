@@ -4,8 +4,8 @@ import { MenuCategoryCard } from ".";
 import { MenuCategory } from "@/types/menu";
 
 interface MenuCategoryListProps {
-    categories: MenuCategory[]; // Expect an array of categories
-    selectedCategory: MenuCategory | null; // Expect a single selected category
+    categories: MenuCategory[];
+    selectedCategory: MenuCategory | null;
     onCategorySelect: (category: MenuCategory) => void;
 }
 

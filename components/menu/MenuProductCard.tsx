@@ -7,12 +7,10 @@ interface MenuProductCardProps {
 const MenuProductCard = (props: MenuProductCardProps) => {
     const { product } = props;
     return (
-        <>
-            <div className={`${styles.vandMenuProductCard} r2l`}>
-                <span>{product.name}</span>
-                <span>{product.price} T</span>
-            </div>
-        </>
+        <div className={`${styles.vandMenuProductCard} r2l`}>
+            <span>{product.name}</span>
+            <span>{product.price} T</span>
+        </div>
     );
 };
 

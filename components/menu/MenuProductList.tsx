@@ -23,9 +23,7 @@ const MenuProductList = (props: MenuProductListProps) => {
     return (
         <div className={`${styles.vandMenuProductList} glass`}>
             {props.products.map((product) => (
-                <>
-                    <MenuProductCard key={product.id} product={product} />
-                </>
+                <MenuProductCard key={product.id} product={product} />
             ))}
         </div>
     );
