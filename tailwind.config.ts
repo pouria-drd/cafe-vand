@@ -12,6 +12,7 @@ const config: Config = {
                 bgImage: "url('/images/bgImage.jpg')",
             },
             fontFamily: {
+                vazir: "Vazir",
                 yekanX: "IRANYekanX",
             },
             colors: {

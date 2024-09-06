@@ -19,7 +19,7 @@
 
 * {
     scroll-behavior: smooth;
-    @apply font-yekanX;
+    @apply font-vazir;
 }
 
 .glass {
@@ -68,4 +68,25 @@
 
 .l2r {
     direction: ltr;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Vazir area */
+
+@font-face {
+    font-family: "Vazir";
+    font-style: normal;
+    font-weight: normal;
+    src: url("../fonts/Vazir/Vazir-Regular-FD.woff") format("woff"),
+        url("../fonts/Vazir/Vazir-Regular-FD.woff2") format("woff2"),
+        url("../fonts/Vazir/Vazir-Regular-FD.ttf") format("ttf");
+}
+
+@font-face {
+    font-family: "Vazir";
+    font-style: normal;
+    font-weight: bold;
+    src: url("../fonts/Vazir/Vazir-Bold-FD.woff") format("woff"),
+        url("../fonts/Vazir/Vazir-Bold-FD.woff2") format("woff2"),
+        url("../fonts/Vazir/Vazir-Bold-FD.ttf") format("ttf");
 }

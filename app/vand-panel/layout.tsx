@@ -12,10 +12,12 @@ interface VandPanelLayoutProps {
 
 function VandPanelLayout(props: VandPanelLayoutProps) {
     return (
-        <>
+        <main className="flex flex-col min-h-screen">
             <PanelNavbar />
-            <main className="p-4">{props.children}</main>
-        </>
+            <section className="bg-gray-100 flex-1 p-4">
+                {props.children}
+            </section>
+        </main>
     );
 }
 
