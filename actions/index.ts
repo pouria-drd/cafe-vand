@@ -1,1 +1,1 @@
-export { getCategories } from "./getCategories";
+export { fetchMenu } from "./menu/fetchMenu";

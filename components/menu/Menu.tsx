@@ -4,7 +4,7 @@ import { useState } from "react";
 import styles from "./menu.module.css";
 import { MenuCategory } from "@/types/menu";
 import { MenuCategoryList, MenuProductList } from ".";
-import { FetchMenuResult } from "@/actions/getCategories";
+import { FetchMenuResult } from "@/actions/menu/fetchMenu";
 
 interface MenuProps {
     result: FetchMenuResult;

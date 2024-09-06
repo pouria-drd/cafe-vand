@@ -15,7 +15,7 @@ export interface FetchMenuResult {
 }
 
 /**
- * Fetches categories data from the specified URL in the environment variable BASE_MENU_API.
+ * Fetches menu data.
  * The function returns either the data fetched or an error message if the fetch fails.
  *
  * @returns {Promise<FetchMenuResult>} An object containing either the array of categories or an error message.
@@ -30,7 +30,7 @@ export interface FetchMenuResult {
  * }
  * ```
  */
-export async function getCategories(): Promise<FetchMenuResult> {
+export async function fetchMenu(): Promise<FetchMenuResult> {
     // Retrieve the BASE_MENU_API from environment variables. If not defined, use an empty string.
     const url: string = process.env.BASE_MENU_API || "";
 
