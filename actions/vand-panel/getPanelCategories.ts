@@ -1,24 +1,24 @@
 "use server";
 
-import { MenuCategory } from "@/types/menu";
+import { PanelCategory } from "@/types/panel";
 
 /**
- * Interface representing the result of the fetchMenu function.
+ * Interface representing the result of the getPanelCategories function.
  * Contains either the fetched data or an error message.
  */
-export interface FetchMenuResult {
+export interface getPanelCategoryResult {
     /** The array of Category objects if the fetch is successful */
-    data?: MenuCategory[];
+    data?: PanelCategory[];
 
     /** The error message if the fetch fails */
     error?: string;
 }
 
 /**
- * Fetches menu data.
+ * Fetches categories data.
  * The function returns either the data fetched or an error message if the fetch fails.
  *
- * @returns {Promise<FetchMenuResult>} An object containing either the array of categories or an error message.
+ * @returns {Promise<getPanelCategoryResult>} An object containing either the array of categories or an error message.
  *
  * @example
  * ```typescript
@@ -30,7 +30,7 @@ export interface FetchMenuResult {
  * }
  * ```
  */
-export async function fetchMenu(): Promise<FetchMenuResult> {
+export async function getPanelCategories(): Promise<getPanelCategoryResult> {
     // Retrieve the BASE_MENU_API from environment variables. If not defined, use an empty string.
     const url: string = process.env.BASE_MENU_API || "";
 
@@ -55,7 +55,7 @@ export async function fetchMenu(): Promise<FetchMenuResult> {
         }
 
         // Parse the JSON response into an array of Category objects.
-        const data: MenuCategory[] = await response.json();
+        const data: PanelCategory[] = await response.json();
         // Return the data if the fetch and parsing were successful.
         return { data };
     } catch (error) {
