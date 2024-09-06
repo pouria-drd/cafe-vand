@@ -1,13 +1,29 @@
+"use client";
+
+import { useState } from "react";
 import NavLinks from "./NavLinks";
-import { CafeVandLogo } from "../ui";
 import styles from "./navbar.module.css";
+import Sidebar from "../sidebar/Sidebar";
+import { CafeVandLogo, MenuButton } from "../ui";
 
 const PanelNavbar = () => {
+    const [isOpen, setIsOpen] = useState<boolean>(false);
+
     return (
-        <nav className={`${styles.vandPanelNavbar}`}>
-            <CafeVandLogo className="text-vand-secondary-2" />
-            <NavLinks />
-        </nav>
+        <>
+            <nav className={`${styles.vandPanelNavbar}`}>
+                <CafeVandLogo className="text-vand-secondary-2" />
+                <NavLinks />
+                <MenuButton onClick={() => setIsOpen(true)} />
+            </nav>
+
+            <Sidebar
+                isOpen={isOpen}
+                onClick={() => {
+                    setIsOpen(false);
+                }}
+            />
+        </>
     );
 };
 
