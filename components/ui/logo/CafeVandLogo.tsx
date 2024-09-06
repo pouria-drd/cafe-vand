@@ -1,14 +1,23 @@
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 import { VandIcon } from "@/components/icons";
 
-const CafeVandLogo = () => {
+interface CafeVandLogoProps {
+    className?: string;
+}
+
+const CafeVandLogo = (props: CafeVandLogoProps) => {
     return (
         <Link href={"/"} className="flex items-center gap-2">
             <span>
-                <VandIcon className="size-12" />
+                <VandIcon className="size-11 sm:size-12 transition-all" />
             </span>
 
-            <h1 className="text-vand-secondary-main text-3xl font-bold font-sans">
+            <h1
+                className={cn(
+                    "text-vand-secondary-main text-2xl sm:text-3xl font-bold font-sans transition-all",
+                    props.className
+                )}>
                 Cafe Vand
             </h1>
         </Link>

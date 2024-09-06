@@ -2,3 +2,6 @@
     @apply bg-vand-primary-2 sticky top-0
     flex items-center z-10 px-4 py-8 h-20 w-full;
 }
+
+.vandPanelNavbar {
+}

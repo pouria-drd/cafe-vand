@@ -1,6 +1,6 @@
-import { getCategories } from "@/actions";
 import { Menu } from "@/components/menu";
-import MenuNavbar from "@/components/navbar/MenuNavbar";
+import { getCategories } from "@/actions";
+import { MenuNavbar } from "@/components/navbar";
 
 async function HomePage() {
     // Fetch categories from the server

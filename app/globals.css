@@ -17,10 +17,6 @@
     @apply bg-vand-primary-4;
 }
 
-body {
-    @apply bg-vand-primary-2;
-}
-
 * {
     scroll-behavior: smooth;
     @apply font-yekanX;
