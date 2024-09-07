@@ -10,6 +10,7 @@ interface CreateCategoryFormProps {
 
 interface UpdateCategoryFormProps {
     type: "update";
+    categorySlug: string;
     initialData: CategoryFormData;
 }
 
@@ -35,8 +36,10 @@ const CategoryForm = (props: CategoryFormProps) => {
         <form
             onSubmit={handleSubmit}
             className="bg-white flex flex-col gap-8 shadow-md rounded-lg mx-auto px-4 py-8">
-            <h1 className="font-bold text-xl sm:text-2xl text-right w-full">
-                {props.type === "create" ? "ایجاد دسته" : "ویرایش دسته"}
+            <h1 className="font-bold text-xl sm:text-2xl text-right w-full r2l">
+                {props.type === "create"
+                    ? "دسته بندی جدید"
+                    : `ویرایش ${props.initialData.name}`}
             </h1>
 
             {error && (
@@ -49,7 +52,7 @@ const CategoryForm = (props: CategoryFormProps) => {
                 name="name"
                 placeholder="نام دسته"
                 value={name}
-                onChange={(e) => setName(e.target.value)}
+                onChange={setName}
             />
 
             <Input
@@ -106,7 +109,7 @@ const CategoryForm = (props: CategoryFormProps) => {
             )}
 
             <Button type="submit" disabled={!isFormValid}>
-                {props.type === "create" ? "ایجاد دسته" : "ویرایش دسته"}
+                {props.type === "create" ? "ایجاد" : "ویرایش"}
             </Button>
         </form>
     );

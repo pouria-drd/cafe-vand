@@ -1,6 +1,7 @@
-import { convertToBase64, slugify } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 import { CategoryFormData } from "@/types/panel";
-import { createCategory } from "@/actions";
+import { convertToBase64, slugify } from "@/lib/utils";
+import { createCategory, updateCategoryBySlug } from "@/actions";
 import { useState, useEffect, useMemo, useCallback } from "react";
 
 // Access environment variables
@@ -16,12 +17,15 @@ interface CreateCategoryFormProps {
 
 interface UpdateCategoryFormProps {
     type: "update";
+    categorySlug: string;
     initialData: CategoryFormData;
 }
 
 type CategoryFormProps = CreateCategoryFormProps | UpdateCategoryFormProps;
 
 export const useCategoryForm = (props: CategoryFormProps) => {
+    const router = useRouter();
+
     const [error, setError] = useState<string | null>(null);
 
     const [name, setName] = useState<string>(
@@ -39,16 +43,27 @@ export const useCategoryForm = (props: CategoryFormProps) => {
         props.type === "create"
             ? null
             : props.initialData.icon
-            ? props.initialData.icon
+            ? process.env.NEXT_PUBLIC_MEDIA_API + "/" + props.initialData.icon
             : null
     );
 
-    // Update slug when name changes
+    // Flag to control if the user has edited the name
+    const [isNameEdited, setIsNameEdited] = useState<boolean>(false);
+
+    // Update slug when name changes, but skip on initial load for update mode
     useEffect(() => {
-        if (name) {
+        if (name && isNameEdited) {
             setSlug(slugify(name));
         }
-    }, [name]);
+    }, [name, isNameEdited]);
+
+    // Handle name change and set the flag to indicate user input
+    const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setName(e.target.value);
+        if (!isNameEdited) {
+            setIsNameEdited(true); // Set flag when user manually changes the name
+        }
+    };
 
     // Validate icon file
     const isValidIcon = (file: File) => {
@@ -113,9 +128,29 @@ export const useCategoryForm = (props: CategoryFormProps) => {
             } else {
                 setError(null);
             }
-        } else {
+        } else if (props.type === "update") {
+            // Call API to update the category
+            const result = await updateCategoryBySlug(
+                props.categorySlug,
+                categoryData
+            );
+            if (result.error) {
+                setError(result.error);
+            } else {
+                setError(null);
+            }
             // Handle update logic here if needed
         }
+
+        // Reset form data
+        setName("");
+        setSlug("");
+        setIsActive(true);
+        setIcon(null);
+        setIconError(null);
+        setIconPreview(null);
+        setIsNameEdited(false); // Reset flag
+        router.push("/vand-panel/categories");
     };
 
     return {
@@ -127,10 +162,13 @@ export const useCategoryForm = (props: CategoryFormProps) => {
         iconError,
         iconPreview,
         isFormValid,
-        setName,
+        setName: handleNameChange, // Use the new handleNameChange function
         setSlug,
         setIsActive,
         handleSubmit,
         handleFileChange,
     };
 };
+function updateCategory(categoryData: CategoryFormData) {
+    throw new Error("Function not implemented.");
+}

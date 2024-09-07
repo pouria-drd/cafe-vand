@@ -8,9 +8,8 @@ async function CategoriesPage() {
 
     return (
         <section className="flex flex-col gap-8">
-            <CategoryForm type="create" />
-
             <CategoryTable categories={result?.data} error={result?.error} />
+            <CategoryForm type="create" />
         </section>
     );
 }

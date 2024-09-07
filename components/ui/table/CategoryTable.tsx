@@ -90,15 +90,20 @@ const CategoryTable = (props: CategoryTableProps) => {
         },
         {
             header: "تصویر",
-            accessor: (category: PanelCategory) => (
-                <img
-                    className="size-10 mx-auto"
-                    src={
-                        process.env.NEXT_PUBLIC_MEDIA_API + "/" + category.icon
-                    }
-                    alt={`تصویر دسته ${category.name}`}
-                />
-            ),
+            accessor: (category: PanelCategory) =>
+                category.icon ? (
+                    <img
+                        className="size-10 mx-auto"
+                        src={
+                            process.env.NEXT_PUBLIC_MEDIA_API +
+                            "/" +
+                            category.icon
+                        }
+                        alt={`تصویر دسته ${category.name}`}
+                    />
+                ) : (
+                    <p className="text-center">-</p>
+                ),
         },
     ];
 

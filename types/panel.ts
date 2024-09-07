@@ -39,6 +39,19 @@ export interface createCategoryResult {
     error?: string;
 }
 
+export interface getCategoryBySlugResult {
+    /** The fetched category data if the fetch is successful */
+    data?: PanelCategory;
+
+    /** The error message if the fetch fails */
+    error?: string;
+}
+
+export interface updateCategoryBySlugResult {
+    data?: PanelCategory;
+    error?: string;
+}
+
 export interface deleteCategoryBySlugResult {
     data?: string;
     error?: string;
