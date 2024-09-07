@@ -5,17 +5,17 @@
 /* ---------------------------------------------------------------------- */
 /* Scroll area */
 
-/* ::-webkit-scrollbar {
-    @apply bg-vand-primary-1 w-1 h-2;
+::-webkit-scrollbar {
+    @apply bg-gray-300 w-1.5 h-2;
 }
 
 ::-webkit-scrollbar-thumb:horizontal {
-    @apply bg-vand-primary-4;
+    @apply bg-gray-400;
 }
 
 ::-webkit-scrollbar-thumb:vertical {
-    @apply bg-vand-primary-4;
-} */
+    @apply bg-gray-400;
+}
 
 * {
     scroll-behavior: smooth;

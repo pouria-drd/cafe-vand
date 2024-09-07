@@ -2,9 +2,8 @@
 
 import { useState } from "react";
 import styles from "./menu.module.css";
-import { MenuCategory } from "@/types/menu";
 import { MenuCategoryList, MenuProductList } from ".";
-import { FetchMenuResult } from "@/actions/menu/fetchMenu";
+import { FetchMenuResult, MenuCategory } from "@/types/menu";
 
 interface MenuProps {
     result: FetchMenuResult;

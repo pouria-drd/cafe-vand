@@ -4,8 +4,8 @@ import Link from "next/link";
 import { Badge, Table } from "..";
 import { formatDate } from "@/lib/utils";
 import { PanelCategory } from "@/types/panel";
-import { BinIcon, EditIcon } from "@/components/icons";
 import { deleteCategoryBySlug } from "@/actions";
+import { BinIcon, EditIcon } from "@/components/icons";
 
 interface CategoryTableProps {
     error?: string;
@@ -93,7 +93,9 @@ const CategoryTable = (props: CategoryTableProps) => {
             accessor: (category: PanelCategory) => (
                 <img
                     className="size-10 mx-auto"
-                    src={category.icon}
+                    src={
+                        process.env.NEXT_PUBLIC_MEDIA_API + "/" + category.icon
+                    }
                     alt={`تصویر دسته ${category.name}`}
                 />
             ),
