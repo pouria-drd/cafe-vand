@@ -35,7 +35,7 @@ const CategoryForm = (props: CategoryFormProps) => {
     return (
         <form
             onSubmit={handleSubmit}
-            className="bg-white flex flex-col gap-8 shadow-md rounded-lg mx-auto px-4 py-8">
+            className="bg-white flex flex-col gap-8 shadow-md rounded-lg mx-auto px-4 py-8 w-full sm:w-80">
             <h1 className="font-bold text-xl sm:text-2xl text-right w-full r2l">
                 {props.type === "create"
                     ? "دسته بندی جدید"
@@ -79,7 +79,7 @@ const CategoryForm = (props: CategoryFormProps) => {
                 </label>
             </div>
 
-            <div className="flex items-center justify-between gap-2 w-full">
+            <div className="flex flex-col-reverse sm:flow-row items-end sm:items-center justify-between gap-2 w-full">
                 <input
                     id="icon"
                     type="file"

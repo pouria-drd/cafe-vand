@@ -93,7 +93,7 @@ const CategoryTable = (props: CategoryTableProps) => {
             accessor: (category: PanelCategory) =>
                 category.icon ? (
                     <img
-                        className="size-10 mx-auto"
+                        className="min-w-10 w-10 mx-auto"
                         src={
                             process.env.NEXT_PUBLIC_MEDIA_API +
                             "/" +
