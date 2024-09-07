@@ -1,3 +1,10 @@
+export interface CategoryFormData {
+    name: string;
+    slug: string;
+    icon?: string;
+    isActive: boolean;
+}
+
 export interface PanelCategory {
     id: number;
     name: string;
@@ -15,6 +22,18 @@ export interface PanelCategory {
 export interface getPanelCategoryResult {
     /** The array of Category objects if the fetch is successful */
     data?: PanelCategory[];
+
+    /** The error message if the fetch fails */
+    error?: string;
+}
+
+/**
+ * Interface representing the result of the createCategory function.
+ * Contains either the success message or an error message.
+ */
+export interface createCategoryResult {
+    /** The success message if the fetch is successful */
+    data?: PanelCategory;
 
     /** The error message if the fetch fails */
     error?: string;

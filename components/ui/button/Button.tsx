@@ -13,13 +13,13 @@ const Button = (props: ButtonProps) => {
     const baseClass =
         variant === "outlined"
             ? "outline outline-2 outline-vand-primary-main text-vand-primary-main hover:outline-none hover:text-vand-secondary-main hover:bg-vand-primary-main"
-            : "text-vand-secondary-main bg-vand-primary-main hover:brightness-95";
+            : "text-white bg-vand-primary-main hover:brightness-95";
 
     return (
         <button
             className={cn(
                 baseClass,
-                "disabled:cursor-not-allowed disabled:bg-opacity-50 transition-all rounded-xl px-3 py-2 min-h-11 r2l",
+                "disabled:cursor-not-allowed disabled:bg-opacity-50 transition-all rounded-lg px-3 py-2",
                 className
             )}
             {...restProps}

@@ -64,7 +64,7 @@ const Table = ({
     };
 
     return (
-        <div className="bg-white overflow-auto shadow-md rounded-lg max-h-96 container max-w-[96vw] md:max-w-full">
+        <div className="overflow-auto shadow-md rounded-lg max-h-96 container max-w-[96vw] md:max-w-full">
             <table className="min-w-full divide-y divide-gray-400">
                 <thead className="bg-gray-50/90 sticky top-0 glass">
                     <tr>
@@ -103,10 +103,12 @@ const Table = ({
                         ))}
                     </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="divide-y divide-gray-200">
                     {sortedData && sortedData.length > 0 ? (
                         sortedData.map((item, index) => (
-                            <tr key={index}>
+                            <tr
+                                key={index}
+                                className="odd:bg-white even:bg-gray-50 ">
                                 {showIndex && (
                                     <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium text-gray-900">
                                         {index + 1}

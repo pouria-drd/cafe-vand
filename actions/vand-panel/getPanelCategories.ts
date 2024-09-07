@@ -36,7 +36,7 @@ export async function getPanelCategories(): Promise<getPanelCategoryResult> {
         // Attempt to fetch data from the URL.
         const response = await fetch(url);
         // const response = await fetch(url, {
-        //     cache: "no-cache",// Disable caching for real-time data
+        //     cache: "no-cache", // Disable caching for real-time data
         // });
 
         // If the response is not successful, return an error.

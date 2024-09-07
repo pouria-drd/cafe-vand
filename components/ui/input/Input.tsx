@@ -10,7 +10,7 @@ const Input = ({ className, ...restProps }: InputProps) => {
     return (
         <input
             className={cn(
-                "border border-vand-secondary-8 transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-vand-primary-main placeholder:text-sm rounded-xl px-3 py-2 min-h-11",
+                "transition-all duration-150 border-none outline outline-1 outline-gray-400 focus:outline-none focus:ring-2 focus:ring-vand-primary-main placeholder:text-sm rounded-lg px-3 py-2",
                 className
             )}
             {...restProps}

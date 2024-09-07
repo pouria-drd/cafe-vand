@@ -38,3 +38,35 @@ export function formatDate(
         return date.toLocaleString(undefined, defaultOptions);
     }
 }
+
+// Helper function to slugify text
+export const slugify = (text: string) => {
+    return text
+        .toString()
+        .toLowerCase()
+        .replace(/\s+/g, "-")
+        .replace(/[^\w\u0600-\u06FF-]+/g, "") // Handles both English and Persian characters
+        .replace(/--+/g, "-")
+        .replace(/^-+/, "")
+        .replace(/-+$/, "");
+};
+
+export function convertToBase64(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+
+        reader.onloadend = () => {
+            if (reader.result) {
+                resolve(reader.result as string);
+            } else {
+                reject(new Error("Failed to read file"));
+            }
+        };
+
+        reader.onerror = () => {
+            reject(new Error("Failed to read file"));
+        };
+
+        reader.readAsDataURL(file);
+    });
+}
