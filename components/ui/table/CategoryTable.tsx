@@ -88,6 +88,16 @@ const CategoryTable = (props: CategoryTableProps) => {
                 <p className="text-center">{category.name}</p>
             ),
         },
+        {
+            header: "تصویر",
+            accessor: (category: PanelCategory) => (
+                <img
+                    className="size-10 mx-auto"
+                    src={category.icon}
+                    alt={`تصویر دسته ${category.name}`}
+                />
+            ),
+        },
     ];
 
     return (
