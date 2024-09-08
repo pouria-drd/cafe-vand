@@ -27,10 +27,10 @@ export async function getCategoryBySlug(
 
     try {
         // Attempt to fetch data from the URL.
-        const response = await fetch(url);
-        // const response = await fetch(url, {
-        //     cache: "no-cache", // Disable caching for real-time data
-        // });
+        // const response = await fetch(url);
+        const response = await fetch(url, {
+            cache: "no-cache", // Disable caching for real-time data
+        });
 
         if (response.status === 404) {
             return { error: "دسته یافت نشد!" };

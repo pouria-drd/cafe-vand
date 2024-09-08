@@ -37,6 +37,7 @@ export async function updateProductBySlug(
     try {
         // Send a POST request to update the product
         const response = await fetch(url, {
+            cache: "no-cache",
             method: "PATCH",
             body: formData,
         });
@@ -53,11 +54,7 @@ export async function updateProductBySlug(
         // If the response is successful, return the data
         if (response.status === 200) {
             revalidatePath("/");
-            revalidatePath("/vand-panel");
-            revalidatePath("/vand-panel/products");
-            revalidatePath("/vand-panel/products/[productSlug]");
-            revalidatePath("/vand-panel/categories");
-            revalidatePath("/vand-panel/categories/[categorySlug]");
+            // revalidatePath(`/vand-panel/products/${productSlug}`);
             const data = await response.json();
             return { data: data };
         }

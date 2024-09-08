@@ -36,6 +36,7 @@ export async function createProduct(
     try {
         // Send a POST request to create the product
         const response = await fetch(url, {
+            cache: "no-cache",
             method: "POST",
             body: formData,
         });
@@ -48,7 +49,7 @@ export async function createProduct(
                 return { error: "دسته را انتخاب کنید" };
             }
             if (result.slug) {
-                return { error: "شناسه تکراری است" };
+                return { error: "شناسه تکراری است / شناسه انگلیسی باید باشد" };
             }
             return { error: `خطا در ایجاد دسته: ${response.statusText}` };
         }
@@ -56,11 +57,6 @@ export async function createProduct(
         // If the response is 201 Created, return the data
         if (response.status === 201) {
             revalidatePath("/");
-            revalidatePath("/vand-panel");
-            revalidatePath("/vand-panel/products");
-            revalidatePath("/vand-panel/products/[productSlug]");
-            revalidatePath("/vand-panel/categories");
-            revalidatePath("/vand-panel/categories/[categorySlug]");
             const result = await response.json();
             return { data: result };
         }

@@ -38,6 +38,7 @@ export async function createCategory(
     try {
         // Send a POST request to create the category
         const response = await fetch(url, {
+            cache: "no-cache",
             method: "POST",
             body: formData,
         });
@@ -57,7 +58,6 @@ export async function createCategory(
         // If the response is 201 Created, return the data
         if (response.status === 201) {
             revalidatePath("/");
-            revalidatePath("/vand-panel");
             const data = await response.json();
             return { data: data };
         }

@@ -1,24 +1,17 @@
 "use server";
 
-import { GetPanelCategoryResult, PanelCategory } from "@/types/panel";
+import { GetProductBySlugResult, PanelProduct } from "@/types/panel";
 
 /**
- * Fetches categories data.
- * The function returns either the data fetched or an error message if the fetch fails.
+ * Fetches a product by its slug.
+ * Returns either the success message or an error message if the operation fails.
  *
- * @returns {Promise<GetPanelCategoryResult>} An object containing either the array of categories or an error message.
- *
- * @example
- * ```typescript
- * const result = await getCategories();
- * if (result.error) {
- *     console.error("Error:", result.error);
- * } else {
- *     console.log("Categories:", result.data);
- * }
- * ```
+ * @param slug The slug of the product to be fetched.
+ * @returns {Promise<GetProductBySlugResult>} An object containing either the fetched data or an error message.
  */
-export async function getPanelCategories(): Promise<GetPanelCategoryResult> {
+export async function getProductBySlug(
+    slug: string
+): Promise<GetProductBySlugResult> {
     // Introduce a delay for testing purposes (e.g., 2 seconds)
     // await new Promise((resolve) => setTimeout(resolve, 2000));
 
@@ -30,7 +23,7 @@ export async function getPanelCategories(): Promise<GetPanelCategoryResult> {
         return { error: "آدرسی برای ارتباط با سرور یافت نشد!" };
     }
 
-    const url = `${baseUrl}/panel/categories/`;
+    const url = `${baseUrl}/panel/products/${slug}/`;
 
     try {
         // Attempt to fetch data from the URL.
@@ -39,15 +32,19 @@ export async function getPanelCategories(): Promise<GetPanelCategoryResult> {
             cache: "no-cache", // Disable caching for real-time data
         });
 
+        if (response.status === 404) {
+            return { error: "محصول یافت نشد!" };
+        }
+
         // If the response is not successful, return an error.
         if (!response.ok) {
             return {
-                error: "خطایی در دریافت داده رخ داده است!",
+                error: "خطایی در دریافت محصول رخ داده است!",
             };
         }
 
-        // Parse the JSON response into an array of Category objects.
-        const data: PanelCategory[] = await response.json();
+        // Parse the JSON response into an array of Product objects.
+        const data: PanelProduct = await response.json();
         // Return the data if the fetch and parsing were successful.
         return { data };
     } catch (error) {

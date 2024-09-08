@@ -7,13 +7,13 @@ import { PanelCategory, ProductFormData } from "@/types/panel";
 
 interface CreateProductFormProps {
     type: "create";
-    category: PanelCategory;
+    category: PanelCategory | PanelCategory[];
 }
 
 interface UpdateProductFormProps {
     type: "update";
     productSlug: string;
-    category: PanelCategory;
+    category: PanelCategory | PanelCategory[];
     initialData: ProductFormData;
 }
 
@@ -33,6 +33,19 @@ const ProductForm = (props: ProductFormProps) => {
         setIsActive,
         handleSubmit,
     } = useProductForm(props);
+
+    const renderCategoryOptions = () => {
+        if (Array.isArray(props.category)) {
+            return props.category.map((category) => (
+                <option key={category.id} value={category.id}>
+                    {category.name}
+                </option>
+            ));
+        } else if (!Array.isArray(props.category))
+            return (
+                <option value={props.category.id}>{props.category.name}</option>
+            );
+    };
 
     return (
         <form onSubmit={handleSubmit} className={`${styles.vandForm}`}>
@@ -64,19 +77,15 @@ const ProductForm = (props: ProductFormProps) => {
                 className="w-full"
                 onChange={(e) => setSlug(e.target.value)}
             />
+            <select
+                className="border p-2 rounded-md"
+                name="category"
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}>
+                <option value="">انتخاب دسته</option>
 
-            {props.type === "create" && (
-                <select
-                    className="border p-2 rounded-md"
-                    name="category"
-                    value={category}
-                    onChange={(e) => setCategory(e.target.value)}>
-                    <option value="">انتخاب دسته</option>
-                    <option value={props.category.id}>
-                        {props.category.name}
-                    </option>
-                </select>
-            )}
+                {renderCategoryOptions()}
+            </select>
 
             <div className="flex items-center justify-end gap-4 w-full">
                 <input

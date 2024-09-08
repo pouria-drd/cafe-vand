@@ -39,6 +39,7 @@ export async function updateCategoryBySlug(
     try {
         // Send a POST request to update the category
         const response = await fetch(url, {
+            cache: "no-cache",
             method: "PATCH",
             body: formData,
         });
@@ -58,7 +59,7 @@ export async function updateCategoryBySlug(
         // If the response is successful, return the data
         if (response.status === 200) {
             revalidatePath("/");
-            revalidatePath("/vand-panel/categories");
+            // revalidatePath(`/vand-panel/categories/${categorySlug}`);
             const data = await response.json();
             return { data: data };
         }

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Badge, Table } from "..";
 import { formatDate } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 import { PanelProduct } from "@/types/panel";
 import { deleteProductBySlug } from "@/actions";
 import { BinIcon, EditIcon } from "@/components/icons";
@@ -14,6 +15,8 @@ interface ProductTableProps {
 }
 
 const ProductTable = (props: ProductTableProps) => {
+    const router = useRouter();
+
     const handleDelete = async (slug: string) => {
         const canDelete = window.confirm(
             "آیا مطمئن هستید که میخواهید این دسته را حذف کنید؟"
@@ -26,6 +29,7 @@ const ProductTable = (props: ProductTableProps) => {
                 window.alert(`خطا در حذف دسته: ${result.error}`);
                 return;
             }
+            router.push("/vand-panel/products");
         } catch (error) {
             window.alert("Error deleting campaign");
         }

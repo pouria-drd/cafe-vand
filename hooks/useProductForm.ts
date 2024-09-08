@@ -6,13 +6,13 @@ import { createProduct, updateProductBySlug } from "@/actions";
 
 interface CreateProductFormProps {
     type: "create";
-    category: PanelCategory;
+    category: PanelCategory | PanelCategory[];
 }
 
 interface UpdateProductFormProps {
     type: "update";
     productSlug: string;
-    category: PanelCategory;
+    category: PanelCategory | PanelCategory[];
     initialData: ProductFormData;
 }
 
@@ -29,7 +29,17 @@ export const useProductForm = (props: ProductFormProps) => {
     const [slug, setSlug] = useState<string>(
         props.type === "create" ? "" : props.initialData.slug
     );
-    const [category, setCategory] = useState<string>(props.category.id);
+    const [category, setCategory] = useState<string>(() => {
+        if (props.type === "create" && !Array.isArray(props.category)) {
+            return props.category.id;
+        } else if (props.type === "create" && Array.isArray(props.category)) {
+            return props.category[0].id;
+        } else if (props.type === "update") {
+            return props.initialData.category;
+        } else {
+            return "";
+        }
+    });
     const [isActive, setIsActive] = useState<boolean>(
         props.type === "create" ? true : props.initialData.isActive
     );
@@ -102,7 +112,11 @@ export const useProductForm = (props: ProductFormProps) => {
         setSlug("");
         setIsActive(true);
         setIsNameEdited(false); // Reset flag
-        router.push(`/vand-panel/categories/${props.category.slug}`);
+        if (!Array.isArray(props.category)) {
+            router.push(`/vand-panel/categories/${props.category.slug}`);
+        } else {
+            router.push(`/vand-panel/products`);
+        }
     };
 
     return {

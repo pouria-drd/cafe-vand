@@ -29,6 +29,11 @@ export interface ProductFormData {
     isActive: boolean;
 }
 
+export interface GetProductBySlugResult {
+    data?: PanelProduct;
+    error?: string;
+}
+
 export interface GetPanelProductsResult {
     data?: PanelProduct[];
     error?: string;

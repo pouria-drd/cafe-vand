@@ -29,6 +29,7 @@ export async function deleteProductBySlug(
     try {
         // Send a DELETE request to remove the product by its slug
         const response = await fetch(url, {
+            cache: "no-cache",
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
@@ -46,9 +47,7 @@ export async function deleteProductBySlug(
         // If the response is 204 No Content, consider it successful
         if (response.status === 204) {
             revalidatePath("/");
-            revalidatePath("/vand-panel");
-            revalidatePath("/vand-panel/categories");
-            revalidatePath("/vand-panel/categories/[categorySlug]");
+            // revalidatePath(`/vand-panel/products/${slug}`);
             return { data: "دسته‌بندی با موفقیت حذف شد!" };
         }
 
