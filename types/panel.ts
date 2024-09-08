@@ -1,10 +1,14 @@
+// Price Data
+
 export interface PanelPrice {
     id: string;
     amount: number;
-    product: string;
-    isActive: boolean;
-    updatedAt: Date;
     createdAt: Date;
+}
+
+export interface DeletePriceByIdResult {
+    data?: string;
+    error?: string;
 }
 
 // Product Data

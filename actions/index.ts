@@ -11,3 +11,6 @@ export { getProductBySlug } from "./vand-panel/product/getProductBySlug";
 export { getPanelProducts } from "./vand-panel/product/getPanelProducts";
 export { updateProductBySlug } from "./vand-panel/product/updateProductBySlug";
 export { deleteProductBySlug } from "./vand-panel/product/deleteProductBySlug";
+
+// Prices
+export { deletePriceById } from "./vand-panel/price/deletePriceById";

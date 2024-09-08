@@ -1,4 +1,4 @@
-import { ProductTable } from "@/components/ui";
+import { PriceTable } from "@/components/ui";
 import { ProductForm } from "@/components/form";
 import { getProductBySlug, getPanelCategories } from "@/actions";
 
@@ -21,11 +21,7 @@ async function ProductDetailPage({
 
     return (
         <section className="flex flex-col gap-8">
-            <ProductTable
-                products={[product.data]}
-                error={product?.error}
-                showCategoryName
-            />
+            <PriceTable prices={product.data.prices} error={product?.error} />
             {categories.data ? (
                 <ProductForm
                     type="update"

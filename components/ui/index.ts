@@ -12,5 +12,6 @@ export { default as CafeVandLogo } from "./logo/CafeVandLogo";
 export { default as LoadingSpinner } from "./spinner/LoadingSpinner";
 
 export { default as Table } from "./table/Table";
+export { default as PriceTable } from "./table/PriceTable";
 export { default as ProductTable } from "./table/ProductTable";
 export { default as CategoryTable } from "./table/CategoryTable";
