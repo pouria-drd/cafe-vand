@@ -1,12 +1,12 @@
 "use server";
 
-import { getPanelCategoryResult, PanelCategory } from "@/types/panel";
+import { GetPanelCategoryResult, PanelCategory } from "@/types/panel";
 
 /**
  * Fetches categories data.
  * The function returns either the data fetched or an error message if the fetch fails.
  *
- * @returns {Promise<getPanelCategoryResult>} An object containing either the array of categories or an error message.
+ * @returns {Promise<GetPanelCategoryResult>} An object containing either the array of categories or an error message.
  *
  * @example
  * ```typescript
@@ -18,7 +18,7 @@ import { getPanelCategoryResult, PanelCategory } from "@/types/panel";
  * }
  * ```
  */
-export async function getPanelCategories(): Promise<getPanelCategoryResult> {
+export async function getPanelCategories(): Promise<GetPanelCategoryResult> {
     // Introduce a delay for testing purposes (e.g., 2 seconds)
     // await new Promise((resolve) => setTimeout(resolve, 2000));
 

@@ -1,18 +1,18 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { CategoryFormData, createCategoryResult } from "@/types/panel";
+import { CategoryFormData, CreateCategoryResult } from "@/types/panel";
 
 /**
  * Creates a new category.
  * Returns either the success message or an error message if the operation fails.
  *
  * @param props The category information.
- * @returns {Promise<createCategoryResult>} An object containing either the success message or an error message.
+ * @returns {Promise<CreateCategoryResult>} An object containing either the success message or an error message.
  */
 export async function createCategory(
     props: CategoryFormData
-): Promise<createCategoryResult> {
+): Promise<CreateCategoryResult> {
     // Introduce a delay for testing purposes (e.g., 2 seconds)
     // await new Promise((resolve) => setTimeout(resolve, 2000));
 

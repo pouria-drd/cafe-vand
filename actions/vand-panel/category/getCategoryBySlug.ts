@@ -1,17 +1,17 @@
 "use server";
 
-import { getCategoryBySlugResult, PanelCategoryDetail } from "@/types/panel";
+import { GetCategoryBySlugResult, PanelCategoryDetail } from "@/types/panel";
 
 /**
  * Fetches a category by its slug.
  * Returns either the success message or an error message if the operation fails.
  *
  * @param slug The slug of the category to be fetched.
- * @returns {Promise<getCategoryBySlugResult>} An object containing either the fetched data or an error message.
+ * @returns {Promise<GetCategoryBySlugResult>} An object containing either the fetched data or an error message.
  */
 export async function getCategoryBySlug(
     slug: string
-): Promise<getCategoryBySlugResult> {
+): Promise<GetCategoryBySlugResult> {
     // Introduce a delay for testing purposes (e.g., 2 seconds)
     // await new Promise((resolve) => setTimeout(resolve, 2000));
 

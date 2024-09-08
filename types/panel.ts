@@ -29,7 +29,12 @@ export interface ProductFormData {
     isActive: boolean;
 }
 
-export interface deleteProductBySlugResult {
+export interface CreateProductResult {
+    data?: PanelProduct;
+    error?: string;
+}
+
+export interface DeleteProductBySlugResult {
     data?: string;
     error?: string;
 }
@@ -64,44 +69,29 @@ export interface PanelCategoryDetail {
     products: PanelProduct[];
 }
 
-/**
- * Interface representing the result of the getPanelCategories function.
- * Contains either the fetched data or an error message.
- */
-export interface getPanelCategoryResult {
-    /** The array of Category objects if the fetch is successful */
+export interface GetPanelCategoryResult {
     data?: PanelCategory[];
 
-    /** The error message if the fetch fails */
     error?: string;
 }
 
-/**
- * Interface representing the result of the createCategory function.
- * Contains either the success message or an error message.
- */
-export interface createCategoryResult {
-    /** The success message if the fetch is successful */
+export interface CreateCategoryResult {
     data?: PanelCategory;
-
-    /** The error message if the fetch fails */
     error?: string;
 }
 
-export interface getCategoryBySlugResult {
-    /** The fetched category data if the fetch is successful */
+export interface GetCategoryBySlugResult {
     data?: PanelCategoryDetail;
 
-    /** The error message if the fetch fails */
     error?: string;
 }
 
-export interface updateCategoryBySlugResult {
+export interface UpdateCategoryBySlugResult {
     data?: PanelCategory;
     error?: string;
 }
 
-export interface deleteCategoryBySlugResult {
+export interface DeleteCategoryBySlugResult {
     data?: string;
     error?: string;
 }

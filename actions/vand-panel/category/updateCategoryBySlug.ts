@@ -1,19 +1,19 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { CategoryFormData, updateCategoryBySlugResult } from "@/types/panel";
+import { CategoryFormData, UpdateCategoryBySlugResult } from "@/types/panel";
 
 /**
  * Updates a category by its slug.
  * Returns either the success message or an error message if the operation fails.
  *
  * @param props The category information.
- * @returns {Promise<updateCategoryBySlugResult>} An object containing either the success message or an error message.
+ * @returns {Promise<UpdateCategoryBySlugResult>} An object containing either the success message or an error message.
  */
 export async function updateCategoryBySlug(
     categorySlug: string,
     props: CategoryFormData
-): Promise<updateCategoryBySlugResult> {
+): Promise<UpdateCategoryBySlugResult> {
     // Introduce a delay for testing purposes (e.g., 2 seconds)
     // await new Promise((resolve) => setTimeout(resolve, 2000));
 

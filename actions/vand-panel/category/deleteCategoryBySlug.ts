@@ -1,18 +1,18 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { deleteCategoryBySlugResult } from "@/types/panel";
+import { DeleteCategoryBySlugResult } from "@/types/panel";
 
 /**
  * Deletes a category by its slug.
  * Returns either the success message or an error message if the operation fails.
  *
  * @param slug The slug of the category to be deleted.
- * @returns {Promise<deleteCategoryBySlugResult>} An object containing either the success message or an error message.
+ * @returns {Promise<DeleteCategoryBySlugResult>} An object containing either the success message or an error message.
  */
 export async function deleteCategoryBySlug(
     slug: string
-): Promise<deleteCategoryBySlugResult> {
+): Promise<DeleteCategoryBySlugResult> {
     // Introduce a delay for testing purposes (e.g., 2 seconds)
     // await new Promise((resolve) => setTimeout(resolve, 2000));
 

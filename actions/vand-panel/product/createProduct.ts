@@ -1,18 +1,18 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { DeleteProductBySlugResult } from "@/types/panel";
+import { ProductFormData, CreateProductResult } from "@/types/panel";
 
 /**
- * Deletes a product by its slug.
+ * Creates a new product.
  * Returns either the success message or an error message if the operation fails.
  *
- * @param slug The slug of the product to be deleted.
- * @returns {Promise<DeleteProductBySlugResult>} An object containing either the success message or an error message.
+ * @param props The product information.
+ * @returns {Promise<CreateProductResult>} An object containing either the success message or an error message.
  */
-export async function deleteProductBySlug(
-    slug: string
-): Promise<DeleteProductBySlugResult> {
+export async function createProduct(
+    props: ProductFormData
+): Promise<CreateProductResult> {
     // Introduce a delay for testing purposes (e.g., 2 seconds)
     // await new Promise((resolve) => setTimeout(resolve, 2000));
 
@@ -24,32 +24,39 @@ export async function deleteProductBySlug(
         return { error: "آدرس API برای دریافت داده از سرور تعریف نشده است!" };
     }
 
-    const url = `${baseUrl}/panel/products/${slug}/`;
+    const url = `${baseUrl}/panel/products/`;
+
+    // Prepare the form data
+    const formData = new FormData();
+    formData.append("name", props.name);
+    formData.append("slug", props.slug);
+    formData.append("category", props.category);
+    formData.append("isActive", props.isActive ? "true" : "false");
 
     try {
-        // Send a DELETE request to remove the product by its slug
+        // Send a POST request to create the product
         const response = await fetch(url, {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json",
-            },
+            method: "POST",
+            body: formData,
         });
 
-        // Handle non-2xx responses
+        // Handle non-ok responses
         if (!response.ok) {
-            if (response.status === 404) {
-                return { error: "دسته‌بندی یافت نشد!" };
+            const data = await response.json();
+            if (data.slug) {
+                return { error: "شناسه تکراری است" };
             }
-            return { error: `خطا در حذف دسته‌بندی: ${response.statusText}` };
+            return { error: `خطا در ایجاد دسته: ${response.statusText}` };
         }
 
-        // If the response is 204 No Content, consider it successful
-        if (response.status === 204) {
+        // If the response is 201 Created, return the data
+        if (response.status === 201) {
             revalidatePath("/");
             revalidatePath("/vand-panel");
             revalidatePath("/vand-panel/categories");
             revalidatePath("/vand-panel/categories/[categorySlug]");
-            return { data: "دسته‌بندی با موفقیت حذف شد!" };
+            const data = await response.json();
+            return { data: data };
         }
 
         // Handle unexpected responses
