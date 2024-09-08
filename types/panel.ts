@@ -25,6 +25,7 @@ export interface PanelProduct {
 export interface ProductFormData {
     name: string;
     slug: string;
+    newPrice: number;
     category: string;
     isActive: boolean;
 }

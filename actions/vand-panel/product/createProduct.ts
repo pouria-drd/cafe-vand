@@ -30,6 +30,7 @@ export async function createProduct(
     const formData = new FormData();
     formData.append("name", props.name);
     formData.append("slug", props.slug);
+    formData.append("newPrice", props.newPrice.toString());
     formData.append("category", props.category);
     formData.append("isActive", props.isActive ? "true" : "false");
 

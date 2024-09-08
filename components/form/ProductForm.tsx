@@ -3,7 +3,7 @@
 import { Button, Input } from "../ui";
 import styles from "./form.module.css";
 import { useProductForm } from "@/hooks";
-import { PanelCategory, ProductFormData } from "@/types/panel";
+import { PanelCategory, PanelProduct } from "@/types/panel";
 
 interface CreateProductFormProps {
     type: "create";
@@ -14,7 +14,7 @@ interface UpdateProductFormProps {
     type: "update";
     productSlug: string;
     category: PanelCategory | PanelCategory[];
-    initialData: ProductFormData;
+    initialData: PanelProduct;
 }
 
 type ProductFormProps = CreateProductFormProps | UpdateProductFormProps;
@@ -23,12 +23,14 @@ const ProductForm = (props: ProductFormProps) => {
     const {
         name,
         slug,
-        category,
+        price,
         error,
+        category,
         isActive,
         isFormValid,
         setName,
         setSlug,
+        setPrice,
         setCategory,
         setIsActive,
         handleSubmit,
@@ -77,6 +79,23 @@ const ProductForm = (props: ProductFormProps) => {
                 className="w-full"
                 onChange={(e) => setSlug(e.target.value)}
             />
+
+            <div className="flex items-center justify-between gap-4 w-full">
+                <Input
+                    id="price"
+                    required
+                    type="number"
+                    name="price"
+                    value={price}
+                    placeholder="قیمت"
+                    onChange={(e) => setPrice(e.target.valueAsNumber)}
+                />
+
+                <label htmlFor="price" className="cursor-pointer">
+                    قیمت
+                </label>
+            </div>
+
             <select
                 className="border p-2 rounded-md"
                 name="category"

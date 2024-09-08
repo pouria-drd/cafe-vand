@@ -1,8 +1,8 @@
 import { slugify } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { useState, useEffect, useMemo } from "react";
-import { PanelCategory, ProductFormData } from "@/types/panel";
 import { createProduct, updateProductBySlug } from "@/actions";
+import { PanelCategory, PanelProduct, ProductFormData } from "@/types/panel";
 
 interface CreateProductFormProps {
     type: "create";
@@ -13,7 +13,7 @@ interface UpdateProductFormProps {
     type: "update";
     productSlug: string;
     category: PanelCategory | PanelCategory[];
-    initialData: ProductFormData;
+    initialData: PanelProduct;
 }
 
 type ProductFormProps = CreateProductFormProps | UpdateProductFormProps;
@@ -26,9 +26,15 @@ export const useProductForm = (props: ProductFormProps) => {
     const [name, setName] = useState<string>(
         props.type === "create" ? "" : props.initialData.name
     );
+
     const [slug, setSlug] = useState<string>(
         props.type === "create" ? "" : props.initialData.slug
     );
+
+    const [price, setPrice] = useState<number>(
+        props.type === "create" ? 0 : props.initialData.price || 0
+    );
+
     const [category, setCategory] = useState<string>(() => {
         if (props.type === "create" && !Array.isArray(props.category)) {
             return props.category.id;
@@ -81,6 +87,7 @@ export const useProductForm = (props: ProductFormProps) => {
         const productData: ProductFormData = {
             name,
             slug,
+            newPrice: price,
             category,
             isActive,
         };
@@ -110,6 +117,7 @@ export const useProductForm = (props: ProductFormProps) => {
         // Reset form data
         setName("");
         setSlug("");
+        setPrice(0);
         setIsActive(true);
         setIsNameEdited(false); // Reset flag
         if (!Array.isArray(props.category)) {
@@ -122,12 +130,14 @@ export const useProductForm = (props: ProductFormProps) => {
     return {
         name,
         slug,
-        category,
+        price,
         error,
         isActive,
+        category,
         isFormValid,
         setName: handleNameChange, // Use the new handleNameChange function
         setSlug,
+        setPrice,
         setCategory,
         setIsActive,
         handleSubmit,
