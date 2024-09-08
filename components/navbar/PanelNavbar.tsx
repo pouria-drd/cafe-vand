@@ -11,7 +11,7 @@ const PanelNavbar = () => {
 
     return (
         <>
-            <nav className={`${styles.vandPanelNavbar}`}>
+            <nav className={`${styles.vandPanelNavbar} glass`}>
                 <CafeVandLogo
                     href="/vand-panel"
                     className="text-vand-secondary-2"
