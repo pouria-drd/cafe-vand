@@ -24,7 +24,6 @@ const PriceTable = (props: PriceTableProps) => {
                 window.alert(`خطا در حذف قیمت: ${result.error}`);
                 return;
             }
-            window.location.reload();
         } catch (error) {
             window.alert("Error deleting campaign");
         }

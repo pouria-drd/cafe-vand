@@ -31,7 +31,7 @@ export const useProductForm = (props: ProductFormProps) => {
         props.type === "create" ? "" : props.initialData.slug
     );
 
-    const [price, setPrice] = useState<number>(
+    const [price, setPrice] = useState<number | string>(
         props.type === "create" ? 0 : props.initialData.price || 0
     );
 
@@ -114,16 +114,19 @@ export const useProductForm = (props: ProductFormProps) => {
             // Handle update logic here if needed
         }
 
-        // Reset form data
-        setName("");
-        setSlug("");
-        setPrice(0);
-        setIsActive(true);
         setIsNameEdited(false); // Reset flag
-        if (!Array.isArray(props.category)) {
-            router.push(`/vand-panel/categories/${props.category.slug}`);
-        } else {
-            router.push(`/vand-panel/products`);
+
+        // Reset form data
+        if (props.type === "create") {
+            setName("");
+            setSlug("");
+            setPrice(0);
+            setIsActive(true);
+            if (!Array.isArray(props.category)) {
+                router.push(`/vand-panel/categories/${props.category.slug}`);
+            }
+        } else if (props.type === "update" && !Array.isArray(props.category)) {
+            router.push(`/vand-panel/products/${props.productSlug}`);
         }
     };
 

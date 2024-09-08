@@ -88,7 +88,7 @@ const ProductForm = (props: ProductFormProps) => {
                     name="price"
                     value={price}
                     placeholder="قیمت"
-                    onChange={(e) => setPrice(e.target.valueAsNumber)}
+                    onChange={(e) => setPrice(e.target.value)}
                 />
 
                 <label htmlFor="price" className="cursor-pointer">
