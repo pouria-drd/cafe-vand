@@ -94,11 +94,7 @@ const CategoryTable = (props: CategoryTableProps) => {
                 category.icon ? (
                     <img
                         className="min-w-8 sm:min-w-10 w-8 sm:w-10 mx-auto"
-                        src={
-                            process.env.NEXT_PUBLIC_MEDIA_API +
-                            "/" +
-                            category.icon
-                        }
+                        src={category.icon}
                         alt={`تصویر دسته ${category.name}`}
                     />
                 ) : (

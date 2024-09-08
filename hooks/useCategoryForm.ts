@@ -43,7 +43,7 @@ export const useCategoryForm = (props: CategoryFormProps) => {
         props.type === "create"
             ? null
             : props.initialData.icon
-            ? process.env.NEXT_PUBLIC_MEDIA_API + "/" + props.initialData.icon
+            ? props.initialData.icon
             : null
     );
 
@@ -169,6 +169,3 @@ export const useCategoryForm = (props: CategoryFormProps) => {
         handleFileChange,
     };
 };
-function updateCategory(categoryData: CategoryFormData) {
-    throw new Error("Function not implemented.");
-}

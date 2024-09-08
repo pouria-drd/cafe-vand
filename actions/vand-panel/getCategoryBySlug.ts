@@ -1,6 +1,6 @@
 "use server";
 
-import { getCategoryBySlugResult, PanelCategory } from "@/types/panel";
+import { getCategoryBySlugResult, PanelCategoryDetail } from "@/types/panel";
 
 /**
  * Fetches a category by its slug.
@@ -44,7 +44,7 @@ export async function getCategoryBySlug(
         }
 
         // Parse the JSON response into an array of Category objects.
-        const data: PanelCategory = await response.json();
+        const data: PanelCategoryDetail = await response.json();
         // Return the data if the fetch and parsing were successful.
         return { data };
     } catch (error) {

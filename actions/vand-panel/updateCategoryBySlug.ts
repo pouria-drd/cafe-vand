@@ -3,8 +3,6 @@
 import { revalidatePath } from "next/cache";
 import { CategoryFormData, updateCategoryBySlugResult } from "@/types/panel";
 
-interface updateCategoryBySlugProps extends CategoryFormData {}
-
 /**
  * Updates a category by its slug.
  * Returns either the success message or an error message if the operation fails.
@@ -49,7 +47,7 @@ export async function updateCategoryBySlug(
         if (!response.ok) {
             const data = await response.json();
             if (data.slug) {
-                return { error: "شناسه تکراری است" };
+                return { error: "شناسه تکراری است / شناسه انگلیسی باید باشد" };
             }
             if (data.icon) {
                 return { error: `خطا در ایجاد دسته: ${data.icon}` };

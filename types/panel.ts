@@ -1,3 +1,25 @@
+export interface PanelPrice {
+    id: string;
+    amount: number;
+    product: string;
+    isActive: boolean;
+    updatedAt: Date;
+    createdAt: Date;
+}
+
+export interface PanelProduct {
+    id: string;
+    name: string;
+    slug: string;
+    price: number;
+    category: string;
+    categoryName: string;
+    isActive: boolean;
+    createdAt: Date;
+    updatedAt: Date;
+    prices: PanelPrice[];
+}
+
 export interface CategoryFormData {
     name: string;
     slug: string;
@@ -6,13 +28,24 @@ export interface CategoryFormData {
 }
 
 export interface PanelCategory {
-    id: number;
+    id: string;
     name: string;
     slug: string;
     icon: string;
     isActive: boolean;
     createdAt: Date;
     updatedAt: Date;
+}
+
+export interface PanelCategoryDetail {
+    id: string;
+    name: string;
+    slug: string;
+    icon: string;
+    isActive: boolean;
+    createdAt: Date;
+    updatedAt: Date;
+    products: PanelProduct[];
 }
 
 /**
@@ -41,7 +74,7 @@ export interface createCategoryResult {
 
 export interface getCategoryBySlugResult {
     /** The fetched category data if the fetch is successful */
-    data?: PanelCategory;
+    data?: PanelCategoryDetail;
 
     /** The error message if the fetch fails */
     error?: string;
