@@ -66,7 +66,7 @@ const Table = ({
     return (
         <div className="overflow-auto shadow-md rounded-lg max-h-96 container max-w-[96vw] md:max-w-full">
             <table className="min-w-full divide-y divide-gray-400">
-                <thead className="bg-gray-50/90 sticky top-0 glass">
+                <thead className="bg-gray-50/85 sticky top-0 glass">
                     <tr>
                         {showIndex && (
                             <th
@@ -81,11 +81,10 @@ const Table = ({
                                 onClick={() =>
                                     col.sortable && handleSort(col.header)
                                 }
-                                className={`text-center text-xs px-6 py-3 
-                                    font-medium text-gray-500 
-                                    uppercase tracking-wider ${
+                                className={`text-gray-600 text-center text-xs sm:text-sm
+                                    font-bold uppercase tracking-wider ${
                                         col.sortable ? "cursor-pointer" : ""
-                                    }`}>
+                                    } px-6 py-4 `}>
                                 {col.header}
                                 {col.sortable && (
                                     <span className="ml-2">
@@ -110,14 +109,17 @@ const Table = ({
                                 key={index}
                                 className="odd:bg-white even:bg-gray-50 ">
                                 {showIndex && (
-                                    <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium text-gray-900">
+                                    <td
+                                        className="whitespace-nowrap text-center text-xs 
+                                        sm:text-sm font-medium text-gray-700 px-6 py-4">
                                         {index + 1}
                                     </td>
                                 )}
                                 {columns.map((col, colIndex) => (
                                     <td
                                         key={colIndex}
-                                        className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 truncate max-w-44">
+                                        className="text-gray-600 text-xs sm:text-sm font-medium 
+                                        whitespace-nowrap truncate max-w-44 px-6 py-4 ">
                                         {col.accessor(item)}
                                     </td>
                                 ))}

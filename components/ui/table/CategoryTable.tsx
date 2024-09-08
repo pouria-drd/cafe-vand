@@ -34,7 +34,7 @@ const CategoryTable = (props: CategoryTableProps) => {
         {
             header: "عملیات",
             accessor: (category: PanelCategory) => (
-                <div className="flex items-center justify-center gap-3 transition-all">
+                <div className="flex items-center justify-center gap-4 transition-all">
                     <Link
                         href={`/vand-panel/categories/${category.slug}`}
                         className="text-blue-600 hover:text-blue-700">
@@ -93,7 +93,7 @@ const CategoryTable = (props: CategoryTableProps) => {
             accessor: (category: PanelCategory) =>
                 category.icon ? (
                     <img
-                        className="min-w-10 w-10 mx-auto"
+                        className="min-w-8 sm:min-w-10 w-8 sm:w-10 mx-auto"
                         src={
                             process.env.NEXT_PUBLIC_MEDIA_API +
                             "/" +

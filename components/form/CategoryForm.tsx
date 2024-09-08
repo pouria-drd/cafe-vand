@@ -79,7 +79,7 @@ const CategoryForm = (props: CategoryFormProps) => {
                 </label>
             </div>
 
-            <div className="flex flex-col-reverse sm:flow-row items-end sm:items-center justify-between gap-2 w-full">
+            <div className="flex flex-col-reverse sm:flex-row items-end sm:items-center justify-between gap-2 w-full">
                 <input
                     id="icon"
                     type="file"
