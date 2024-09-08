@@ -1,18 +1,19 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { ProductFormData, CreateProductResult } from "@/types/panel";
+import { ProductFormData, UpdateProductBySlugResult } from "@/types/panel";
 
 /**
- * Creates a new product.
+ * Updates a product by its slug.
  * Returns either the success message or an error message if the operation fails.
  *
  * @param props The product information.
- * @returns {Promise<CreateProductResult>} An object containing either the success message or an error message.
+ * @returns {Promise<UpdateProductBySlugResult>} An object containing either the success message or an error message.
  */
-export async function createProduct(
+export async function updateProductBySlug(
+    productSlug: string,
     props: ProductFormData
-): Promise<CreateProductResult> {
+): Promise<UpdateProductBySlugResult> {
     // Introduce a delay for testing purposes (e.g., 2 seconds)
     // await new Promise((resolve) => setTimeout(resolve, 2000));
 
@@ -24,7 +25,7 @@ export async function createProduct(
         return { error: "آدرس API برای دریافت داده از سرور تعریف نشده است!" };
     }
 
-    const url = `${baseUrl}/panel/products/`;
+    const url = `${baseUrl}/panel/products/${productSlug}/`;
 
     // Prepare the form data
     const formData = new FormData();
@@ -34,33 +35,29 @@ export async function createProduct(
     formData.append("isActive", props.isActive ? "true" : "false");
 
     try {
-        // Send a POST request to create the product
+        // Send a POST request to update the product
         const response = await fetch(url, {
-            method: "POST",
+            method: "PATCH",
             body: formData,
         });
 
         // Handle non-ok responses
         if (!response.ok) {
-            const result = await response.json();
-            console.log(result);
-            if (result.category) {
-                return { error: "دسته را انتخاب کنید" };
+            const data = await response.json();
+            if (data.slug) {
+                return { error: "شناسه تکراری است / شناسه انگلیسی باید باشد" };
             }
-            if (result.slug) {
-                return { error: "شناسه تکراری است" };
-            }
-            return { error: `خطا در ایجاد دسته: ${response.statusText}` };
+            return { error: `خطا در ویرایش محصول: ${response.statusText}` };
         }
 
-        // If the response is 201 Created, return the data
-        if (response.status === 201) {
+        // If the response is successful, return the data
+        if (response.status === 200) {
             revalidatePath("/");
             revalidatePath("/vand-panel");
             revalidatePath("/vand-panel/categories");
             revalidatePath("/vand-panel/categories/[categorySlug]");
-            const result = await response.json();
-            return { data: result };
+            const data = await response.json();
+            return { data: data };
         }
 
         // Handle unexpected responses

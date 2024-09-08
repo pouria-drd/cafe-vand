@@ -2,42 +2,43 @@
 
 import { Button, Input } from "../ui";
 import styles from "./form.module.css";
-import { useCategoryForm } from "@/hooks";
-import { CategoryFormData } from "@/types/panel";
+import { useProductForm } from "@/hooks";
+import { PanelCategory, ProductFormData } from "@/types/panel";
 
-interface CreateCategoryFormProps {
+interface CreateProductFormProps {
     type: "create";
+    category: PanelCategory;
 }
 
-interface UpdateCategoryFormProps {
+interface UpdateProductFormProps {
     type: "update";
-    categorySlug: string;
-    initialData: CategoryFormData;
+    productSlug: string;
+    category: PanelCategory;
+    initialData: ProductFormData;
 }
 
-type CategoryFormProps = CreateCategoryFormProps | UpdateCategoryFormProps;
+type ProductFormProps = CreateProductFormProps | UpdateProductFormProps;
 
-const CategoryForm = (props: CategoryFormProps) => {
+const ProductForm = (props: ProductFormProps) => {
     const {
         name,
         slug,
+        category,
         error,
         isActive,
-        iconError,
-        iconPreview,
         isFormValid,
         setName,
         setSlug,
+        setCategory,
         setIsActive,
         handleSubmit,
-        handleFileChange,
-    } = useCategoryForm(props);
+    } = useProductForm(props);
 
     return (
         <form onSubmit={handleSubmit} className={`${styles.vandForm}`}>
             <h1 className="font-bold text-xl sm:text-2xl text-right w-full r2l">
                 {props.type === "create"
-                    ? "دسته بندی جدید"
+                    ? "ایجاد محصول"
                     : `ویرایش ${props.initialData.name}`}
             </h1>
 
@@ -49,7 +50,7 @@ const CategoryForm = (props: CategoryFormProps) => {
                 required
                 type="text"
                 name="name"
-                placeholder="نام دسته"
+                placeholder="نام محصول"
                 value={name}
                 onChange={setName}
             />
@@ -63,6 +64,19 @@ const CategoryForm = (props: CategoryFormProps) => {
                 className="w-full"
                 onChange={(e) => setSlug(e.target.value)}
             />
+
+            {props.type === "create" && (
+                <select
+                    className="border p-2 rounded-md"
+                    name="category"
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}>
+                    <option value="">انتخاب دسته</option>
+                    <option value={props.category.id}>
+                        {props.category.name}
+                    </option>
+                </select>
+            )}
 
             <div className="flex items-center justify-end gap-4 w-full">
                 <input
@@ -78,35 +92,6 @@ const CategoryForm = (props: CategoryFormProps) => {
                 </label>
             </div>
 
-            <div className="flex flex-col-reverse sm:flex-row items-end sm:items-center justify-between gap-2 w-full">
-                <input
-                    id="icon"
-                    type="file"
-                    name="icon"
-                    accept={process.env.NEXT_PUBLIC_VALID_FILE_TYPES}
-                    placeholder="آیکون"
-                    className="cursor-pointer"
-                    onChange={handleFileChange}
-                />
-                <label className="cursor-pointer" htmlFor="icon">
-                    آیکون
-                </label>
-            </div>
-
-            {iconPreview && (
-                <div className="w-full">
-                    <img
-                        src={iconPreview}
-                        alt="Preview"
-                        className="size-14 object-cover mx-auto"
-                    />
-                </div>
-            )}
-
-            {iconError && (
-                <p className="text-red-500 text-xs r2l">{iconError}</p>
-            )}
-
             <Button type="submit" disabled={!isFormValid}>
                 {props.type === "create" ? "ایجاد" : "ویرایش"}
             </Button>
@@ -114,4 +99,4 @@ const CategoryForm = (props: CategoryFormProps) => {
     );
 };
 
-export default CategoryForm;
+export default ProductForm;

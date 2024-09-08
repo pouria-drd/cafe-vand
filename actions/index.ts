@@ -6,4 +6,6 @@ export { getPanelCategories } from "./vand-panel/category/getPanelCategories";
 export { deleteCategoryBySlug } from "./vand-panel/category/deleteCategoryBySlug";
 export { updateCategoryBySlug } from "./vand-panel/category/updateCategoryBySlug";
 // Products
+export { createProduct } from "./vand-panel/product/createProduct";
+export { updateProductBySlug } from "./vand-panel/product/updateProductBySlug";
 export { deleteProductBySlug } from "./vand-panel/product/deleteProductBySlug";

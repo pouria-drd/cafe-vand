@@ -34,6 +34,11 @@ export interface CreateProductResult {
     error?: string;
 }
 
+export interface UpdateProductBySlugResult {
+    data?: PanelProduct;
+    error?: string;
+}
+
 export interface DeleteProductBySlugResult {
     data?: string;
     error?: string;
