@@ -25,14 +25,13 @@ async function CategoryDetailPage({
                 error={result?.error}
             />
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+            <div className="flex flex-col-reverse sm:grid sm:grid-cols-2 gap-8">
+                <ProductForm type="create" category={result.data} />
                 <CategoryForm
                     type="update"
                     categorySlug={params.categorySlug}
                     initialData={result.data}
                 />
-
-                <ProductForm type="create" category={result.data} />
             </div>
         </section>
     );

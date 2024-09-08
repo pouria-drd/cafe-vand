@@ -54,6 +54,8 @@ export async function updateProductBySlug(
         if (response.status === 200) {
             revalidatePath("/");
             revalidatePath("/vand-panel");
+            revalidatePath("/vand-panel/products");
+            revalidatePath("/vand-panel/products/[productSlug]");
             revalidatePath("/vand-panel/categories");
             revalidatePath("/vand-panel/categories/[categorySlug]");
             const data = await response.json();

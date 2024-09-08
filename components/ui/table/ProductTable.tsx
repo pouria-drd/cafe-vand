@@ -66,6 +66,14 @@ const ProductTable = (props: ProductTableProps) => {
             ),
         },
         {
+            header: "قیمت",
+            accessor: (product: PanelProduct) => (
+                <p className="text-center">
+                    {product.price ? product.price : 0}
+                </p>
+            ),
+        },
+        {
             header: "وضعیت",
             accessor: (product: PanelProduct) => (
                 <div className="flex items-center justify-center">

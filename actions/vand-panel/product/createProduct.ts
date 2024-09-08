@@ -57,6 +57,8 @@ export async function createProduct(
         if (response.status === 201) {
             revalidatePath("/");
             revalidatePath("/vand-panel");
+            revalidatePath("/vand-panel/products");
+            revalidatePath("/vand-panel/products/[productSlug]");
             revalidatePath("/vand-panel/categories");
             revalidatePath("/vand-panel/categories/[categorySlug]");
             const result = await response.json();

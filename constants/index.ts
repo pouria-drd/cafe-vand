@@ -14,4 +14,8 @@ export const navItems = [
         name: "دسته بندی ها",
         path: basePath + "/categories",
     },
+    {
+        name: "محصولات",
+        path: basePath + "/products",
+    },
 ];
