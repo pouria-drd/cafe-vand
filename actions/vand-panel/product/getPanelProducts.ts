@@ -1,24 +1,24 @@
 "use server";
 
-import { GetPanelCategoryResult, PanelCategory } from "@/types/panel";
+import { GetPanelProductsResult, PanelProduct } from "@/types/panel";
 
 /**
- * Fetches categories data.
+ * Fetches products data.
  * The function returns either the data fetched or an error message if the fetch fails.
  *
- * @returns {Promise<GetPanelCategoryResult>} An object containing either the array of categories or an error message.
+ * @returns {Promise<GetPanelProductsResult>} An object containing either the array of products or an error message.
  *
  * @example
  * ```typescript
- * const result = await getCategories();
+ * const result = await getPanelProducts();
  * if (result.error) {
  *     console.error("Error:", result.error);
  * } else {
- *     console.log("Categories:", result.data);
+ *     console.log("Products:", result.data);
  * }
  * ```
  */
-export async function getPanelCategories(): Promise<GetPanelCategoryResult> {
+export async function getPanelProducts(): Promise<GetPanelProductsResult> {
     // Introduce a delay for testing purposes (e.g., 2 seconds)
     // await new Promise((resolve) => setTimeout(resolve, 2000));
 
@@ -30,7 +30,7 @@ export async function getPanelCategories(): Promise<GetPanelCategoryResult> {
         return { error: "آدرسی برای ارتباط با سرور یافت نشد!" };
     }
 
-    const url = `${baseUrl}/panel/categories/`;
+    const url = `${baseUrl}/panel/products/`;
 
     try {
         // Attempt to fetch data from the URL.
@@ -42,12 +42,12 @@ export async function getPanelCategories(): Promise<GetPanelCategoryResult> {
         // If the response is not successful, return an error.
         if (!response.ok) {
             return {
-                error: "خطایی در دریافت داده رخ داده است!",
+                error: "خطایی در دریافت محصولات رخ داده است!",
             };
         }
 
-        // Parse the JSON response into an array of Category objects.
-        const data: PanelCategory[] = await response.json();
+        // Parse the JSON response into an array of Product objects.
+        const data: PanelProduct[] = await response.json();
         // Return the data if the fetch and parsing were successful.
         return { data };
     } catch (error) {

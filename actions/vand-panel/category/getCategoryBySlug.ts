@@ -20,7 +20,7 @@ export async function getCategoryBySlug(
 
     // Validate if the API base URL is properly set
     if (!baseUrl) {
-        return { error: "آدرس API برای دریافت داده از سرور تعریف نشده است!" };
+        return { error: "آدرسی برای ارتباط با سرور یافت نشد!" };
     }
 
     const url = `${baseUrl}/panel/categories/${slug}/`;
