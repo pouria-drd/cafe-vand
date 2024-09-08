@@ -1,4 +1,5 @@
 import { getCategoryBySlug } from "@/actions";
+import { ProductTable } from "@/components/ui";
 import { CategoryForm } from "@/components/form";
 
 async function CategoryDetailPage({
@@ -15,11 +16,18 @@ async function CategoryDetailPage({
                 <p className="text-red-500 text-center r2l">{result.error}</p>
             )}
             {result.data && (
-                <CategoryForm
-                    type="update"
-                    categorySlug={params.categorySlug}
-                    initialData={result.data}
-                />
+                <>
+                    <ProductTable
+                        products={result?.data.products}
+                        error={result?.error}
+                    />
+
+                    <CategoryForm
+                        type="update"
+                        categorySlug={params.categorySlug}
+                        initialData={result.data}
+                    />
+                </>
             )}
         </section>
     );

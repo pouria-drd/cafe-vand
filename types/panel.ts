@@ -7,6 +7,8 @@ export interface PanelPrice {
     createdAt: Date;
 }
 
+// Product Data
+
 export interface PanelProduct {
     id: string;
     name: string;
@@ -19,6 +21,20 @@ export interface PanelProduct {
     updatedAt: Date;
     prices: PanelPrice[];
 }
+
+export interface ProductFormData {
+    name: string;
+    slug: string;
+    category: string;
+    isActive: boolean;
+}
+
+export interface deleteProductBySlugResult {
+    data?: string;
+    error?: string;
+}
+
+// Category Data
 
 export interface CategoryFormData {
     name: string;
