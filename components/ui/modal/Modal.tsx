@@ -28,17 +28,17 @@ const Modal = (props: ModalProps) => {
             {props.isOpen && (
                 <motion.div
                     onClick={stopPropagation}
-                    className={`${styles.vandModal} `}
+                    className={`${styles.vandModal}`}
                     initial={{ y: "-100vh", opacity: 0 }} // Modal starts above the screen
                     animate={{ y: 0, opacity: 1 }} // Animates to its normal position
                     exit={{ y: "-100vh", opacity: 0 }} // Exit back to top of the screen
                     transition={{ duration: 0.4, ease: "easeInOut" }} // Smooth and controlled animation
                 >
-                    <div className="flex items-center justify-between gap-2 w-full">
+                    <div className="flex items-center justify-between gap-4 w-full">
                         <button onClick={handleCloseModal}>
                             <CloseIcon />
                         </button>
-                        <h3 className="text-xl">{title}</h3>
+                        <h3 className="text-xl font-bold truncate">{title}</h3>
                     </div>
 
                     <div className="w-full">{props.children}</div>
