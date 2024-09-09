@@ -1,11 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { Badge, Table } from "..";
 import { formatDate } from "@/lib/utils";
+import { Fragment, useState } from "react";
 import { PanelCategory } from "@/types/panel";
+import { AnimatePresence } from "framer-motion";
 import { deleteCategoryBySlug } from "@/actions";
-import { BinIcon, EditIcon } from "@/components/icons";
+import { Badge, CategoryModalForm, Table } from "..";
+import { BinIcon, EditIcon, EyeIcon } from "@/components/icons";
 
 interface CategoryTableProps {
     error?: string;
@@ -13,6 +15,15 @@ interface CategoryTableProps {
 }
 
 const CategoryTable = (props: CategoryTableProps) => {
+    const [isOpen, setIsOpen] = useState<boolean>(false);
+    const [selectedCategory, setSelectedCategory] =
+        useState<PanelCategory | null>(null);
+
+    const handleEdit = (category: PanelCategory) => {
+        setIsOpen(true);
+        setSelectedCategory(category);
+    };
+
     const handleDelete = async (slug: string) => {
         const canDelete = window.confirm(
             "آیا مطمئن هستید که میخواهید این دسته را حذف کنید؟"
@@ -37,9 +48,14 @@ const CategoryTable = (props: CategoryTableProps) => {
                 <div className="flex items-center justify-center gap-4 transition-all">
                     <Link
                         href={`/vand-panel/categories/${category.slug}`}
+                        className="text-green-600 hover:text-green-700">
+                        <EyeIcon />
+                    </Link>
+                    <button
+                        onClick={() => handleEdit(category)}
                         className="text-blue-600 hover:text-blue-700">
                         <EditIcon />
-                    </Link>
+                    </button>
                     <button
                         onClick={() => handleDelete(category.slug)}
                         className="text-red-500 hover:text-red-600">
@@ -49,7 +65,7 @@ const CategoryTable = (props: CategoryTableProps) => {
             ),
         },
         {
-            header: "تاریخ  به‌روزرسانی",
+            header: "به‌روزرسانی",
             accessor: (category: PanelCategory) => (
                 <p className="text-center ss02">
                     {formatDate(category.updatedAt, true)}
@@ -57,7 +73,7 @@ const CategoryTable = (props: CategoryTableProps) => {
             ),
         },
         {
-            header: "تاریخ ایجاد",
+            header: "ایجاد",
             accessor: (category: PanelCategory) => (
                 <p className="text-center ss02">
                     {formatDate(category.createdAt, true)}
@@ -83,7 +99,7 @@ const CategoryTable = (props: CategoryTableProps) => {
             ),
         },
         {
-            header: "نام دسته",
+            header: "نام",
             accessor: (category: PanelCategory) => (
                 <p className="text-center">{category.name}</p>
             ),
@@ -104,11 +120,26 @@ const CategoryTable = (props: CategoryTableProps) => {
     ];
 
     return (
-        <Table
-            columns={columns}
-            data={props.categories}
-            noDataMessage={props.error || "اطلاعاتی وجود ندارد"}
-        />
+        <Fragment>
+            <Table
+                columns={columns}
+                data={props.categories}
+                noDataMessage={props.error || "اطلاعاتی وجود ندارد"}
+            />
+            <AnimatePresence>
+                {isOpen && selectedCategory && (
+                    <CategoryModalForm
+                        type="update"
+                        isOpen={isOpen}
+                        categoryData={selectedCategory}
+                        onClose={() => {
+                            setIsOpen(false);
+                            setSelectedCategory(null);
+                        }}
+                    />
+                )}
+            </AnimatePresence>
+        </Fragment>
     );
 };
 

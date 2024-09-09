@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { useRouter } from "next/navigation";
 import { convertToBase64, slugify } from "@/lib/utils";
 import { createCategory, updateCategoryBySlug } from "@/actions";
 import { useState, useEffect, useMemo, useCallback } from "react";
@@ -24,7 +23,7 @@ const categorySchema = z.object({
 });
 
 export const useCategoryForm = (props: CategoryFormProps) => {
-    const router = useRouter();
+    const [pending, setPending] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const [formErrors, setFormErrors] = useState<{
         [key: string]: string | null;
@@ -38,17 +37,17 @@ export const useCategoryForm = (props: CategoryFormProps) => {
 
     // Initialize form states
     const [name, setName] = useState<string>(
-        (props.type === "update" && props.initialData?.name) || ""
+        props.type === "create" ? "" : props.categoryData.name
     );
     const [slug, setSlug] = useState<string>(
-        (props.type === "update" && props.initialData?.slug) || ""
+        props.type === "create" ? "" : props.categoryData.slug
     );
     const [isActive, setIsActive] = useState<boolean>(
-        (props.type === "update" && props.initialData?.isActive) || true
+        props.type === "create" ? true : props.categoryData.isActive
     );
     const [icon, setIcon] = useState<string | null>(null);
     const [iconPreview, setIconPreview] = useState<string | null>(
-        (props.type === "update" && props.initialData?.icon) || null
+        props.type === "create" ? null : props.categoryData.icon || null
     );
 
     // Update slug when name changes (only after user edits)
@@ -98,7 +97,7 @@ export const useCategoryForm = (props: CategoryFormProps) => {
         const validation = categorySchema.safeParse({
             name,
             slug,
-            icon,
+            icon: props.type === "update" && iconPreview ? undefined : icon,
             isActive,
         });
 
@@ -135,7 +134,7 @@ export const useCategoryForm = (props: CategoryFormProps) => {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!isFormValid) return;
-
+        setPending(true);
         const categoryData: CategoryFormData = {
             name,
             slug,
@@ -145,13 +144,17 @@ export const useCategoryForm = (props: CategoryFormProps) => {
         const result =
             props.type === "create"
                 ? await createCategory(categoryData)
-                : await updateCategoryBySlug(props.categorySlug, categoryData);
+                : await updateCategoryBySlug(
+                      props.categoryData.slug,
+                      categoryData
+                  );
 
+        setPending(false);
         if (result.error) {
             setError(result.error);
         } else {
             resetForm();
-            router.push("/vand-panel/categories");
+            props.onClose();
         }
     };
 
@@ -159,8 +162,9 @@ export const useCategoryForm = (props: CategoryFormProps) => {
     const resetForm = () => {
         setName("");
         setSlug("");
-        setIsActive(true);
         setIcon(null);
+        setPending(false);
+        setIsActive(true);
         setIconError(null);
         setIconPreview(null);
         setIsNameEdited(false);
@@ -173,9 +177,10 @@ export const useCategoryForm = (props: CategoryFormProps) => {
         slug,
         icon,
         error,
-        formErrors,
+        pending,
         isActive,
         iconError,
+        formErrors,
         iconPreview,
         isFormValid,
         setName: handleNameChange,

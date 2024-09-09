@@ -10,11 +10,12 @@ const CategoryModalForm = (props: CategoryFormProps) => {
         name,
         slug,
         error,
+        pending,
         isActive,
         iconError,
+        formErrors, // Add this line to access field-specific errors
         iconPreview,
         isFormValid,
-        formErrors, // Add this line to access field-specific errors
         // functions
         setName,
         setSlug,
@@ -34,7 +35,7 @@ const CategoryModalForm = (props: CategoryFormProps) => {
             title={
                 props.type === "create"
                     ? "دسته بندی جدید"
-                    : `ویرایش دسته بندی ${props.initialData.name}`
+                    : `ویرایش ${props.isOpen && props.categoryData!.name}`
             }>
             <Form onSubmit={handleSubmit}>
                 {/* Display server error at the top */}
@@ -141,8 +142,15 @@ const CategoryModalForm = (props: CategoryFormProps) => {
                 )}
 
                 {/* Submit Button */}
-                <Button type="submit" disabled={!isFormValid}>
-                    {props.type === "create" ? "ایجاد" : "ویرایش"}
+                <Button
+                    type="submit"
+                    disabled={!isFormValid || pending}
+                    className="r2l">
+                    {pending
+                        ? "لطفا صبر کنید ..."
+                        : props.type === "create"
+                        ? "ایجاد"
+                        : "ویرایش"}
                 </Button>
             </Form>
         </Modal>

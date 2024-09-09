@@ -38,7 +38,9 @@ const Modal = (props: ModalProps) => {
                         <button onClick={handleCloseModal}>
                             <CloseIcon />
                         </button>
-                        <h3 className="text-xl font-bold truncate">{title}</h3>
+                        <h3 className="text-xl font-bold truncate r2l">
+                            {title}
+                        </h3>
                     </div>
 
                     <div className="w-full">{props.children}</div>

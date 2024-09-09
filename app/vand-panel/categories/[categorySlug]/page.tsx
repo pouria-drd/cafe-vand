@@ -15,7 +15,9 @@ async function CategoryDetailPage({
     }
 
     if (!result.data) {
-        return <p className="text-red-500 text-center r2l">دسته یافت نشد!</p>;
+        return (
+            <p className="text-red-500 text-center r2l">دسته بندی یافت نشد!</p>
+        );
     }
 
     return (

@@ -78,8 +78,7 @@ interface CreateCategoryFormProps extends BaseFormProps {
 
 interface UpdateCategoryFormProps extends BaseFormProps {
     type: "update";
-    categorySlug: string;
-    initialData: CategoryFormData;
+    categoryData: CategoryFormData;
 }
 
 export type CategoryFormProps =

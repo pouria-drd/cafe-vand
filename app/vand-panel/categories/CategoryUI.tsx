@@ -8,8 +8,12 @@ const CategoryUI = () => {
 
     return (
         <Fragment>
-            <div className="flex items-center justify-between gap-4 w-full">
-                <Button onClick={() => setIsOpen(true)}>دسته بندی جدید</Button>
+            <div className="flex flex-col-reverse sm:flex-row items-center justify-between gap-4 w-full">
+                <Button
+                    className="w-full sm:w-auto"
+                    onClick={() => setIsOpen(true)}>
+                    دسته بندی جدید
+                </Button>
                 <h1 className="text-xl sm:text-2xl text-right">
                     آخرین دسته بندی ها
                 </h1>
