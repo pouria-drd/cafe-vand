@@ -41,7 +41,7 @@ export const useProductForm = (props: ProductFormProps) => {
         } else if (props.type === "create" && Array.isArray(props.category)) {
             return props.category[0].id;
         } else if (props.type === "update") {
-            return props.initialData.category;
+            return props.initialData.categoryId;
         } else {
             return "";
         }
@@ -88,7 +88,7 @@ export const useProductForm = (props: ProductFormProps) => {
             name,
             slug,
             newPrice: price,
-            category,
+            categoryId: category,
             isActive,
         };
 

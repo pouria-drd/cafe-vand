@@ -33,7 +33,7 @@ export async function updateProductBySlug(
     formData.append("name", props.name);
     formData.append("slug", props.slug);
     formData.append("newPrice", props.newPrice.toString());
-    formData.append("category", props.category);
+    formData.append("category", props.categoryId);
     formData.append("isActive", props.isActive ? "true" : "false");
 
     try {

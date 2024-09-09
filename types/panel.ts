@@ -1,28 +1,30 @@
-// Price Data
+// Common Data Structures
+interface PanelEntityBase {
+    id: string;
+    name: string;
+    slug: string;
+    isActive: boolean;
+    createdAt: Date;
+    updatedAt: Date;
+}
 
-export interface PanelPrice {
+interface PanelPrice {
     id: string;
     amount: number;
     createdAt: Date;
 }
 
-export interface DeletePriceByIdResult {
-    data?: string;
+// Generic Result Structure
+interface Result<T> {
+    data?: T;
     error?: string;
 }
 
 // Product Data
-
-export interface PanelProduct {
-    id: string;
-    name: string;
-    slug: string;
+export interface PanelProduct extends PanelEntityBase {
     price: number;
-    category: string;
+    categoryId: string;
     categoryName: string;
-    isActive: boolean;
-    createdAt: Date;
-    updatedAt: Date;
     prices: PanelPrice[];
 }
 
@@ -30,37 +32,18 @@ export interface ProductFormData {
     name: string;
     slug: string;
     newPrice: number | string;
-    category: string;
+    categoryId: string;
     isActive: boolean;
 }
 
-export interface GetProductBySlugResult {
-    data?: PanelProduct;
-    error?: string;
-}
-
-export interface GetPanelProductsResult {
-    data?: PanelProduct[];
-    error?: string;
-}
-
-export interface CreateProductResult {
-    data?: PanelProduct;
-    error?: string;
-}
-
-export interface UpdateProductBySlugResult {
-    data?: PanelProduct;
-    error?: string;
-}
-
-export interface DeleteProductBySlugResult {
-    data?: string;
-    error?: string;
-}
+// API Results
+export type GetProductBySlugResult = Result<PanelProduct>;
+export type GetPanelProductsResult = Result<PanelProduct[]>;
+export type CreateProductResult = Result<PanelProduct>;
+export type UpdateProductBySlugResult = Result<PanelProduct>;
+export type DeleteProductBySlugResult = Result<string>;
 
 // Category Data
-
 export interface CategoryFormData {
     name: string;
     slug: string;
@@ -68,50 +51,37 @@ export interface CategoryFormData {
     isActive: boolean;
 }
 
-export interface PanelCategory {
-    id: string;
-    name: string;
-    slug: string;
+export interface PanelCategory extends PanelEntityBase {
     icon: string;
-    isActive: boolean;
-    createdAt: Date;
-    updatedAt: Date;
 }
 
-export interface PanelCategoryDetail {
-    id: string;
-    name: string;
-    slug: string;
-    icon: string;
-    isActive: boolean;
-    createdAt: Date;
-    updatedAt: Date;
+export interface PanelCategoryDetail extends PanelCategory {
     products: PanelProduct[];
 }
 
-export interface GetPanelCategoryResult {
-    data?: PanelCategory[];
+// API Results for Categories
+export type GetPanelCategoryResult = Result<PanelCategory[]>;
+export type CreateCategoryResult = Result<PanelCategory>;
+export type GetCategoryBySlugResult = Result<PanelCategoryDetail>;
+export type UpdateCategoryBySlugResult = Result<PanelCategory>;
+export type DeleteCategoryBySlugResult = Result<string>;
 
-    error?: string;
+// Modal & Form Props
+interface BaseFormProps {
+    isOpen: boolean;
+    onClose: () => void;
 }
 
-export interface CreateCategoryResult {
-    data?: PanelCategory;
-    error?: string;
+interface CreateCategoryFormProps extends BaseFormProps {
+    type: "create";
 }
 
-export interface GetCategoryBySlugResult {
-    data?: PanelCategoryDetail;
-
-    error?: string;
+interface UpdateCategoryFormProps extends BaseFormProps {
+    type: "update";
+    categorySlug: string;
+    initialData: CategoryFormData;
 }
 
-export interface UpdateCategoryBySlugResult {
-    data?: PanelCategory;
-    error?: string;
-}
-
-export interface DeleteCategoryBySlugResult {
-    data?: string;
-    error?: string;
-}
+export type CategoryFormProps =
+    | CreateCategoryFormProps
+    | UpdateCategoryFormProps;
