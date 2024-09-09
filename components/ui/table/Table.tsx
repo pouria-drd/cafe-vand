@@ -64,7 +64,7 @@ const Table = ({
     };
 
     return (
-        <div className="overflow-auto shadow-md rounded-lg max-h-96 container max-w-[96vw] md:max-w-full">
+        <div className="overflow-auto border rounded-lg max-h-96 container max-w-[96vw] md:max-w-full">
             <table className="min-w-full divide-y divide-gray-400">
                 <thead className="bg-gray-50/85 sticky top-0 glass">
                     <tr>

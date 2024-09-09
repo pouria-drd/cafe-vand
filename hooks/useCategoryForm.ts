@@ -1,156 +1,171 @@
+import { z } from "zod";
 import { useRouter } from "next/navigation";
-import { CategoryFormData } from "@/types/panel";
 import { convertToBase64, slugify } from "@/lib/utils";
 import { createCategory, updateCategoryBySlug } from "@/actions";
 import { useState, useEffect, useMemo, useCallback } from "react";
+import { CategoryFormProps, CategoryFormData } from "@/types/panel";
 
-// Access environment variables
-const MAX_FILE_SIZE =
-    parseInt(process.env.NEXT_PUBLIC_MAX_ICON_SIZE || "1", 10) * 1024 * 1024;
+// Constants
+const MAX_FILE_SIZE_MB = parseInt(
+    process.env.NEXT_PUBLIC_MAX_ICON_SIZE || "1",
+    10
+);
+const MAX_FILE_SIZE = MAX_FILE_SIZE_MB * 1024 * 1024;
 const VALID_FILE_TYPES = (
     process.env.NEXT_PUBLIC_VALID_FILE_TYPES || "image/png,image/jpeg"
 ).split(",");
 
-interface CreateCategoryFormProps {
-    type: "create";
-}
-
-interface UpdateCategoryFormProps {
-    type: "update";
-    categorySlug: string;
-    initialData: CategoryFormData;
-}
-
-type CategoryFormProps = CreateCategoryFormProps | UpdateCategoryFormProps;
+// Zod schema
+const categorySchema = z.object({
+    name: z.string().min(3, "نام دسته‌بندی الزامی است"),
+    slug: z.string().min(3, "شناسه دسته‌بندی الزامی است"),
+    isActive: z.boolean(),
+    icon: z.string().optional(),
+});
 
 export const useCategoryForm = (props: CategoryFormProps) => {
     const router = useRouter();
-
     const [error, setError] = useState<string | null>(null);
-
-    const [name, setName] = useState<string>(
-        props.type === "create" ? "" : props.initialData.name
-    );
-    const [slug, setSlug] = useState<string>(
-        props.type === "create" ? "" : props.initialData.slug
-    );
-    const [isActive, setIsActive] = useState<boolean>(
-        props.type === "create" ? true : props.initialData.isActive
-    );
-    const [icon, setIcon] = useState<string | null>(null); // Icon file input
+    const [formErrors, setFormErrors] = useState<{
+        [key: string]: string | null;
+    }>({
+        name: null,
+        slug: null,
+        icon: null,
+    });
     const [iconError, setIconError] = useState<string | null>(null);
-    const [iconPreview, setIconPreview] = useState<string | null>(
-        props.type === "create"
-            ? null
-            : props.initialData.icon
-            ? props.initialData.icon
-            : null
-    );
-
-    // Flag to control if the user has edited the name
     const [isNameEdited, setIsNameEdited] = useState<boolean>(false);
 
-    // Update slug when name changes, but skip on initial load for update mode
+    // Initialize form states
+    const [name, setName] = useState<string>(
+        (props.type === "update" && props.initialData?.name) || ""
+    );
+    const [slug, setSlug] = useState<string>(
+        (props.type === "update" && props.initialData?.slug) || ""
+    );
+    const [isActive, setIsActive] = useState<boolean>(
+        (props.type === "update" && props.initialData?.isActive) || true
+    );
+    const [icon, setIcon] = useState<string | null>(null);
+    const [iconPreview, setIconPreview] = useState<string | null>(
+        (props.type === "update" && props.initialData?.icon) || null
+    );
+
+    // Update slug when name changes (only after user edits)
     useEffect(() => {
-        if (name && isNameEdited) {
-            setSlug(slugify(name));
-        }
+        if (name && isNameEdited) setSlug(slugify(name));
     }, [name, isNameEdited]);
 
-    // Handle name change and set the flag to indicate user input
+    // Handle name change
     const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setName(e.target.value);
-        if (!isNameEdited) {
-            setIsNameEdited(true); // Set flag when user manually changes the name
-        }
+        if (!isNameEdited) setIsNameEdited(true);
     };
 
-    // Validate icon file
-    const isValidIcon = (file: File) => {
+    const validateIcon = (
+        file: File,
+        setError: (error: string | null) => void
+    ): boolean => {
         if (file.size > MAX_FILE_SIZE) {
-            setIconError(
-                `حجم فایل باید حداکثر ${MAX_FILE_SIZE / 1024 / 1024}MB باشد.`
-            );
+            setError(`حجم فایل باید حداکثر ${MAX_FILE_SIZE_MB}MB باشد.`);
             return false;
         }
         if (!VALID_FILE_TYPES.includes(file.type)) {
-            setIconError("فرمت فایل نامعتبر است. فقط png و jpg مجاز هستند.");
+            setError("فرمت فایل نامعتبر است. فقط png و jpg مجاز هستند.");
             return false;
         }
-        setIconError(null);
+        setError(null);
         return true;
     };
 
     // Handle file input change
     const handleFileChange = useCallback(
         async (e: React.ChangeEvent<HTMLInputElement>) => {
-            if (e.target.files && e.target.files[0]) {
-                const file = e.target.files[0];
-                if (isValidIcon(file)) {
-                    const imageBase64String = await convertToBase64(file);
-                    setIcon(imageBase64String);
-                    setIconPreview(URL.createObjectURL(file)); // Update the preview
-                } else {
-                    setIcon(null); // Clear the icon if it's invalid
-                    setIconPreview(null);
-                }
+            const file = e.target.files?.[0];
+            if (file && validateIcon(file, setIconError)) {
+                setIcon(await convertToBase64(file));
+                setIconPreview(URL.createObjectURL(file));
+            } else {
+                setIcon(null);
+                setIconPreview(null);
             }
         },
         []
     );
 
-    // Check form validity
+    // Validate form
+    const validateForm = () => {
+        const validation = categorySchema.safeParse({
+            name,
+            slug,
+            icon,
+            isActive,
+        });
+
+        if (!validation.success) {
+            const errors: { [key: string]: string | null } = {};
+
+            // Access the ZodFormattedError object
+            const formattedErrors = validation.error.format();
+
+            // Extract and map errors
+            for (const [key, value] of Object.entries(formattedErrors)) {
+                if (Array.isArray(value) && value.length > 0) {
+                    // Assuming each value is a string
+                    errors[key] = value[0]; // Take the first message
+                } else {
+                    errors[key] = null;
+                }
+            }
+
+            setFormErrors(errors);
+            return false;
+        }
+
+        setFormErrors({ name: null, slug: null, icon: null });
+        return true;
+    };
+
+    // Form validity
     const isFormValid = useMemo(() => {
-        return name.trim() !== "" && slug.trim() !== "" && !iconError;
+        return validateForm() && !iconError;
     }, [name, slug, iconError, icon]);
 
     // Handle form submission
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        if (!isFormValid) return;
 
-        if (!isFormValid) {
-            return; // Prevent submission if form is not valid
-        }
-
-        // Prepare the category data
         const categoryData: CategoryFormData = {
             name,
             slug,
             isActive,
-            icon: icon ? icon : undefined,
+            icon: icon || undefined,
         };
+        const result =
+            props.type === "create"
+                ? await createCategory(categoryData)
+                : await updateCategoryBySlug(props.categorySlug, categoryData);
 
-        if (props.type === "create") {
-            // Call API to create the category
-            const result = await createCategory(categoryData);
-            if (result.error) {
-                setError(result.error);
-            } else {
-                setError(null);
-            }
-        } else if (props.type === "update") {
-            // Call API to update the category
-            const result = await updateCategoryBySlug(
-                props.categorySlug,
-                categoryData
-            );
-            if (result.error) {
-                setError(result.error);
-            } else {
-                setError(null);
-            }
-            // Handle update logic here if needed
+        if (result.error) {
+            setError(result.error);
+        } else {
+            resetForm();
+            router.push("/vand-panel/categories");
         }
+    };
 
-        // Reset form data
+    // Reset form fields
+    const resetForm = () => {
         setName("");
         setSlug("");
         setIsActive(true);
         setIcon(null);
         setIconError(null);
         setIconPreview(null);
-        setIsNameEdited(false); // Reset flag
-        router.push("/vand-panel/categories");
+        setIsNameEdited(false);
+        setError(null);
+        setFormErrors({ name: null, slug: null, icon: null });
     };
 
     return {
@@ -158,12 +173,14 @@ export const useCategoryForm = (props: CategoryFormProps) => {
         slug,
         icon,
         error,
+        formErrors,
         isActive,
         iconError,
         iconPreview,
         isFormValid,
-        setName: handleNameChange, // Use the new handleNameChange function
+        setName: handleNameChange,
         setSlug,
+        resetForm,
         setIsActive,
         handleSubmit,
         handleFileChange,

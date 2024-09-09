@@ -1,0 +1,3 @@
+.vandForm {
+    @apply bg-white flex flex-col gap-6 w-full;
+}
