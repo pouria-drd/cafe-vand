@@ -1,0 +1,5 @@
+.vandModal {
+    @apply bg-white cursor-default
+    flex flex-col items-center justify-center gap-4
+    w-[90vw] sm:w-96 rounded-lg p-4;
+}
