@@ -133,10 +133,11 @@ const CategoryTable = (props: CategoryTableProps) => {
         <Fragment>
             <Table
                 columns={columns}
-                data={props.categories || []}
-                pageSize={5} // Example page size for pagination
+                data={props.categories || []} // Pass the data to the table
                 filterable // Enable search filter
                 sortable // Enable column sorting
+                pageSize={5} // Example page size for pagination
+                noDataMessage="اطلاعاتی وجود ندارد" // Customize the no data message
             />
             <AnimatePresence>
                 {isOpen && selectedCategory && (

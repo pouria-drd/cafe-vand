@@ -13,17 +13,21 @@ interface Column<T> {
     customRender?: (data: T) => React.ReactNode;
 }
 
-interface Props<T> {
+interface TableProps<T> {
     data: T[];
     columns: Column<T>[];
     pageSize?: number;
-    filterable?: boolean;
     sortable?: boolean;
+    filterable?: boolean;
+    noDataMessage?: string;
 }
 
-const Table = <T extends object>(props: Props<T>) => {
+const Table = <T extends object>(props: TableProps<T>) => {
     const [filter, setFilter] = useState("");
-    const { pageSize = props.pageSize || 5 } = props;
+    const {
+        pageSize = props.pageSize || 5,
+        noDataMessage = props.noDataMessage || "No data found",
+    } = props;
     const [currentPage, setCurrentPage] = useState(1);
     const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
     const [sortColumn, setSortColumn] = useState<keyof T | string | null>(null);
@@ -98,13 +102,25 @@ const Table = <T extends object>(props: Props<T>) => {
     };
 
     const renderBody = () => {
+        if (props.data.length === 0) {
+            return (
+                <tr>
+                    <td
+                        colSpan={props.columns.length}
+                        className="px-6 py-4 text-center text-sm text-gray-500 r2l">
+                        {noDataMessage}
+                    </td>
+                </tr>
+            );
+        }
+
         return paginatedData.map((row, rowIndex) => (
             <tr className="odd:bg-white even:bg-gray-50" key={rowIndex}>
                 {props.columns.map((column) => (
                     <td
                         key={String(column.accessor)}
                         className="text-gray-600 text-xs sm:text-sm font-medium 
-                        whitespace-nowrap truncate max-w-44 p-4">
+                    whitespace-nowrap truncate max-w-44 p-4">
                         {column.customRender
                             ? column.customRender(row)
                             : (row[
@@ -117,10 +133,12 @@ const Table = <T extends object>(props: Props<T>) => {
     };
 
     const renderPagination = () => {
+        if (props.data.length === 0) return null;
+
         const totalPages = Math.ceil(sortedData.length / pageSize);
 
         return (
-            <div className="flex items-center justify-center gap-4 w-full">
+            <div className="flex items-center justify-center gap-4 w-full pb-4">
                 {/* Previous Button */}
                 <Button
                     onClick={() => handlePageChange(currentPage - 1)}
@@ -157,9 +175,9 @@ const Table = <T extends object>(props: Props<T>) => {
     return (
         <div
             className="flex flex-col items-center gap-4 overflow-auto 
-            border rounded-md p-4 max-h-screen">
+            border rounded-md px-4 max-h-[80svh]">
             {props.filterable && (
-                <div className="relative flex items-center w-full">
+                <div className="relative flex items-center w-full pt-4">
                     {!filter && (
                         <SearchIcon className="absolute left-3 size-5 text-gray-400" />
                     )}
