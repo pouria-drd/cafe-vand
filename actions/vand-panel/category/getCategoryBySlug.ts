@@ -1,9 +1,9 @@
 "use server";
 
 import {
-    GetCategoryBySlugResult,
-    PanelCategoryDetail,
     PanelPrice,
+    PanelCategoryDetail,
+    GetCategoryBySlugResult,
 } from "@/types/panel";
 
 export async function getCategoryBySlug(

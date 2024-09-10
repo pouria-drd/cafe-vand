@@ -1,6 +1,6 @@
 import { getCategoryBySlug } from "@/actions";
 import { ProductTable } from "@/components/ui";
-import { CategoryForm, ProductForm } from "@/components/form";
+import { ProductForm } from "@/components/form";
 
 async function CategoryDetailPage({
     params,
@@ -29,11 +29,6 @@ async function CategoryDetailPage({
 
             <div className="flex flex-col-reverse sm:grid sm:grid-cols-2 gap-8">
                 <ProductForm type="create" category={result.data} />
-                <CategoryForm
-                    type="update"
-                    categorySlug={params.categorySlug}
-                    initialData={result.data}
-                />
             </div>
         </section>
     );

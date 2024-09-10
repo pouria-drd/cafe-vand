@@ -8,16 +8,17 @@ interface PanelEntityBase {
     updatedAt: Date;
 }
 
-interface PanelPrice {
-    id: string;
-    amount: number;
-    createdAt: Date;
-}
-
 // Generic Result Structure
 interface Result<T> {
     data?: T;
     error?: string;
+}
+
+// Price Data
+export interface PanelPrice {
+    id: string;
+    amount: number;
+    createdAt: Date;
 }
 
 // Product Data

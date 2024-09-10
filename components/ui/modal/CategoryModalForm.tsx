@@ -110,7 +110,7 @@ const CategoryModalForm = (props: CategoryFormProps) => {
                         <label
                             className="cursor-pointer text-right w-full"
                             htmlFor="icon">
-                            آیکون
+                            تصویر
                         </label>
                         <Input
                             id="icon"

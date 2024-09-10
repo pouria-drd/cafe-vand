@@ -11,4 +11,5 @@ export { default as EditIcon } from "./EditIcon";
 export { default as VandIcon } from "./VandIcon";
 export { default as MenuIcon } from "./MenuIcon";
 export { default as CloseIcon } from "./CloseIcon";
+export { default as SearchIcon } from "./SearchIcon";
 export { default as VandMiniIcon } from "./VandMiniIcon";

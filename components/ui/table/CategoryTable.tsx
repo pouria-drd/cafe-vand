@@ -44,29 +44,32 @@ const CategoryTable = (props: CategoryTableProps) => {
     const columns = [
         {
             header: "عملیات",
-            accessor: (category: PanelCategory) => (
+            accessor: "actions",
+            customRender: (category: PanelCategory) => (
                 <div className="flex items-center justify-center gap-4 transition-all">
-                    <Link
-                        href={`/vand-panel/categories/${category.slug}`}
-                        className="text-green-600 hover:text-green-700">
-                        <EyeIcon />
-                    </Link>
-                    <button
-                        onClick={() => handleEdit(category)}
-                        className="text-blue-600 hover:text-blue-700">
-                        <EditIcon />
-                    </button>
                     <button
                         onClick={() => handleDelete(category.slug)}
                         className="text-red-500 hover:text-red-600">
                         <BinIcon />
                     </button>
+                    <button
+                        onClick={() => handleEdit(category)}
+                        className="text-blue-600 hover:text-blue-700">
+                        <EditIcon />
+                    </button>
+                    <Link
+                        href={`/vand-panel/categories/${category.slug}`}
+                        className="text-green-600 hover:text-green-700">
+                        <EyeIcon />
+                    </Link>
                 </div>
             ),
         },
         {
             header: "به‌روزرسانی",
-            accessor: (category: PanelCategory) => (
+            accessor: "updatedAt",
+            sortable: true,
+            customRender: (category: PanelCategory) => (
                 <p className="text-center ss02">
                     {formatDate(category.updatedAt, true)}
                 </p>
@@ -74,7 +77,9 @@ const CategoryTable = (props: CategoryTableProps) => {
         },
         {
             header: "ایجاد",
-            accessor: (category: PanelCategory) => (
+            accessor: "createdAt",
+            sortable: true,
+            customRender: (category: PanelCategory) => (
                 <p className="text-center ss02">
                     {formatDate(category.createdAt, true)}
                 </p>
@@ -82,7 +87,8 @@ const CategoryTable = (props: CategoryTableProps) => {
         },
         {
             header: "وضعیت",
-            accessor: (category: PanelCategory) => (
+            accessor: "isActive",
+            customRender: (category: PanelCategory) => (
                 <div className="flex items-center justify-center">
                     {category.isActive ? (
                         <Badge status="active" />
@@ -94,19 +100,24 @@ const CategoryTable = (props: CategoryTableProps) => {
         },
         {
             header: "شناسه",
-            accessor: (category: PanelCategory) => (
+            accessor: "slug",
+            sortable: true,
+            customRender: (category: PanelCategory) => (
                 <p className="text-center">{category.slug}</p>
             ),
         },
         {
             header: "نام",
-            accessor: (category: PanelCategory) => (
+            accessor: "name",
+            sortable: true,
+            customRender: (category: PanelCategory) => (
                 <p className="text-center">{category.name}</p>
             ),
         },
         {
             header: "تصویر",
-            accessor: (category: PanelCategory) =>
+            accessor: "icon",
+            customRender: (category: PanelCategory) =>
                 category.icon ? (
                     <img
                         className="min-w-8 sm:min-w-10 w-8 sm:w-10 mx-auto"
@@ -118,13 +129,14 @@ const CategoryTable = (props: CategoryTableProps) => {
                 ),
         },
     ];
-
     return (
         <Fragment>
             <Table
                 columns={columns}
-                data={props.categories}
-                noDataMessage={props.error || "اطلاعاتی وجود ندارد"}
+                data={props.categories || []}
+                pageSize={5} // Example page size for pagination
+                filterable // Enable search filter
+                sortable // Enable column sorting
             />
             <AnimatePresence>
                 {isOpen && selectedCategory && (

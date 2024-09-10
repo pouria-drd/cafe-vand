@@ -19,7 +19,7 @@ const Button = (props: ButtonProps) => {
         <button
             className={cn(
                 baseClass,
-                "disabled:cursor-not-allowed disabled:bg-opacity-50 transition-all rounded-lg px-3 py-2",
+                "disabled:cursor-not-allowed disabled:bg-opacity-50 transition-all rounded-md px-3 py-2",
                 className
             )}
             {...restProps}
