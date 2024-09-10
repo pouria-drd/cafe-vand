@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { Badge, Table } from "..";
 import { formatDate } from "@/lib/utils";
 import { PanelProduct } from "@/types/panel";
+import { Badge, Table, TableColumn } from "..";
 import { deleteProductBySlug } from "@/actions";
 import { BinIcon, EditIcon } from "@/components/icons";
 
@@ -31,10 +31,11 @@ const ProductTable = (props: ProductTableProps) => {
         }
     };
 
-    const columns = [
+    const columns: TableColumn<PanelProduct>[] = [
         {
             header: "عملیات",
-            accessor: (product: PanelProduct) => (
+            accessor: "actions",
+            customRender: (product: PanelProduct) => (
                 <div className="flex items-center justify-center gap-4 transition-all">
                     <Link
                         href={`/vand-panel/products/${product.slug}`}
@@ -50,34 +51,37 @@ const ProductTable = (props: ProductTableProps) => {
             ),
         },
         {
+            sortable: true,
+            accessor: "updatedAt",
             header: "تاریخ  به‌روزرسانی",
-            accessor: (product: PanelProduct) => (
+            customRender: (product: PanelProduct) => (
                 <p className="text-center ss02">
                     {formatDate(product.updatedAt, true)}
                 </p>
             ),
         },
         {
+            sortable: true,
             header: "تاریخ ایجاد",
-            accessor: (product: PanelProduct) => (
+            accessor: "createdAt",
+            customRender: (product: PanelProduct) => (
                 <p className="text-center ss02">
                     {formatDate(product.createdAt, true)}
                 </p>
             ),
         },
         {
+            sortable: true,
             header: "قیمت",
-            accessor: (product: PanelProduct) => (
-                <p className="text-center">
-                    {product.prices && product.prices.length > 0
-                        ? product.prices[0].amount
-                        : 0}
-                </p>
+            accessor: "price",
+            customRender: (product: PanelProduct) => (
+                <p className="text-center">{product.price || 0}</p>
             ),
         },
         {
             header: "وضعیت",
-            accessor: (product: PanelProduct) => (
+            accessor: "isActive",
+            customRender: (product: PanelProduct) => (
                 <div className="flex items-center justify-center">
                     {product.isActive ? (
                         <Badge status="active" />
@@ -88,14 +92,18 @@ const ProductTable = (props: ProductTableProps) => {
             ),
         },
         {
+            sortable: true,
             header: "شناسه",
-            accessor: (product: PanelProduct) => (
+            accessor: "slug",
+            customRender: (product: PanelProduct) => (
                 <p className="text-center">{product.slug}</p>
             ),
         },
         {
-            header: "نام محصول",
-            accessor: (product: PanelProduct) => (
+            header: "نام",
+            sortable: true,
+            accessor: "name",
+            customRender: (product: PanelProduct) => (
                 <p className="text-center">{product.name}</p>
             ),
         },
@@ -103,8 +111,10 @@ const ProductTable = (props: ProductTableProps) => {
 
     if (props.showCategoryName) {
         columns.push({
-            header: "نام دسته",
-            accessor: (product: PanelProduct) => (
+            header: "دسته",
+            sortable: true,
+            accessor: "categoryName",
+            customRender: (product: PanelProduct) => (
                 <p className="text-center">{product.categoryName}</p>
             ),
         });
@@ -112,8 +122,11 @@ const ProductTable = (props: ProductTableProps) => {
 
     return (
         <Table
+            sortable
+            filterable
+            pageSize={10}
             columns={columns}
-            data={props.products}
+            data={props.products || []}
             noDataMessage={props.error || "اطلاعاتی وجود ندارد"}
         />
     );

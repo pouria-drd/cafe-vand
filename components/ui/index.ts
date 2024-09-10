@@ -17,6 +17,7 @@ export { default as Modal } from "./modal/Modal";
 export { default as CategoryModalForm } from "./modal/CategoryModalForm";
 
 export { default as Table } from "./table/Table";
+export type { TableColumn } from "./table/Table";
 export { default as PriceTable } from "./table/PriceTable";
 export { default as ProductTable } from "./table/ProductTable";
 export { default as CategoryTable } from "./table/CategoryTable";

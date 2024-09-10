@@ -6,8 +6,8 @@ import { Fragment, useState } from "react";
 import { PanelCategory } from "@/types/panel";
 import { AnimatePresence } from "framer-motion";
 import { deleteCategoryBySlug } from "@/actions";
-import { Badge, CategoryModalForm, Table } from "..";
 import { BinIcon, EditIcon, EyeIcon } from "@/components/icons";
+import { Badge, CategoryModalForm, Table, TableColumn } from "..";
 
 interface CategoryTableProps {
     error?: string;
@@ -41,7 +41,7 @@ const CategoryTable = (props: CategoryTableProps) => {
         }
     };
 
-    const columns = [
+    const columns: TableColumn<PanelCategory>[] = [
         {
             header: "عملیات",
             accessor: "actions",
@@ -66,9 +66,9 @@ const CategoryTable = (props: CategoryTableProps) => {
             ),
         },
         {
+            sortable: true,
             header: "به‌روزرسانی",
             accessor: "updatedAt",
-            sortable: true,
             customRender: (category: PanelCategory) => (
                 <p className="text-center ss02">
                     {formatDate(category.updatedAt, true)}
@@ -76,9 +76,9 @@ const CategoryTable = (props: CategoryTableProps) => {
             ),
         },
         {
+            sortable: true,
             header: "ایجاد",
             accessor: "createdAt",
-            sortable: true,
             customRender: (category: PanelCategory) => (
                 <p className="text-center ss02">
                     {formatDate(category.createdAt, true)}
@@ -99,17 +99,17 @@ const CategoryTable = (props: CategoryTableProps) => {
             ),
         },
         {
+            sortable: true,
             header: "شناسه",
             accessor: "slug",
-            sortable: true,
             customRender: (category: PanelCategory) => (
                 <p className="text-center">{category.slug}</p>
             ),
         },
         {
             header: "نام",
-            accessor: "name",
             sortable: true,
+            accessor: "name",
             customRender: (category: PanelCategory) => (
                 <p className="text-center">{category.name}</p>
             ),

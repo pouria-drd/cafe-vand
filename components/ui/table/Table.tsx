@@ -6,7 +6,7 @@ import { ChevronRightIcon, SearchIcon } from "@/components/icons";
 
 type SortOrder = "asc" | "desc";
 
-interface Column<T> {
+export interface TableColumn<T> {
     header: string;
     accessor: keyof T | string;
     sortable?: boolean;
@@ -15,7 +15,7 @@ interface Column<T> {
 
 interface TableProps<T> {
     data: T[];
-    columns: Column<T>[];
+    columns: TableColumn<T>[];
     pageSize?: number;
     sortable?: boolean;
     filterable?: boolean;
@@ -178,8 +178,10 @@ const Table = <T extends object>(props: TableProps<T>) => {
 
     return (
         <div
-            className="flex flex-col gap-4 overflow-auto 
-            border rounded-md px-4 max-h-[80svh]">
+            className={`bg-white flex flex-col gap-4 overflow-auto 
+            border rounded-md px-4 max-h-[80svh] ${
+                props.filterable ? "" : "pt-4"
+            }`}>
             {props.filterable && (
                 <div className="relative flex items-center w-full pt-4">
                     {!filter && (
@@ -195,7 +197,10 @@ const Table = <T extends object>(props: TableProps<T>) => {
                 </div>
             )}
             <table className="size-full">
-                <thead className="bg-gray-50/85 sticky top-0 glass">
+                <thead
+                    className={`bg-gray-50/85 sticky glass ${
+                        props.filterable ? "top-0" : "-top-4"
+                    }`}>
                     {renderHeader()}
                 </thead>
                 <tbody className="divide-y divide-gray-200">
