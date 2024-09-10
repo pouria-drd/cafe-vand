@@ -71,7 +71,6 @@ const ProductTable = (props: ProductTableProps) => {
             ),
         },
         {
-            sortable: true,
             header: "قیمت",
             accessor: "price",
             customRender: (product: PanelProduct) => (

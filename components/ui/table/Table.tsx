@@ -185,7 +185,7 @@ const Table = <T extends object>(props: TableProps<T>) => {
             {props.filterable && (
                 <div className="relative flex items-center w-full pt-4">
                     {!filter && (
-                        <SearchIcon className="absolute left-3 size-5 text-gray-400" />
+                        <SearchIcon className="absolute left-3 bottom-[11px] size-5 text-gray-400" />
                     )}
                     <Input
                         type="text"
