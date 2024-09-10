@@ -178,7 +178,7 @@ const Table = <T extends object>(props: TableProps<T>) => {
 
     return (
         <div
-            className="flex flex-col items-center gap-4 overflow-auto 
+            className="flex flex-col gap-4 overflow-auto 
             border rounded-md px-4 max-h-[80svh]">
             {props.filterable && (
                 <div className="relative flex items-center w-full pt-4">
@@ -194,7 +194,7 @@ const Table = <T extends object>(props: TableProps<T>) => {
                     />
                 </div>
             )}
-            <table className="size-full overflow-auto">
+            <table className="size-full">
                 <thead className="bg-gray-50/85 sticky top-0 glass">
                     {renderHeader()}
                 </thead>
