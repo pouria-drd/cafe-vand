@@ -53,7 +53,7 @@ const ProductTable = (props: ProductTableProps) => {
         {
             sortable: true,
             accessor: "updatedAt",
-            header: "تاریخ  به‌روزرسانی",
+            header: "به‌روزرسانی",
             customRender: (product: PanelProduct) => (
                 <p className="text-center ss02">
                     {formatDate(product.updatedAt, true)}
@@ -62,7 +62,7 @@ const ProductTable = (props: ProductTableProps) => {
         },
         {
             sortable: true,
-            header: "تاریخ ایجاد",
+            header: "ایجاد",
             accessor: "createdAt",
             customRender: (product: PanelProduct) => (
                 <p className="text-center ss02">
