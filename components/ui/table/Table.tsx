@@ -2,7 +2,7 @@
 
 import { Button, Input } from "..";
 import React, { useState } from "react";
-import { SearchIcon } from "@/components/icons";
+import { ChevronRightIcon, SearchIcon } from "@/components/icons";
 
 type SortOrder = "asc" | "desc";
 
@@ -120,7 +120,7 @@ const Table = <T extends object>(props: TableProps<T>) => {
                     <td
                         key={String(column.accessor)}
                         className="text-gray-600 text-xs sm:text-sm font-medium 
-                    whitespace-nowrap truncate max-w-44 p-4">
+                        whitespace-nowrap truncate max-w-44 p-4">
                         {column.customRender
                             ? column.customRender(row)
                             : (row[
@@ -141,16 +141,18 @@ const Table = <T extends object>(props: TableProps<T>) => {
             <div className="flex items-center justify-center gap-4 w-full pb-4">
                 {/* Previous Button */}
                 <Button
+                    disabled={currentPage === 1}
                     onClick={() => handlePageChange(currentPage - 1)}
-                    disabled={currentPage === 1}>
-                    Previous
+                    className="flex items-center justify-center 
+                    min-w-8 sm:min-w-10 size-8 sm:size-10 aspect-square">
+                    <ChevronRightIcon className="min-w-3.5 -rotate-180" />
                 </Button>
 
                 {/* Page Numbers */}
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map(
                     (page) => (
                         <Button
-                            className="min-w-10 size-10 aspect-square"
+                            className="min-w-8 sm:min-w-10 size-8 sm:size-10 aspect-square text-sm"
                             key={page}
                             onClick={() => handlePageChange(page)}
                             disabled={page === currentPage}
@@ -164,9 +166,11 @@ const Table = <T extends object>(props: TableProps<T>) => {
 
                 {/* Next Button */}
                 <Button
+                    disabled={currentPage === totalPages}
                     onClick={() => handlePageChange(currentPage + 1)}
-                    disabled={currentPage === totalPages}>
-                    Next
+                    className="flex items-center justify-center 
+                    min-w-8 sm:min-w-10 size-8 sm:size-10 aspect-square">
+                    <ChevronRightIcon className="min-w-3.5" />
                 </Button>
             </div>
         );
