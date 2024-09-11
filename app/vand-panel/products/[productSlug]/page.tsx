@@ -1,14 +1,12 @@
+import { getProduct } from "@/actions/v1";
 import { PriceTable } from "@/components/ui";
-import { ProductForm } from "@/components/form";
-import { getCategoryList, getProduct } from "@/actions/v1";
+import ProductDetailUI from "./ProductDetailUI";
 
 async function ProductDetailPage({
     params: { productSlug },
 }: {
     params: { productSlug: string };
 }) {
-    // Fetch product and categories from the server
-    const categories = await getCategoryList();
     const product = await getProduct(productSlug);
 
     if (product.error) {
@@ -20,20 +18,9 @@ async function ProductDetailPage({
     }
 
     return (
-        <section className="flex flex-col gap-8">
+        <section className="bg-white flex flex-col gap-8 rounded p-4">
+            <ProductDetailUI product={product.data} />
             <PriceTable prices={product.data.prices} error={product?.error} />
-            {categories.data ? (
-                <ProductForm
-                    type="update"
-                    initialData={product.data}
-                    productSlug={productSlug}
-                    category={categories.data}
-                />
-            ) : (
-                <p className="text-red-500 text-center r2l">
-                    خطایی در دریافت دسته ها رخ داده است!
-                </p>
-            )}
         </section>
     );
 }

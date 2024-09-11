@@ -1,6 +1,6 @@
 import { getCategory } from "@/actions/v1";
 import { ProductTable } from "@/components/ui";
-import { ProductForm } from "@/components/form";
+import CategoryDetailUI from "./CategoryDetailUI";
 
 async function CategoryDetailPage({
     params,
@@ -8,7 +8,11 @@ async function CategoryDetailPage({
     params: { categorySlug: string };
 }) {
     // Fetch category from the server
-    const result = await getCategory(params.categorySlug);
+    const result = await getCategory(
+        params.categorySlug /*{
+        cache: "force-cache",
+    }*/
+    );
 
     if (result.error) {
         return <p className="text-red-500 text-center r2l">{result.error}</p>;
@@ -21,15 +25,13 @@ async function CategoryDetailPage({
     }
 
     return (
-        <section className="flex flex-col gap-8">
+        <section className="bg-white flex flex-col gap-8 rounded p-4">
+            <CategoryDetailUI apiResult={result} />
             <ProductTable
+                category={result.data}
                 products={result.data.products}
                 error={result?.error}
             />
-
-            <div className="flex flex-col-reverse sm:grid sm:grid-cols-2 gap-8">
-                <ProductForm type="create" category={result.data} />
-            </div>
         </section>
     );
 }

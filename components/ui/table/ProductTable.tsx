@@ -1,19 +1,28 @@
 "use client";
 
 import Link from "next/link";
-import { Product } from "@/types/panel";
+import { Category, Product } from "@/types/panel";
 import { formatDate } from "@/lib/utils";
-import { Badge, Table, TableColumn } from "..";
 import { deleteProduct } from "@/actions/v1";
-import { BinIcon, EditIcon } from "@/components/icons";
+import { Badge, Table, TableColumn } from "..";
+import { BinIcon, EditIcon, EyeIcon } from "@/components/icons";
+import { Fragment, useState } from "react";
+import { ProductForm } from "@/components/form";
+import { AnimatePresence } from "framer-motion";
 
 interface ProductTableProps {
     error?: string;
     products?: Product[];
     showCategoryName?: boolean;
+    category?: Category | Category[];
 }
 
 const ProductTable = (props: ProductTableProps) => {
+    const [isOpen, setIsOpen] = useState<boolean>(false);
+    const [selectedProduct, setSelectedProduct] = useState<Product | null>(
+        null
+    );
+
     const handleDelete = async (slug: string) => {
         const canDelete = window.confirm(
             "آیا مطمئن هستید که میخواهید این دسته را حذف کنید؟"
@@ -31,22 +40,32 @@ const ProductTable = (props: ProductTableProps) => {
         }
     };
 
+    const handleEdit = (product: Product) => {
+        setIsOpen(true);
+        setSelectedProduct(product);
+    };
+
     const columns: TableColumn<Product>[] = [
         {
             header: "عملیات",
             accessor: "actions",
             customRender: (product: Product) => (
                 <div className="flex items-center justify-center gap-4 transition-all">
-                    <Link
-                        href={`/vand-panel/products/${product.slug}`}
-                        className="text-blue-600 hover:text-blue-700">
-                        <EditIcon />
-                    </Link>
                     <button
                         onClick={() => handleDelete(product.slug)}
                         className="text-red-500 hover:text-red-600">
                         <BinIcon />
                     </button>
+                    <button
+                        onClick={() => handleEdit(product)}
+                        className="text-blue-600 hover:text-blue-700">
+                        <EditIcon />
+                    </button>
+                    <Link
+                        href={`/vand-panel/products/${product.slug}`}
+                        className="text-green-600 hover:text-green-700">
+                        <EyeIcon />
+                    </Link>
                 </div>
             ),
         },
@@ -120,14 +139,30 @@ const ProductTable = (props: ProductTableProps) => {
     }
 
     return (
-        <Table
-            sortable
-            filterable
-            pageSize={10}
-            columns={columns}
-            data={props.products || []}
-            noDataMessage={props.error || "اطلاعاتی وجود ندارد"}
-        />
+        <Fragment>
+            <Table
+                sortable
+                filterable
+                pageSize={10}
+                columns={columns}
+                data={props.products || []}
+                noDataMessage={props.error || "اطلاعاتی وجود ندارد"}
+            />
+            <AnimatePresence>
+                {isOpen && selectedProduct && props.category && (
+                    <ProductForm
+                        type="modal"
+                        isOpen={isOpen}
+                        category={props.category}
+                        initialData={selectedProduct}
+                        onClose={() => {
+                            setIsOpen(false);
+                            setSelectedProduct(null);
+                        }}
+                    />
+                )}
+            </AnimatePresence>
+        </Fragment>
     );
 };
 

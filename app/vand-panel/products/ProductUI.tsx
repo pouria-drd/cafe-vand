@@ -6,7 +6,7 @@ import { ProductForm } from "@/components/form";
 import { RetrieveCategoryListResult } from "@/types/panel";
 
 interface ProductUIProps {
-    categories: RetrieveCategoryListResult;
+    apiResult: RetrieveCategoryListResult;
 }
 
 const ProductUI = (props: ProductUIProps) => {
@@ -18,7 +18,7 @@ const ProductUI = (props: ProductUIProps) => {
                 <Button
                     className="w-full sm:w-auto"
                     onClick={() => setIsOpen(true)}>
-                    {props.categories.data
+                    {props.apiResult.data
                         ? "محصول جدید"
                         : "خطایی در دریافت دسته ها رخ داده است!"}
                 </Button>
@@ -26,11 +26,11 @@ const ProductUI = (props: ProductUIProps) => {
                     آخرین محصولات
                 </h1>
             </div>
-            {props.categories && props.categories.data && (
+            {props.apiResult && props.apiResult.data && (
                 <ProductForm
                     type="modal"
                     isOpen={isOpen}
-                    category={props.categories.data}
+                    category={props.apiResult.data}
                     onClose={() => setIsOpen(false)}
                 />
             )}

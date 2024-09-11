@@ -9,12 +9,13 @@ export default async function ProductsPage() {
 
     return (
         <section className="bg-white flex flex-col gap-8 rounded p-4">
-            <ProductUI categories={categories} />
+            <ProductUI apiResult={categories} />
 
             <ProductTable
                 showCategoryName
                 error={products?.error}
                 products={products?.data}
+                category={categories.data}
             />
         </section>
     );
