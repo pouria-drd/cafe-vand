@@ -7,8 +7,7 @@ import { ProductFormData, CreateProductResult } from "@/types/panel";
  * Sends a POST request to the server to create a new product with configurable options.
  *
  * @param props - The product information to be submitted.
- * @param options - Optional configuration for cache and timeout.
- * @param options.cache - Cache mode for the request (default is 'no-cache').
+ * @param options - Optional configuration for timeout.
  * @param options.timeout - Timeout in milliseconds for the request (default is 5000ms).
  * @returns {Promise<CreateProductResult>} - An object containing the created product data or an error message.
  *
@@ -22,7 +21,7 @@ import { ProductFormData, CreateProductResult } from "@/types/panel";
  *     categoryId: uuid,
  *     isActive: true
  *   },
- *   { cache: 'reload', timeout: 3000 }
+ *   { timeout: 3000 }
  * );
  *
  * if (result.error) {
@@ -34,10 +33,13 @@ import { ProductFormData, CreateProductResult } from "@/types/panel";
  */
 export async function createProduct(
     props: ProductFormData,
-    options?: { cache?: RequestCache; timeout?: number }
+    options?: { timeout?: number }
 ): Promise<CreateProductResult> {
     // set delay for testing purposes (e.g., 2 seconds)
     // await new Promise((resolve) => setTimeout(resolve, 6000));
+
+    // Set default options for timeout
+    const timeout = options?.timeout || 5000;
 
     // Ensure product information is valid before making the request
     if (
@@ -58,12 +60,6 @@ export async function createProduct(
         return { error: "آدرسی برای ارتباط با سرور یافت نشد!" };
     }
 
-    // Set default options for cache and timeout
-    const {
-        cache = "no-cache", // Default cache mode
-        timeout = 5000, // Default timeout in milliseconds
-    } = options || {};
-
     const url = `${baseUrl}/panel/products/`;
 
     // Prepare the form data
@@ -83,7 +79,6 @@ export async function createProduct(
         const response = await fetch(url, {
             method: "POST",
             body: formData,
-            cache, // Use configurable cache
             signal: controller.signal,
         });
 
@@ -105,6 +100,9 @@ export async function createProduct(
         // If the response is 201 Created, return the data
         if (response.status === 201) {
             revalidatePath("/");
+            revalidatePath("/vand-panel/");
+            revalidatePath("/vand-panel/products");
+            revalidatePath("/vand-panel/categories");
             const result = await response.json();
             return { data: result };
         }

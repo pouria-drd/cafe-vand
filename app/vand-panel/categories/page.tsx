@@ -4,7 +4,7 @@ import { CategoryTable } from "@/components/ui";
 
 async function CategoriesPage() {
     // Fetch categories from the server
-    const result = await getCategoryList();
+    const result = await getCategoryList({ cache: "force-cache" });
 
     return (
         <section className="bg-white flex flex-col gap-8 rounded p-4">

@@ -7,14 +7,13 @@ import { DeleteCategoryResult } from "@/types/panel";
  * Send a DELETE request to the server to delete a category with configurable options.
  *
  * @param slug - The slug of the category to be deleted.
- * @param options - Optional configuration for cache and timeout.
- * @param options.cache - Cache mode for the request (default is 'no-cache').
+ * @param options - Optional configuration for timeout.
  * @param options.timeout - Timeout in milliseconds for the request (default is 5000ms).
  * @returns {Promise<DeleteCategoryResult>} - An object containing either the success message or an error message.
  *
  * @example
  * ```typescript
- * const result = await deleteCategory("milk-shake", { cache: 'reload', timeout: 3000 });
+ * const result = await deleteCategory("milk-shake", { timeout: 3000 });
  * if (result.error) {
  *     console.error("Error:", result.error);
  * } else {
@@ -24,10 +23,13 @@ import { DeleteCategoryResult } from "@/types/panel";
  */
 export async function deleteCategory(
     slug: string,
-    options?: { cache?: RequestCache; timeout?: number }
+    options?: { timeout?: number }
 ): Promise<DeleteCategoryResult> {
     // set delay for testing purposes (e.g., 2 seconds)
     // await new Promise((resolve) => setTimeout(resolve, 6000));
+
+    // Set default options for timeout
+    const timeout = options?.timeout || 5000;
 
     // Ensure the slug is valid before making the request
     if (!slug || typeof slug !== "string" || slug.trim() === "") {
@@ -42,12 +44,6 @@ export async function deleteCategory(
         return { error: "آدرسی برای ارتباط با سرور یافت نشد!" };
     }
 
-    // Set default options for cache and timeout
-    const {
-        cache = "no-cache", // Default cache mode
-        timeout = 5000, // Default timeout in milliseconds
-    } = options || {};
-
     const url = `${baseUrl}/panel/categories/${encodeURIComponent(slug)}/`;
 
     // Set up a timeout using AbortController
@@ -58,7 +54,6 @@ export async function deleteCategory(
         // Send a DELETE request to remove the category with configurable cache and timeout
         const response = await fetch(url, {
             method: "DELETE",
-            cache, // Use configurable cache
             signal: controller.signal,
         });
 
@@ -82,6 +77,9 @@ export async function deleteCategory(
         // If category is deleted, return the success message
         if (response.status === 204) {
             revalidatePath("/");
+            revalidatePath("/vand-panel/");
+            revalidatePath("/vand-panel/products");
+            revalidatePath("/vand-panel/categories");
             return { data: "دسته‌بندی با موفقیت حذف شد!" };
         }
 

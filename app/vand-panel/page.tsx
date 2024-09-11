@@ -17,7 +17,7 @@ function VandPanel() {
 
     useEffect(() => {
         const fetchCategories = async () => {
-            const result = await getCategoryList();
+            const result = await getCategoryList({ cache: "force-cache" });
             if (result.data) {
                 setCategories(result.data);
             } else {
@@ -36,7 +36,7 @@ function VandPanel() {
                         {error}
                     </p>
                 )}
-                <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                     <Button onClick={() => setIsProductModalOpen(true)}>
                         محصول جدید
                     </Button>

@@ -1,28 +1,21 @@
+import ProductUI from "./ProductUI";
 import { ProductTable } from "@/components/ui";
-import { ProductForm } from "@/components/form";
 import { getCategoryList, getProductList } from "@/actions/v1";
 
-async function ProductsPage() {
+export default async function ProductsPage() {
     // Fetch products and categories from the server
-    const products = await getProductList();
-    const categories = await getCategoryList();
+    const products = await getProductList({ cache: "force-cache" });
+    const categories = await getCategoryList({ cache: "force-cache" });
 
     return (
-        <section className="flex flex-col gap-8">
+        <section className="bg-white flex flex-col gap-8 rounded p-4">
+            <ProductUI categories={categories} />
+
             <ProductTable
-                products={products?.data}
-                error={products?.error}
                 showCategoryName
+                error={products?.error}
+                products={products?.data}
             />
-            {categories.data ? (
-                <ProductForm type="create" category={categories.data} />
-            ) : (
-                <p className="text-red-500 text-center r2l">
-                    خطایی در دریافت دسته ها رخ داده است!
-                </p>
-            )}
         </section>
     );
 }
-
-export default ProductsPage;

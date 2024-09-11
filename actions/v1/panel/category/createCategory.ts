@@ -7,8 +7,7 @@ import { CategoryFormData, CreateCategoryResult } from "@/types/panel";
  * Send a POST request to the server to create a new category with configurable options.
  *
  * @param props - The category form data.
- * @param options - Optional configuration for cache and timeout.
- * @param options.cache - Cache mode for the request (default is 'no-cache').
+ * @param options - Optional configuration timeout.
  * @param options.timeout - Timeout in milliseconds for the request (default is 5000ms).
  * @returns {Promise<CreateCategoryResult>} - An object containing either the created category data or an error message.
  *
@@ -21,7 +20,7 @@ import { CategoryFormData, CreateCategoryResult } from "@/types/panel";
  *     isActive: true,
  *     icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAABkCAYAAAD..."
  *   },
- *   { cache: 'reload', timeout: 3000 }
+ *   { timeout: 3000 }
  * );
  *
  * if (result.error) {
@@ -33,10 +32,13 @@ import { CategoryFormData, CreateCategoryResult } from "@/types/panel";
  */
 export async function createCategory(
     props: CategoryFormData,
-    options?: { cache?: RequestCache; timeout?: number }
+    options?: { timeout?: number }
 ): Promise<CreateCategoryResult> {
     // set delay for testing purposes (e.g., 2 seconds)
     // await new Promise((resolve) => setTimeout(resolve, 6000));
+
+    // Set default options for timeout
+    const timeout = options?.timeout || 5000;
 
     // Ensure the category information is valid before making the request
     if (!props || !props.name || !props.slug || !props.icon) {
@@ -50,12 +52,6 @@ export async function createCategory(
     if (!baseUrl) {
         return { error: "آدرسی برای ارتباط با سرور یافت نشد!" };
     }
-
-    // Set default options for cache and timeout
-    const {
-        cache = "no-cache", // Default cache mode
-        timeout = 5000, // Default timeout in milliseconds
-    } = options || {};
 
     const url = `${baseUrl}/panel/categories/`;
 
@@ -75,7 +71,6 @@ export async function createCategory(
         const response = await fetch(url, {
             method: "POST",
             body: formData,
-            cache, // Use configurable cache
             signal: controller.signal,
         });
 
@@ -97,6 +92,9 @@ export async function createCategory(
         // If category is created, return the data
         if (response.status === 201) {
             revalidatePath("/");
+            revalidatePath("/vand-panel/");
+            revalidatePath("/vand-panel/products");
+            revalidatePath("/vand-panel/categories");
             const data = await response.json();
             return { data };
         }

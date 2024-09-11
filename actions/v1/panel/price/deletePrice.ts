@@ -7,14 +7,13 @@ import { DeletePriceByIdResult } from "@/types/panel";
  * Deletes a price by its id with configurable options.
  *
  * @param id - The id of the price to be deleted.
- * @param options - Optional configuration for cache and timeout.
- * @param options.cache - Cache mode for the request (default is 'no-cache').
+ * @param options - Optional configuration for timeout.
  * @param options.timeout - Timeout in milliseconds for the request (default is 5000ms).
  * @returns {Promise<DeletePriceByIdResult>} An object containing either the success message or an error message.
  *
  * @example
  * ```typescript
- * const result = await deletePrice("price-id-123", { cache: 'reload', timeout: 3000 });
+ * const result = await deletePrice("price-id-123", { timeout: 3000 });
  * if (result.error) {
  *     console.error("Error:", result.error);
  * } else {
@@ -24,16 +23,13 @@ import { DeletePriceByIdResult } from "@/types/panel";
  */
 export async function deletePrice(
     id: string,
-    options?: { cache?: RequestCache; timeout?: number }
+    options?: { timeout?: number }
 ): Promise<DeletePriceByIdResult> {
     // set delay for testing purposes (e.g., 2 seconds)
     // await new Promise((resolve) => setTimeout(resolve, 6000));
 
-    // Set default options for cache and timeout
-    const {
-        cache = "no-cache", // Default cache mode
-        timeout = 5000, // Default timeout in milliseconds
-    } = options || {};
+    // Set default options for timeout
+    const timeout = options?.timeout || 5000;
 
     // Retrieve the API base URL from environment variables
     const baseUrl = process.env.Base_API;
@@ -51,10 +47,6 @@ export async function deletePrice(
         // Send a DELETE request to remove the price by its id
         const response = await fetch(url, {
             method: "DELETE",
-            cache, // Use configurable cache
-            headers: {
-                "Content-Type": "application/json",
-            },
             signal: controller.signal, // AbortController signal
         });
 
@@ -64,6 +56,9 @@ export async function deletePrice(
         // Handle response based on status codes
         if (response.status === 204) {
             revalidatePath("/");
+            revalidatePath("/vand-panel/");
+            revalidatePath("/vand-panel/products");
+            revalidatePath("/vand-panel/categories");
             return { data: "قیمت با موفقیت حذف شد!" };
         }
 

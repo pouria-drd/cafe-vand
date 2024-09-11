@@ -6,14 +6,15 @@ import { CategoryDetail, RetrieveCategoryResult } from "@/types/panel";
  * Send a GET request to the server to fetch a category with configurable options.
  *
  * @param slug - The slug of the category to be fetched.
- * @param options - Optional configuration for cache and timeout.
+ * @param options - Optional configuration for cache, timeout, and revalidation.
  * @param options.cache - Cache mode for the request (default is 'no-cache').
  * @param options.timeout - Timeout in milliseconds for the request (default is 5000ms).
+ * @param options.revalidate - Number of hours after which to revalidate the data (default is 1 hour).
  * @returns {Promise<RetrieveCategoryResult>} - An object containing either the detailed category data or an error message.
  *
  * @example
  * ```typescript
- * const result = await getCategory('milk-shake', { cache: 'reload', timeout: 3000 });
+ * const result = await getCategory('milk-shake', { cache: 'force-cache', timeout: 3000, revalidate: 2 });
  * if (result.error) {
  *     console.error("Error:", result.error);
  * } else {
@@ -23,10 +24,14 @@ import { CategoryDetail, RetrieveCategoryResult } from "@/types/panel";
  */
 export async function getCategory(
     slug: string,
-    options?: { cache?: RequestCache; timeout?: number }
+    options?: { cache?: RequestCache; timeout?: number; revalidate?: number }
 ): Promise<RetrieveCategoryResult> {
-    // set delay for testing purposes (e.g., 2 seconds)
-    // await new Promise((resolve) => setTimeout(resolve, 6000));
+    // Set default options for cache, timeout, and revalidation
+    const timeout = options?.timeout || 5000;
+    const cache = options?.cache || "no-cache";
+    const revalidateHours = options?.revalidate || 1; // Default revalidation time is 1 hour
+    const revalidate =
+        cache !== "no-cache" ? revalidateHours * 3600 : undefined; // Set revalidate only if cache is not 'no-cache'
 
     // Ensure the slug is valid before making the request
     if (!slug || typeof slug !== "string" || slug.trim() === "") {
@@ -41,12 +46,6 @@ export async function getCategory(
         return { error: "آدرسی برای ارتباط با سرور یافت نشد!" };
     }
 
-    // Set default options for cache and timeout
-    const {
-        cache = "no-cache", // Default cache mode
-        timeout = 5000, // Default timeout in milliseconds
-    } = options || {};
-
     const url = `${baseUrl}/panel/categories/${encodeURIComponent(slug)}/`;
 
     // Set up a timeout using AbortController
@@ -54,11 +53,12 @@ export async function getCategory(
     const timeoutId = setTimeout(() => controller.abort(), timeout);
 
     try {
-        // Fetch category data with configurable cache and timeout
+        // Fetch category data with configurable cache, timeout, and revalidation
         const response = await fetch(url, {
             method: "GET",
             cache, // Use configurable cache
             signal: controller.signal,
+            ...(revalidate !== undefined ? { next: { revalidate } } : {}), // Apply revalidate only if it's defined
         });
 
         // Clear the timeout if the request completes on time

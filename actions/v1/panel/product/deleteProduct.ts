@@ -7,14 +7,13 @@ import { DeleteProductResult } from "@/types/panel";
  * Sends a DELETE request to the server to delete a product with configurable options.
  *
  * @param slug - The slug of the product to be deleted.
- * @param options - Optional configuration for cache and timeout.
- * @param options.cache - Cache mode for the request (default is 'no-cache').
+ * @param options - Optional configuration for timeout.
  * @param options.timeout - Timeout in milliseconds for the request (default is 5000ms).
  * @returns {Promise<DeleteProductResult>} - An object containing the result of the delete operation or an error message.
  *
  * @example
  * ```typescript
- * const result = await deleteProduct("milk-shake", { cache: 'reload', timeout: 3000 });
+ * const result = await deleteProduct("milk-shake", { timeout: 3000 });
  * if (result.error) {
  *     console.error("Error:", result.error);
  * } else {
@@ -24,10 +23,13 @@ import { DeleteProductResult } from "@/types/panel";
  */
 export async function deleteProduct(
     slug: string,
-    options?: { cache?: RequestCache; timeout?: number }
+    options?: { timeout?: number }
 ): Promise<DeleteProductResult> {
     // set delay for testing purposes (e.g., 2 seconds)
     // await new Promise((resolve) => setTimeout(resolve, 6000));
+
+    // Set default options for timeout
+    const timeout = options?.timeout || 5000;
 
     // Ensure the slug is valid before making the request
     if (!slug || typeof slug !== "string" || slug.trim() === "") {
@@ -42,12 +44,6 @@ export async function deleteProduct(
         return { error: "آدرسی برای ارتباط با سرور یافت نشد!" };
     }
 
-    // Set default options for cache and timeout
-    const {
-        cache = "no-cache", // Default cache mode
-        timeout = 5000, // Default timeout in milliseconds
-    } = options || {};
-
     const url = `${baseUrl}/panel/products/${encodeURIComponent(slug)}/`;
 
     // Set up a timeout using AbortController
@@ -59,7 +55,6 @@ export async function deleteProduct(
         const response = await fetch(url, {
             method: "DELETE",
             signal: controller.signal,
-            cache, // Use configurable cache
         });
 
         // Clear the timeout if the request completes on time
@@ -83,6 +78,9 @@ export async function deleteProduct(
         if (response.status === 204) {
             // Revalidate the cache after deletion
             revalidatePath("/");
+            revalidatePath("/vand-panel/");
+            revalidatePath("/vand-panel/products");
+            revalidatePath("/vand-panel/categories");
             return { data: "محصول با موفقیت حذف شد!" };
         }
 

@@ -8,6 +8,7 @@ import { RetrieveProductListResult, Product } from "@/types/panel";
  * @param options - Optional configuration for cache and timeout.
  * @param options.cache - Cache mode for the request (default is 'no-cache').
  * @param options.timeout - Timeout in milliseconds for the request (default is 5000ms).
+ * @param options.revalidate - Number of hours after which to revalidate the data (default is 1 hour).
  * @returns {Promise<RetrieveProductListResult>} - An object containing either the array of products or an error message.
  *
  * @example
@@ -23,21 +24,23 @@ import { RetrieveProductListResult, Product } from "@/types/panel";
 export async function getProductList(options?: {
     cache?: RequestCache;
     timeout?: number;
+    revalidate?: number; // Number of hours for revalidation
 }): Promise<RetrieveProductListResult> {
     // set delay for testing purposes (e.g., 2 seconds)
     // await new Promise((resolve) => setTimeout(resolve, 6000));
+
+    // Set default options for cache, timeout, and revalidation
+    const timeout = options?.timeout || 5000;
+    const cache = options?.cache || "no-cache";
+    const revalidateHours = options?.revalidate || 1; // Default revalidation time is 1 hour
+    const revalidate =
+        cache !== "no-cache" ? revalidateHours * 3600 : undefined; // Set revalidate only if cache is not 'no-cache'
 
     // Retrieve the API base URL from environment variables and validate it
     const baseUrl = process.env.Base_API;
     if (!baseUrl) {
         return { error: "آدرسی برای ارتباط با سرور یافت نشد!" };
     }
-
-    // Set default options for cache and timeout
-    const {
-        cache = "no-cache", // Default cache mode
-        timeout = 5000, // Default timeout in milliseconds
-    } = options || {};
 
     const url = `${baseUrl}/panel/products/`;
 
@@ -48,8 +51,10 @@ export async function getProductList(options?: {
     try {
         // Fetch product list data with configurable cache and timeout
         const response = await fetch(url, {
+            method: "GET",
+            cache, // Use configurable cache
             signal: controller.signal,
-            cache, // Use configurable cache option
+            ...(revalidate !== undefined ? { next: { revalidate } } : {}), // Apply revalidate only if it's defined
         });
 
         // Clear the timeout if the request completes on time

@@ -8,8 +8,7 @@ import { ProductFormData, UpdateProductResult } from "@/types/panel";
  *
  * @param productSlug - The slug of the product to be updated.
  * @param props - The product information to be updated.
- * @param options - Optional configuration for cache and timeout.
- * @param options.cache - Cache mode for the request (default is 'no-cache').
+ * @param options - Optional configuration for timeout.
  * @param options.timeout - Timeout in milliseconds for the request (default is 5000ms).
  * @returns {Promise<UpdateProductResult>} - An object containing the updated product data or an error message.
  *
@@ -24,7 +23,7 @@ import { ProductFormData, UpdateProductResult } from "@/types/panel";
  *     categoryId: uuid,
  *     isActive: true
  *   },
- *   { cache: 'reload', timeout: 3000 }
+ *   { timeout: 3000 }
  * );
  *
  * if (result.error) {
@@ -37,22 +36,19 @@ import { ProductFormData, UpdateProductResult } from "@/types/panel";
 export async function updateProduct(
     productSlug: string,
     props: ProductFormData,
-    options?: { cache?: RequestCache; timeout?: number }
+    options?: { timeout?: number }
 ): Promise<UpdateProductResult> {
     // set delay for testing purposes (e.g., 2 seconds)
     // await new Promise((resolve) => setTimeout(resolve, 6000));
+
+    // Set default options for timeout
+    const timeout = options?.timeout || 5000;
 
     // Retrieve the API base URL from environment variables and validate it
     const baseUrl = process.env.Base_API;
     if (!baseUrl) {
         return { error: "آدرسی برای ارتباط با سرور یافت نشد!" };
     }
-
-    // Set default options for cache and timeout
-    const {
-        cache = "no-cache", // Default cache mode
-        timeout = 5000, // Default timeout in milliseconds
-    } = options || {};
 
     const url = `${baseUrl}/panel/products/${encodeURIComponent(productSlug)}/`;
 
@@ -74,7 +70,6 @@ export async function updateProduct(
         const response = await fetch(url, {
             method: "PATCH",
             body: formData,
-            cache, // Use configurable cache
             signal: controller.signal,
         });
 

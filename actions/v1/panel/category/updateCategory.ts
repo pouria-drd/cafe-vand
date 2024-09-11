@@ -8,8 +8,7 @@ import { CategoryFormData, UpdateCategoryResult } from "@/types/panel";
  *
  * @param slug - The slug of the category to be updated.
  * @param props - The category information.
- * @param options - Optional configuration for cache and timeout.
- * @param options.cache - Cache mode for the request (default is 'no-cache').
+ * @param options - Optional configuration for timeout.
  * @param options.timeout - Timeout in milliseconds for the request (default is 5000ms).
  * @returns {Promise<UpdateCategoryResult>} An object containing either the updated category data or an error message.
  *
@@ -20,7 +19,7 @@ import { CategoryFormData, UpdateCategoryResult } from "@/types/panel";
  *     slug: "milk-shake",
  *     isActive: false,
  *     icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAABkCAYAAAD..."
- * }, { cache: 'reload', timeout: 3000 });
+ * }, { timeout: 3000 });
  *
  * if (result.error) {
  *     console.error("Error:", result.error);
@@ -32,16 +31,13 @@ import { CategoryFormData, UpdateCategoryResult } from "@/types/panel";
 export async function updateCategory(
     slug: string,
     props: CategoryFormData,
-    options?: { cache?: RequestCache; timeout?: number }
+    options?: { timeout?: number }
 ): Promise<UpdateCategoryResult> {
     // set delay for testing purposes (e.g., 2 seconds)
     // await new Promise((resolve) => setTimeout(resolve, 6000));
 
-    // Default options for cache and timeout
-    const {
-        cache = "no-cache", // Default cache mode
-        timeout = 5000, // Default timeout in milliseconds
-    } = options || {};
+    // Set default options for timeout
+    const timeout = options?.timeout || 5000;
 
     // Retrieve the API base URL from environment variables and validate it
     const baseUrl = process.env.Base_API;
@@ -64,11 +60,10 @@ export async function updateCategory(
     const timeoutId = setTimeout(() => controller.abort(), timeout);
 
     try {
-        // Send a PATCH request to update the category with configurable cache and timeout
+        // Send a PATCH request to update the category with configurable timeout
         const response = await fetch(url, {
             method: "PATCH",
             body: formData,
-            cache,
             signal: controller.signal,
         });
 
@@ -90,6 +85,10 @@ export async function updateCategory(
         // If the response is successful, return the updated data
         const data = await response.json();
         revalidatePath("/");
+        revalidatePath("/vand-panel/");
+        revalidatePath("/vand-panel/products");
+        revalidatePath("/vand-panel/categories");
+        revalidatePath("/vand-panel/categories/" + slug);
         return { data };
     } catch (error) {
         // console.error("Fetch error:", error); // Log error for debugging in development
