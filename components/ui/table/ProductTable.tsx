@@ -1,15 +1,15 @@
 "use client";
 
 import Link from "next/link";
+import { Product } from "@/types/panel";
 import { formatDate } from "@/lib/utils";
-import { PanelProduct } from "@/types/panel";
 import { Badge, Table, TableColumn } from "..";
-import { deleteProductBySlug } from "@/actions";
+import { deleteProduct } from "@/actions/v1";
 import { BinIcon, EditIcon } from "@/components/icons";
 
 interface ProductTableProps {
     error?: string;
-    products?: PanelProduct[];
+    products?: Product[];
     showCategoryName?: boolean;
 }
 
@@ -21,7 +21,7 @@ const ProductTable = (props: ProductTableProps) => {
         if (!canDelete) return;
 
         try {
-            const result = await deleteProductBySlug(slug);
+            const result = await deleteProduct(slug);
             if (result.error) {
                 window.alert(`خطا در حذف دسته: ${result.error}`);
                 return;
@@ -31,11 +31,11 @@ const ProductTable = (props: ProductTableProps) => {
         }
     };
 
-    const columns: TableColumn<PanelProduct>[] = [
+    const columns: TableColumn<Product>[] = [
         {
             header: "عملیات",
             accessor: "actions",
-            customRender: (product: PanelProduct) => (
+            customRender: (product: Product) => (
                 <div className="flex items-center justify-center gap-4 transition-all">
                     <Link
                         href={`/vand-panel/products/${product.slug}`}
@@ -54,7 +54,7 @@ const ProductTable = (props: ProductTableProps) => {
             sortable: true,
             accessor: "updatedAt",
             header: "به‌روزرسانی",
-            customRender: (product: PanelProduct) => (
+            customRender: (product: Product) => (
                 <p className="text-center ss02">
                     {formatDate(product.updatedAt, true)}
                 </p>
@@ -64,7 +64,7 @@ const ProductTable = (props: ProductTableProps) => {
             sortable: true,
             header: "ایجاد",
             accessor: "createdAt",
-            customRender: (product: PanelProduct) => (
+            customRender: (product: Product) => (
                 <p className="text-center ss02">
                     {formatDate(product.createdAt, true)}
                 </p>
@@ -73,14 +73,14 @@ const ProductTable = (props: ProductTableProps) => {
         {
             header: "قیمت",
             accessor: "price",
-            customRender: (product: PanelProduct) => (
+            customRender: (product: Product) => (
                 <p className="text-center">{product.price || 0}</p>
             ),
         },
         {
             header: "وضعیت",
             accessor: "isActive",
-            customRender: (product: PanelProduct) => (
+            customRender: (product: Product) => (
                 <div className="flex items-center justify-center">
                     {product.isActive ? (
                         <Badge status="active" />
@@ -94,7 +94,7 @@ const ProductTable = (props: ProductTableProps) => {
             sortable: true,
             header: "شناسه",
             accessor: "slug",
-            customRender: (product: PanelProduct) => (
+            customRender: (product: Product) => (
                 <p className="text-center">{product.slug}</p>
             ),
         },
@@ -102,7 +102,7 @@ const ProductTable = (props: ProductTableProps) => {
             header: "نام",
             sortable: true,
             accessor: "name",
-            customRender: (product: PanelProduct) => (
+            customRender: (product: Product) => (
                 <p className="text-center">{product.name}</p>
             ),
         },
@@ -113,7 +113,7 @@ const ProductTable = (props: ProductTableProps) => {
             header: "دسته",
             sortable: true,
             accessor: "categoryName",
-            customRender: (product: PanelProduct) => (
+            customRender: (product: Product) => (
                 <p className="text-center">{product.categoryName}</p>
             ),
         });

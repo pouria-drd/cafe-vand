@@ -3,18 +3,18 @@
 import { Button, Input } from "../ui";
 import styles from "./form.module.css";
 import { useProductForm } from "@/hooks";
-import { PanelCategory, PanelProduct } from "@/types/panel";
+import { Category, Product } from "@/types/panel";
 
 interface CreateProductFormProps {
     type: "create";
-    category: PanelCategory | PanelCategory[];
+    category: Category | Category[];
 }
 
 interface UpdateProductFormProps {
     type: "update";
     productSlug: string;
-    category: PanelCategory | PanelCategory[];
-    initialData: PanelProduct;
+    category: Category | Category[];
+    initialData: Product;
 }
 
 type ProductFormProps = CreateProductFormProps | UpdateProductFormProps;

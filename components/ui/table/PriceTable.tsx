@@ -1,14 +1,14 @@
 "use client";
 
-import { Table } from "..";
+import { Price } from "@/types/panel";
+import { Table, TableColumn } from "..";
 import { formatDate } from "@/lib/utils";
-import { PanelPrice } from "@/types/panel";
-import { deletePriceById } from "@/actions";
+import { deletePrice } from "@/actions/v1";
 import { BinIcon } from "@/components/icons";
 
 interface PriceTableProps {
     error?: string;
-    prices?: PanelPrice[];
+    prices?: Price[];
 }
 
 const PriceTable = (props: PriceTableProps) => {
@@ -19,7 +19,7 @@ const PriceTable = (props: PriceTableProps) => {
         if (!canDelete) return;
 
         try {
-            const result = await deletePriceById(id);
+            const result = await deletePrice(id);
             if (result.error) {
                 window.alert(`خطا در حذف قیمت: ${result.error}`);
                 return;
@@ -29,10 +29,11 @@ const PriceTable = (props: PriceTableProps) => {
         }
     };
 
-    const columns = [
+    const columns: TableColumn<Price>[] = [
         {
             header: "عملیات",
-            accessor: (price: PanelPrice) => (
+            accessor: "actions",
+            customRender: (price: Price) => (
                 <div className="flex items-center justify-center gap-4 transition-all">
                     <button
                         onClick={() => handleDelete(price.id)}
@@ -43,16 +44,19 @@ const PriceTable = (props: PriceTableProps) => {
             ),
         },
         {
-            header: "تاریخ ایجاد",
-            accessor: (price: PanelPrice) => (
-                <p className="text-center ss02">
+            header: "ایجاد",
+            accessor: "createdAt",
+            customRender: (price: Price) => (
+                <p className="text-center">
                     {formatDate(price.createdAt, true)}
                 </p>
             ),
+            sortable: true,
         },
         {
             header: "قیمت",
-            accessor: (price: PanelPrice) => (
+            accessor: "amount",
+            customRender: (price: Price) => (
                 <p className="text-center">{price.amount}</p>
             ),
         },
@@ -61,7 +65,7 @@ const PriceTable = (props: PriceTableProps) => {
     return (
         <Table
             columns={columns}
-            data={props.prices}
+            data={props.prices || []}
             noDataMessage={props.error || "اطلاعاتی وجود ندارد"}
         />
     );

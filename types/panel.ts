@@ -1,87 +1,107 @@
-// Common Data Structures
-interface PanelEntityBase {
+// Base Data Structures --------------------------------------------------------
+
+interface BaseEntityData {
     id: string;
     name: string;
     slug: string;
-    isActive: boolean;
     createdAt: Date;
     updatedAt: Date;
+    isActive: boolean;
 }
 
-// Generic Result Structure
-interface Result<T> {
+interface BaseFormData {
+    name: string;
+    slug: string;
+    isActive: boolean;
+}
+
+interface BaseModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+}
+
+// Generic Structures ----------------------------------------------------------
+interface APIResult<T> {
     data?: T;
     error?: string;
 }
 
-// Price Data
-export interface PanelPrice {
+// Entities Data ---------------------------------------------------------------
+
+export interface Price {
     id: string;
     amount: number;
     createdAt: Date;
 }
 
-// Product Data
-export interface PanelProduct extends PanelEntityBase {
+export interface Product extends BaseEntityData {
     price: number;
     categoryId: string;
     categoryName: string;
-    prices: PanelPrice[];
 }
 
-export interface ProductFormData {
-    name: string;
-    slug: string;
-    newPrice: number | string;
-    categoryId: string;
-    isActive: boolean;
+export interface ProductDetail extends Product {
+    prices: Price[];
 }
 
-// API Results
-export type GetProductBySlugResult = Result<PanelProduct>;
-export type GetPanelProductsResult = Result<PanelProduct[]>;
-export type CreateProductResult = Result<PanelProduct>;
-export type UpdateProductBySlugResult = Result<PanelProduct>;
-export type DeleteProductBySlugResult = Result<string>;
-
-// Category Data
-export interface CategoryFormData {
-    name: string;
-    slug: string;
-    icon?: string;
-    isActive: boolean;
-}
-
-export interface PanelCategory extends PanelEntityBase {
+export interface Category extends BaseEntityData {
     icon: string;
 }
 
-export interface PanelCategoryDetail extends PanelCategory {
-    products: PanelProduct[];
+export interface CategoryDetail extends Category {
+    products: Product[];
 }
 
-// API Results for Categories
-export type GetPanelCategoryResult = Result<PanelCategory[]>;
-export type CreateCategoryResult = Result<PanelCategory>;
-export type GetCategoryBySlugResult = Result<PanelCategoryDetail>;
-export type UpdateCategoryBySlugResult = Result<PanelCategory>;
-export type DeleteCategoryBySlugResult = Result<string>;
+// API Results -----------------------------------------------------------------
 
-// Modal & Form Props
-interface BaseFormProps {
-    isOpen: boolean;
-    onClose: () => void;
+// Product Results
+export type DeleteProductResult = APIResult<string>;
+export type UpdateProductResult = APIResult<Product>;
+export type CreateProductResult = APIResult<Product>;
+export type RetrieveProductResult = APIResult<ProductDetail>;
+export type RetrieveProductListResult = APIResult<Product[]>;
+
+// Category Results
+export type DeleteCategoryResult = APIResult<string>;
+export type UpdateCategoryResult = APIResult<Category>;
+export type CreateCategoryResult = APIResult<Category>;
+export type RetrieveCategoryResult = APIResult<CategoryDetail>;
+export type RetrieveCategoryListResult = APIResult<Category[]>;
+
+// Price Results
+export type DeletePriceByIdResult = APIResult<string>;
+
+// Form Data ----------------------------------------------------------------------
+
+export interface ProductFormData extends BaseFormData {
+    newPrice: number | string;
+    categoryId: string;
 }
 
-interface CreateCategoryFormProps extends BaseFormProps {
+export interface CreateProductFormProps {
     type: "create";
 }
 
-interface UpdateCategoryFormProps extends BaseFormProps {
+export interface UpdateProductFormProps {
+    type: "update";
+    productData: ProductFormData;
+}
+
+export interface CategoryFormData extends BaseFormData {
+    icon?: string;
+}
+
+// Modal Data ----------------------------------------------------------------------
+
+interface CreateCategoryModalProps extends BaseModalProps {
+    type: "create";
+}
+
+interface UpdateCategoryModalProps extends BaseModalProps {
     type: "update";
     categoryData: CategoryFormData;
 }
 
-export type CategoryFormProps =
-    | CreateCategoryFormProps
-    | UpdateCategoryFormProps;
+export type CategoryModalProps =
+    | CreateCategoryModalProps
+    | UpdateCategoryModalProps;

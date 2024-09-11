@@ -1,8 +1,8 @@
 import { z } from "zod";
 import { convertToBase64, slugify } from "@/lib/utils";
-import { createCategory, updateCategoryBySlug } from "@/actions";
+import { createCategory, updateCategory } from "@/actions/v1";
 import { useState, useEffect, useMemo, useCallback } from "react";
-import { CategoryFormProps, CategoryFormData } from "@/types/panel";
+import { CategoryModalProps, CategoryFormData } from "@/types/panel";
 
 // Constants
 const MAX_FILE_SIZE_MB = parseInt(
@@ -22,7 +22,7 @@ const categorySchema = z.object({
     icon: z.string().optional(),
 });
 
-export const useCategoryForm = (props: CategoryFormProps) => {
+export const useCategoryForm = (props: CategoryModalProps) => {
     const [pending, setPending] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const [formErrors, setFormErrors] = useState<{
@@ -144,10 +144,7 @@ export const useCategoryForm = (props: CategoryFormProps) => {
         const result =
             props.type === "create"
                 ? await createCategory(categoryData)
-                : await updateCategoryBySlug(
-                      props.categoryData.slug,
-                      categoryData
-                  );
+                : await updateCategory(props.categoryData.slug, categoryData);
 
         setPending(false);
         if (result.error) {

@@ -1,10 +1,10 @@
 "use client";
 
-import { useCategoryForm } from "@/hooks";
+import { useCategoryForm } from "@/hooks/v1";
 import { Button, Form, Input, Modal } from "..";
-import { CategoryFormProps } from "@/types/panel";
+import { CategoryModalProps } from "@/types/panel";
 
-const CategoryModalForm = (props: CategoryFormProps) => {
+const CategoryModalForm = (props: CategoryModalProps) => {
     const {
         // variables
         name,

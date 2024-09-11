@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { formatDate } from "@/lib/utils";
 import { Fragment, useState } from "react";
-import { PanelCategory } from "@/types/panel";
+import { Category } from "@/types/panel";
 import { AnimatePresence } from "framer-motion";
 import { deleteCategoryBySlug } from "@/actions";
 import { BinIcon, EditIcon, EyeIcon } from "@/components/icons";
@@ -11,15 +11,16 @@ import { Badge, CategoryModalForm, Table, TableColumn } from "..";
 
 interface CategoryTableProps {
     error?: string;
-    categories?: PanelCategory[];
+    categories?: Category[];
 }
 
 const CategoryTable = (props: CategoryTableProps) => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
-    const [selectedCategory, setSelectedCategory] =
-        useState<PanelCategory | null>(null);
+    const [selectedCategory, setSelectedCategory] = useState<Category | null>(
+        null
+    );
 
-    const handleEdit = (category: PanelCategory) => {
+    const handleEdit = (category: Category) => {
         setIsOpen(true);
         setSelectedCategory(category);
     };
@@ -41,11 +42,11 @@ const CategoryTable = (props: CategoryTableProps) => {
         }
     };
 
-    const columns: TableColumn<PanelCategory>[] = [
+    const columns: TableColumn<Category>[] = [
         {
             header: "عملیات",
             accessor: "actions",
-            customRender: (category: PanelCategory) => (
+            customRender: (category: Category) => (
                 <div className="flex items-center justify-center gap-4 transition-all">
                     <button
                         onClick={() => handleDelete(category.slug)}
@@ -69,7 +70,7 @@ const CategoryTable = (props: CategoryTableProps) => {
             sortable: true,
             header: "به‌روزرسانی",
             accessor: "updatedAt",
-            customRender: (category: PanelCategory) => (
+            customRender: (category: Category) => (
                 <p className="text-center ss02">
                     {formatDate(category.updatedAt, true)}
                 </p>
@@ -79,7 +80,7 @@ const CategoryTable = (props: CategoryTableProps) => {
             sortable: true,
             header: "ایجاد",
             accessor: "createdAt",
-            customRender: (category: PanelCategory) => (
+            customRender: (category: Category) => (
                 <p className="text-center ss02">
                     {formatDate(category.createdAt, true)}
                 </p>
@@ -88,7 +89,7 @@ const CategoryTable = (props: CategoryTableProps) => {
         {
             header: "وضعیت",
             accessor: "isActive",
-            customRender: (category: PanelCategory) => (
+            customRender: (category: Category) => (
                 <div className="flex items-center justify-center">
                     {category.isActive ? (
                         <Badge status="active" />
@@ -102,7 +103,7 @@ const CategoryTable = (props: CategoryTableProps) => {
             sortable: true,
             header: "شناسه",
             accessor: "slug",
-            customRender: (category: PanelCategory) => (
+            customRender: (category: Category) => (
                 <p className="text-center">{category.slug}</p>
             ),
         },
@@ -110,14 +111,14 @@ const CategoryTable = (props: CategoryTableProps) => {
             header: "نام",
             sortable: true,
             accessor: "name",
-            customRender: (category: PanelCategory) => (
+            customRender: (category: Category) => (
                 <p className="text-center">{category.name}</p>
             ),
         },
         {
             header: "تصویر",
             accessor: "icon",
-            customRender: (category: PanelCategory) =>
+            customRender: (category: Category) =>
                 category.icon ? (
                     <img
                         className="min-w-8 sm:min-w-10 w-8 sm:w-10 mx-auto"

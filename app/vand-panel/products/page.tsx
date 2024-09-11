@@ -1,11 +1,11 @@
 import { ProductTable } from "@/components/ui";
 import { ProductForm } from "@/components/form";
-import { getPanelProducts, getPanelCategories } from "@/actions";
+import { getCategoryList, getProductList } from "@/actions/v1";
 
 async function ProductsPage() {
     // Fetch products and categories from the server
-    const products = await getPanelProducts();
-    const categories = await getPanelCategories();
+    const products = await getProductList();
+    const categories = await getCategoryList();
 
     return (
         <section className="flex flex-col gap-8">

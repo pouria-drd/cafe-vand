@@ -1,6 +1,6 @@
 import { PriceTable } from "@/components/ui";
 import { ProductForm } from "@/components/form";
-import { getProductBySlug, getPanelCategories } from "@/actions";
+import { getCategoryList, getProduct } from "@/actions/v1";
 
 async function ProductDetailPage({
     params: { productSlug },
@@ -8,8 +8,8 @@ async function ProductDetailPage({
     params: { productSlug: string };
 }) {
     // Fetch product and categories from the server
-    const categories = await getPanelCategories();
-    const product = await getProductBySlug(productSlug);
+    const categories = await getCategoryList();
+    const product = await getProduct(productSlug);
 
     if (product.error) {
         return <p className="text-red-500 text-center r2l">{product.error}</p>;

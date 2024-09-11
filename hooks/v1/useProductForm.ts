@@ -1,19 +1,19 @@
 import { slugify } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { useState, useEffect, useMemo } from "react";
-import { createProduct, updateProductBySlug } from "@/actions";
-import { PanelCategory, PanelProduct, ProductFormData } from "@/types/panel";
+import { createProduct, updateProduct } from "@/actions/v1";
+import { Category, Product, ProductFormData } from "@/types/panel";
 
 interface CreateProductFormProps {
     type: "create";
-    category: PanelCategory | PanelCategory[];
+    category: Category | Category[];
 }
 
 interface UpdateProductFormProps {
     type: "update";
     productSlug: string;
-    category: PanelCategory | PanelCategory[];
-    initialData: PanelProduct;
+    category: Category | Category[];
+    initialData: Product;
 }
 
 type ProductFormProps = CreateProductFormProps | UpdateProductFormProps;
@@ -102,10 +102,7 @@ export const useProductForm = (props: ProductFormProps) => {
             }
         } else if (props.type === "update") {
             // Call API to update the product
-            const result = await updateProductBySlug(
-                props.productSlug,
-                productData
-            );
+            const result = await updateProduct(props.productSlug, productData);
             if (result.error) {
                 setError(result.error);
             } else {

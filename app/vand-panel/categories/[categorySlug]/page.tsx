@@ -1,4 +1,4 @@
-import { getCategoryBySlug } from "@/actions";
+import { getCategory } from "@/actions/v1";
 import { ProductTable } from "@/components/ui";
 import { ProductForm } from "@/components/form";
 
@@ -8,7 +8,7 @@ async function CategoryDetailPage({
     params: { categorySlug: string };
 }) {
     // Fetch category from the server
-    const result = await getCategoryBySlug(params.categorySlug);
+    const result = await getCategory(params.categorySlug);
 
     if (result.error) {
         return <p className="text-red-500 text-center r2l">{result.error}</p>;

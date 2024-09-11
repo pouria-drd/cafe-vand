@@ -1,10 +1,10 @@
 import CategoryUI from "./CategoryUI";
-import { getPanelCategories } from "@/actions";
+import { getCategoryList } from "@/actions/v1";
 import { CategoryTable } from "@/components/ui";
 
 async function CategoriesPage() {
     // Fetch categories from the server
-    const result = await getPanelCategories();
+    const result = await getCategoryList();
 
     return (
         <section className="bg-white flex flex-col gap-8 rounded p-4">
