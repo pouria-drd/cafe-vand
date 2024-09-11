@@ -37,23 +37,23 @@ export const useProductForm = (props: ProductFormProps) => {
     });
 
     const [name, setName] = useState<string>(
-        props.initialData ? props.initialData?.name : ""
+        props.initialData ? props.initialData.name : ""
     );
 
     const [slug, setSlug] = useState<string>(
-        props.initialData ? props.initialData?.slug : ""
+        props.initialData ? props.initialData.slug : ""
     );
 
     const [price, setPrice] = useState<number | string>(
-        props.initialData ? props.initialData?.price : 0
+        props.initialData ? props.initialData.price : 0
     );
 
     const [categoryId, setCategoryId] = useState<string>(
-        props.initialData ? props.initialData?.categoryId : ""
+        props.initialData ? props.initialData.category : ""
     );
 
     const [isActive, setIsActive] = useState<boolean>(
-        props.initialData ? props.initialData?.isActive : true
+        props.initialData ? props.initialData.isActive : true
     );
 
     // Flag to control if the user has edited the name
@@ -151,12 +151,19 @@ export const useProductForm = (props: ProductFormProps) => {
     };
 
     const resetForm = () => {
-        setName("");
-        setSlug("");
-        setPrice(0);
+        if (props.initialData) {
+            setName(props.initialData.name);
+            setCategoryId(props.initialData.category);
+            setPrice(props.initialData.price);
+            setIsActive(props.initialData.isActive);
+        } else {
+            setName("");
+            setPrice(0);
+            setCategoryId("");
+            setIsActive(true);
+        }
+
         setError(null);
-        setIsActive(true);
-        setCategoryId("");
         setPending(false);
         setIsNameEdited(false);
         setFormErrors({

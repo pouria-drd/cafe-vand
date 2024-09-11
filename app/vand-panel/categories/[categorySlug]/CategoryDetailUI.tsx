@@ -20,9 +20,15 @@ const CategoryDetailUI = (props: CategoryDetailUIProps) => {
                     onClick={() => setIsOpen(true)}>
                     محصول جدید
                 </Button>
-                <h1 className="text-xl sm:text-2xl text-right">
-                    آخرین محصولات این دسته
-                </h1>
+                {props.apiResult.data ? (
+                    <h1 className="text-xl sm:text-2xl text-right r2l">
+                        آخرین محصولات {props.apiResult.data.name}
+                    </h1>
+                ) : (
+                    <h1 className="text-xl sm:text-2xl text-right">
+                        آخرین محصولات این دسته
+                    </h1>
+                )}
             </div>
 
             {props.apiResult && props.apiResult.data && (

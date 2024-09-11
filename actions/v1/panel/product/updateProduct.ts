@@ -88,6 +88,9 @@ export async function updateProduct(
         // If the response is successful (200 OK), return the updated data
         if (response.status === 200) {
             revalidatePath("/");
+            revalidatePath("/vand-panel/");
+            revalidatePath("/vand-panel/products");
+            revalidatePath("/vand-panel/categories");
             const data = await response.json();
             return { data };
         }

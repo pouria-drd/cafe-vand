@@ -37,13 +37,13 @@ export const useCategoryForm = (props: CategoryFormProps) => {
 
     // Initialize form states
     const [name, setName] = useState<string>(
-        props.initialData ? props.initialData?.name : ""
+        props.initialData ? props.initialData.name : ""
     );
     const [slug, setSlug] = useState<string>(
-        props.initialData ? props.initialData?.slug : ""
+        props.initialData ? props.initialData.slug : ""
     );
     const [isActive, setIsActive] = useState<boolean>(
-        props.initialData ? props.initialData?.isActive : true
+        props.initialData ? props.initialData.isActive : true
     );
     const [icon, setIcon] = useState<string | null>(null);
     const [iconPreview, setIconPreview] = useState<string | null>(
@@ -159,12 +159,20 @@ export const useCategoryForm = (props: CategoryFormProps) => {
 
     // Reset form fields
     const resetForm = () => {
-        setName("");
-        setSlug("");
-        setIcon(null);
+        if (props.initialData) {
+            setName(props.initialData.name);
+            setSlug(props.initialData.slug);
+            setIcon(props.initialData.icon);
+            setIsActive(props.initialData.isActive);
+        } else {
+            setName("");
+            setSlug("");
+            setIcon(null);
+            setIsActive(true);
+        }
+
         setError(null);
         setPending(false);
-        setIsActive(true);
         setIconError(null);
         setIconPreview(null);
         setIsNameEdited(false);

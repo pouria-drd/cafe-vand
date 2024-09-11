@@ -97,9 +97,9 @@ const ProductForm = (props: _ProductFormProps) => {
 
                     {/* Category Input */}
                     <select
-                        className="border p-2 rounded-md"
                         name="category"
                         value={categoryId}
+                        className="border p-2 rounded-md"
                         onChange={(e) => setCategoryId(e.target.value)}>
                         <option value="">انتخاب دسته</option>
 
@@ -226,9 +226,9 @@ const ProductForm = (props: _ProductFormProps) => {
 
                 {/* Category Input */}
                 <select
-                    className="border p-2 rounded-md"
                     name="category"
                     value={categoryId}
+                    className="border p-2 rounded-md"
                     onChange={(e) => setCategoryId(e.target.value)}>
                     <option value="">انتخاب دسته</option>
 

@@ -26,7 +26,7 @@ export interface Price {
  */
 export interface Product extends BaseEntityData {
     price: number;
-    categoryId: string;
+    category: string;
     categoryName: string;
 }
 
