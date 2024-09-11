@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import { formatDate } from "@/lib/utils";
-import { Fragment, useState } from "react";
 import { Category } from "@/types/panel";
+import { Fragment, useState } from "react";
+import { deleteCategory } from "@/actions/v1";
+import { Badge, Table, TableColumn } from "..";
 import { AnimatePresence } from "framer-motion";
-import { deleteCategoryBySlug } from "@/actions";
+import { CategoryForm } from "@/components/form";
 import { BinIcon, EditIcon, EyeIcon } from "@/components/icons";
-import { Badge, CategoryModalForm, Table, TableColumn } from "..";
 
 interface CategoryTableProps {
     error?: string;
@@ -32,7 +33,7 @@ const CategoryTable = (props: CategoryTableProps) => {
         if (!canDelete) return;
 
         try {
-            const result = await deleteCategoryBySlug(slug);
+            const result = await deleteCategory(slug);
             if (result.error) {
                 window.alert(`خطا در حذف دسته: ${result.error}`);
                 return;
@@ -142,10 +143,10 @@ const CategoryTable = (props: CategoryTableProps) => {
             />
             <AnimatePresence>
                 {isOpen && selectedCategory && (
-                    <CategoryModalForm
-                        type="update"
+                    <CategoryForm
+                        type="modal"
                         isOpen={isOpen}
-                        categoryData={selectedCategory}
+                        initialData={selectedCategory}
                         onClose={() => {
                             setIsOpen(false);
                             setSelectedCategory(null);

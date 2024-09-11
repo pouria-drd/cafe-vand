@@ -1,53 +1,59 @@
+import { z } from "zod";
 import { slugify } from "@/lib/utils";
-import { useRouter } from "next/navigation";
 import { useState, useEffect, useMemo } from "react";
 import { createProduct, updateProduct } from "@/actions/v1";
-import { Category, Product, ProductFormData } from "@/types/panel";
+import { ProductFormData, ProductFormProps } from "@/types/panel";
 
-interface CreateProductFormProps {
-    type: "create";
-    category: Category | Category[];
-}
-
-interface UpdateProductFormProps {
-    type: "update";
-    productSlug: string;
-    category: Category | Category[];
-    initialData: Product;
-}
-
-type ProductFormProps = CreateProductFormProps | UpdateProductFormProps;
+// Zod schema
+const productSchema = z.object({
+    isActive: z.boolean(),
+    name: z.string().min(3, "نام محصول الزامی است"),
+    slug: z.string().min(3, "شناسه محصول الزامی است"),
+    categoryId: z.string().min(16, "شناسه دسته محصول الزامی است"),
+    newPrice: z.union([z.string(), z.number()]).refine(
+        (val) => {
+            if (typeof val === "string") {
+                return !isNaN(parseFloat(val)) && parseFloat(val) > 0;
+            }
+            return typeof val === "number" && val > 0;
+        },
+        {
+            message: "قیمت محصول الزامی است",
+        }
+    ),
+});
 
 export const useProductForm = (props: ProductFormProps) => {
-    const router = useRouter();
-
+    const [pending, setPending] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
+    const [formErrors, setFormErrors] = useState<{
+        [key: string]: string | null;
+    }>({
+        name: null,
+        slug: null,
+        isActive: null,
+        newPrice: null,
+        categoryId: null,
+    });
 
     const [name, setName] = useState<string>(
-        props.type === "create" ? "" : props.initialData.name
+        props.initialData ? props.initialData?.name : ""
     );
 
     const [slug, setSlug] = useState<string>(
-        props.type === "create" ? "" : props.initialData.slug
+        props.initialData ? props.initialData?.slug : ""
     );
 
     const [price, setPrice] = useState<number | string>(
-        props.type === "create" ? 0 : props.initialData.price || 0
+        props.initialData ? props.initialData?.price : 0
     );
 
-    const [category, setCategory] = useState<string>(() => {
-        if (props.type === "create" && !Array.isArray(props.category)) {
-            return props.category.id;
-        } else if (props.type === "create" && Array.isArray(props.category)) {
-            return props.category[0].id;
-        } else if (props.type === "update") {
-            return props.initialData.categoryId;
-        } else {
-            return "";
-        }
-    });
+    const [categoryId, setCategoryId] = useState<string>(
+        props.initialData ? props.initialData?.categoryId : ""
+    );
+
     const [isActive, setIsActive] = useState<boolean>(
-        props.type === "create" ? true : props.initialData.isActive
+        props.initialData ? props.initialData?.isActive : true
     );
 
     // Flag to control if the user has edited the name
@@ -68,12 +74,49 @@ export const useProductForm = (props: ProductFormProps) => {
         }
     };
 
-    // Check form validity
+    // Validate form
+    const validateForm = () => {
+        const validation = productSchema.safeParse({
+            name,
+            slug,
+            newPrice: price,
+            isActive,
+            categoryId,
+        });
+
+        if (!validation.success) {
+            const errors: { [key: string]: string | null } = {};
+
+            // Access the ZodFormattedError object
+            const formattedErrors = validation.error.format();
+
+            // Extract and map errors
+            for (const [key, value] of Object.entries(formattedErrors)) {
+                if (Array.isArray(value) && value.length > 0) {
+                    errors[key] = value[0]; // Take the first message
+                } else {
+                    errors[key] = null;
+                }
+            }
+
+            setFormErrors(errors);
+            return false;
+        }
+
+        setFormErrors({
+            name: null,
+            slug: null,
+            newPrice: null,
+            isActive: null,
+            categoryId: null,
+        });
+        return true;
+    };
+
+    // Form validity
     const isFormValid = useMemo(() => {
-        return (
-            name.trim() !== "" && slug.trim() !== "" && category.trim() !== ""
-        );
-    }, [name, slug, category]);
+        return validateForm();
+    }, [name, slug, price, categoryId, isActive]);
 
     // Handle form submission
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -83,48 +126,46 @@ export const useProductForm = (props: ProductFormProps) => {
             return; // Prevent submission if form is not valid
         }
 
+        setPending(true);
+
         // Prepare the product data
         const productData: ProductFormData = {
             name,
             slug,
-            newPrice: price,
-            categoryId: category,
             isActive,
+            newPrice: price,
+            categoryId: categoryId,
         };
+        const result = props.initialData
+            ? await updateProduct(props.initialData.slug, productData)
+            : await createProduct(productData);
 
-        if (props.type === "create") {
-            // Call API to create the product
-            const result = await createProduct(productData);
-            if (result.error) {
-                setError(result.error);
-            } else {
-                setError(null);
-            }
-        } else if (props.type === "update") {
-            // Call API to update the product
-            const result = await updateProduct(props.productSlug, productData);
-            if (result.error) {
-                setError(result.error);
-            } else {
-                setError(null);
-            }
-            // Handle update logic here if needed
+        setPending(false);
+
+        if (result.error) {
+            setError(result.error);
+        } else {
+            resetForm();
+            props.type === "modal" && props.onClose();
         }
+    };
 
-        setIsNameEdited(false); // Reset flag
-
-        // Reset form data
-        if (props.type === "create") {
-            setName("");
-            setSlug("");
-            setPrice(0);
-            setIsActive(true);
-            if (!Array.isArray(props.category)) {
-                router.push(`/vand-panel/categories/${props.category.slug}`);
-            }
-        } else if (props.type === "update" && !Array.isArray(props.category)) {
-            router.push(`/vand-panel/products/${props.productSlug}`);
-        }
+    const resetForm = () => {
+        setName("");
+        setSlug("");
+        setPrice(0);
+        setError(null);
+        setIsActive(true);
+        setCategoryId("");
+        setPending(false);
+        setIsNameEdited(false);
+        setFormErrors({
+            name: null,
+            slug: null,
+            newPrice: null,
+            categoryId: null,
+            isActive: null,
+        });
     };
 
     return {
@@ -132,14 +173,17 @@ export const useProductForm = (props: ProductFormProps) => {
         slug,
         price,
         error,
+        pending,
         isActive,
-        category,
+        categoryId,
+        formErrors,
         isFormValid,
         setName: handleNameChange, // Use the new handleNameChange function
         setSlug,
         setPrice,
-        setCategory,
+        resetForm,
         setIsActive,
         handleSubmit,
+        setCategoryId,
     };
 };

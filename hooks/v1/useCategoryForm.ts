@@ -2,7 +2,7 @@ import { z } from "zod";
 import { convertToBase64, slugify } from "@/lib/utils";
 import { createCategory, updateCategory } from "@/actions/v1";
 import { useState, useEffect, useMemo, useCallback } from "react";
-import { CategoryModalProps, CategoryFormData } from "@/types/panel";
+import { CategoryFormProps, CategoryFormData } from "@/types/panel";
 
 // Constants
 const MAX_FILE_SIZE_MB = parseInt(
@@ -22,7 +22,7 @@ const categorySchema = z.object({
     icon: z.string().optional(),
 });
 
-export const useCategoryForm = (props: CategoryModalProps) => {
+export const useCategoryForm = (props: CategoryFormProps) => {
     const [pending, setPending] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const [formErrors, setFormErrors] = useState<{
@@ -37,17 +37,17 @@ export const useCategoryForm = (props: CategoryModalProps) => {
 
     // Initialize form states
     const [name, setName] = useState<string>(
-        props.type === "create" ? "" : props.categoryData.name
+        props.initialData ? props.initialData?.name : ""
     );
     const [slug, setSlug] = useState<string>(
-        props.type === "create" ? "" : props.categoryData.slug
+        props.initialData ? props.initialData?.slug : ""
     );
     const [isActive, setIsActive] = useState<boolean>(
-        props.type === "create" ? true : props.categoryData.isActive
+        props.initialData ? props.initialData?.isActive : true
     );
     const [icon, setIcon] = useState<string | null>(null);
     const [iconPreview, setIconPreview] = useState<string | null>(
-        props.type === "create" ? null : props.categoryData.icon || null
+        props.initialData ? props.initialData?.icon : null
     );
 
     // Update slug when name changes (only after user edits)
@@ -97,8 +97,8 @@ export const useCategoryForm = (props: CategoryModalProps) => {
         const validation = categorySchema.safeParse({
             name,
             slug,
-            icon: props.type === "update" && iconPreview ? undefined : icon,
             isActive,
+            icon: props.initialData && iconPreview ? undefined : icon,
         });
 
         if (!validation.success) {
@@ -134,24 +134,26 @@ export const useCategoryForm = (props: CategoryModalProps) => {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!isFormValid) return;
+
         setPending(true);
+
         const categoryData: CategoryFormData = {
             name,
             slug,
             isActive,
             icon: icon || undefined,
         };
-        const result =
-            props.type === "create"
-                ? await createCategory(categoryData)
-                : await updateCategory(props.categoryData.slug, categoryData);
+        const result = props.initialData
+            ? await updateCategory(props.initialData.slug, categoryData)
+            : await createCategory(categoryData);
 
         setPending(false);
+
         if (result.error) {
             setError(result.error);
         } else {
             resetForm();
-            props.onClose();
+            props.type === "modal" && props.onClose();
         }
     };
 
@@ -160,12 +162,12 @@ export const useCategoryForm = (props: CategoryModalProps) => {
         setName("");
         setSlug("");
         setIcon(null);
+        setError(null);
         setPending(false);
         setIsActive(true);
         setIconError(null);
         setIconPreview(null);
         setIsNameEdited(false);
-        setError(null);
         setFormErrors({ name: null, slug: null, icon: null });
     };
 

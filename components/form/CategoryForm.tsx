@@ -1,117 +1,290 @@
 "use client";
 
-import { Button, Input } from "../ui";
-import styles from "./form.module.css";
-import { useCategoryForm } from "@/hooks";
-import { CategoryFormData } from "@/types/panel";
-
-interface CreateCategoryFormProps {
-    type: "create";
-}
-
-interface UpdateCategoryFormProps {
-    type: "update";
-    categorySlug: string;
-    initialData: CategoryFormData;
-}
-
-type CategoryFormProps = CreateCategoryFormProps | UpdateCategoryFormProps;
+import { useCategoryForm } from "@/hooks/v1";
+import { CategoryFormProps } from "@/types/panel";
+import { Button, Form, Input, Modal } from "../ui";
 
 const CategoryForm = (props: CategoryFormProps) => {
     const {
+        // variables
         name,
         slug,
         error,
+        pending,
         isActive,
         iconError,
+        formErrors, // Add this line to access field-specific errors
         iconPreview,
         isFormValid,
+        // functions
         setName,
         setSlug,
+        resetForm,
         setIsActive,
         handleSubmit,
         handleFileChange,
     } = useCategoryForm(props);
 
-    return (
-        <form onSubmit={handleSubmit} className={`${styles.vandForm}`}>
-            <h1 className="font-bold text-xl sm:text-2xl text-right w-full r2l">
-                {props.type === "create"
-                    ? "دسته بندی جدید"
-                    : `ویرایش ${props.initialData.name}`}
-            </h1>
+    if (props.type === "modal")
+        return (
+            <Modal
+                isOpen={props.isOpen}
+                onClose={() => {
+                    resetForm();
+                    props.onClose();
+                }}
+                title={
+                    props.initialData
+                        ? `ویرایش ${props.isOpen && props.initialData.name}`
+                        : "دسته بندی جدید"
+                }>
+                <Form onSubmit={handleSubmit}>
+                    {/* Display server error at the top */}
+                    {error && (
+                        <p className="text-center text-red-500 text-xs r2l">
+                            {error}
+                        </p>
+                    )}
 
-            {error && (
-                <p className="text-center text-red-500 text-xs r2l">{error}</p>
-            )}
+                    {/* Active Checkbox */}
+                    <div className="flex items-center justify-between gap-4 w-full">
+                        <div className="flex items-center gap-2">
+                            <input
+                                id="isActive"
+                                type="checkbox"
+                                name="isActive"
+                                checked={isActive}
+                                className="cursor-pointer size-4"
+                                onChange={(e) => setIsActive(e.target.checked)}
+                            />
+                            <label
+                                className="cursor-pointer"
+                                htmlFor="isActive">
+                                {isActive ? "فعال" : "غیرفعال"}
+                            </label>
+                        </div>
+                        <label className="cursor-pointer" htmlFor="isActive">
+                            وضعیت
+                        </label>
+                    </div>
 
-            <Input
-                required
-                type="text"
-                name="name"
-                placeholder="نام دسته"
-                value={name}
-                onChange={setName}
-            />
+                    {/* Name Input */}
+                    <div className="flex flex-col items-center justify-center gap-1 w-full">
+                        <Input
+                            autoFocus
+                            required
+                            type="text"
+                            name="name"
+                            value={name}
+                            autoComplete="off"
+                            className="w-full"
+                            onChange={setName}
+                            placeholder="نام دسته"
+                        />
+                        {formErrors.name && (
+                            <p className="absolute text-red-500 text-xs r2l">
+                                {formErrors.name}
+                            </p>
+                        )}
+                    </div>
 
-            <Input
-                required
-                type="text"
-                name="slug"
-                value={slug}
-                placeholder="شناسه"
-                className="w-full"
-                onChange={(e) => setSlug(e.target.value)}
-            />
+                    {/* Slug Input */}
+                    <div className="flex flex-col items-center justify-center gap-1 w-full">
+                        <Input
+                            required
+                            type="text"
+                            name="slug"
+                            value={slug}
+                            autoComplete="off"
+                            className="w-full"
+                            placeholder="شناسه"
+                            onChange={(e) => setSlug(e.target.value)}
+                        />
+                        {formErrors.slug && (
+                            <p className="absolute text-red-500 text-xs r2l">
+                                {formErrors.slug}
+                            </p>
+                        )}
+                    </div>
 
-            <div className="flex items-center justify-end gap-4 w-full">
-                <input
-                    id="isActive"
-                    type="checkbox"
-                    name="isActive"
-                    checked={isActive}
-                    className="cursor-pointer size-4"
-                    onChange={(e) => setIsActive(e.target.checked)}
-                />
-                <label className="cursor-pointer" htmlFor="isActive">
-                    فعال
-                </label>
-            </div>
+                    {/* Icon File Input */}
+                    <div className="flex flex-col items-center justify-center gap-1 w-full">
+                        <div className="flex flex-col gap-1 w-full">
+                            <label
+                                className="cursor-pointer text-right w-full"
+                                htmlFor="icon">
+                                تصویر
+                            </label>
+                            <Input
+                                id="icon"
+                                type="file"
+                                name="icon"
+                                accept={
+                                    process.env.NEXT_PUBLIC_VALID_FILE_TYPES
+                                }
+                                placeholder="آیکون"
+                                className="cursor-pointer w-full"
+                                onChange={handleFileChange}
+                            />
+                        </div>
+                        {/* Icon Error */}
+                        {iconError && (
+                            <p className="text-red-500 text-xs text-right r2l w-full">
+                                {iconError}
+                            </p>
+                        )}
+                    </div>
 
-            <div className="flex flex-col-reverse sm:flex-row items-end sm:items-center justify-between gap-2 w-full">
-                <input
-                    id="icon"
-                    type="file"
-                    name="icon"
-                    accept={process.env.NEXT_PUBLIC_VALID_FILE_TYPES}
-                    placeholder="آیکون"
-                    className="cursor-pointer"
-                    onChange={handleFileChange}
-                />
-                <label className="cursor-pointer" htmlFor="icon">
-                    آیکون
-                </label>
-            </div>
+                    {/* Icon Preview */}
+                    {iconPreview && (
+                        <div className="w-full">
+                            <img
+                                src={iconPreview}
+                                alt="Preview"
+                                className="size-14 object-cover mx-auto"
+                            />
+                        </div>
+                    )}
 
-            {iconPreview && (
-                <div className="w-full">
-                    <img
-                        src={iconPreview}
-                        alt="Preview"
-                        className="size-14 object-cover mx-auto"
-                    />
+                    {/* Submit Button */}
+                    <Button
+                        type="submit"
+                        disabled={!isFormValid || pending}
+                        className="r2l">
+                        {pending
+                            ? "لطفا صبر کنید ..."
+                            : props.initialData
+                            ? "ویرایش"
+                            : "ایجاد"}
+                    </Button>
+                </Form>
+            </Modal>
+        );
+
+    if (props.type === "form")
+        return (
+            <Form onSubmit={handleSubmit}>
+                {/* Title */}
+                <h1 className="font-bold text-xl sm:text-2xl text-right w-full r2l">
+                    {props.initialData
+                        ? `ویرایش ${props.initialData.name}`
+                        : "دسته بندی جدید"}
+                </h1>
+                {error && (
+                    <p className="text-center text-red-500 text-xs r2l">
+                        {error}
+                    </p>
+                )}
+
+                {/* Active Checkbox */}
+                <div className="flex items-center justify-between gap-4 w-full">
+                    <div className="flex items-center gap-2">
+                        <input
+                            id="isActive"
+                            type="checkbox"
+                            name="isActive"
+                            checked={isActive}
+                            className="cursor-pointer size-4"
+                            onChange={(e) => setIsActive(e.target.checked)}
+                        />
+                        <label className="cursor-pointer" htmlFor="isActive">
+                            {isActive ? "فعال" : "غیرفعال"}
+                        </label>
+                    </div>
+                    <label className="cursor-pointer" htmlFor="isActive">
+                        وضعیت
+                    </label>
                 </div>
-            )}
 
-            {iconError && (
-                <p className="text-red-500 text-xs r2l">{iconError}</p>
-            )}
+                {/* Name Input */}
+                <div className="flex flex-col items-center justify-center gap-1 w-full">
+                    <Input
+                        autoFocus
+                        required
+                        type="text"
+                        name="name"
+                        value={name}
+                        autoComplete="off"
+                        className="w-full"
+                        onChange={setName}
+                        placeholder="نام دسته"
+                    />
+                    {formErrors.name && (
+                        <p className="absolute text-red-500 text-xs r2l">
+                            {formErrors.name}
+                        </p>
+                    )}
+                </div>
 
-            <Button type="submit" disabled={!isFormValid}>
-                {props.type === "create" ? "ایجاد" : "ویرایش"}
-            </Button>
-        </form>
-    );
+                {/* Slug Input */}
+                <div className="flex flex-col items-center justify-center gap-1 w-full">
+                    <Input
+                        required
+                        type="text"
+                        name="slug"
+                        value={slug}
+                        autoComplete="off"
+                        className="w-full"
+                        placeholder="شناسه"
+                        onChange={(e) => setSlug(e.target.value)}
+                    />
+                    {formErrors.slug && (
+                        <p className="absolute text-red-500 text-xs r2l">
+                            {formErrors.slug}
+                        </p>
+                    )}
+                </div>
+
+                {/* Icon File Input */}
+                <div className="flex flex-col items-center justify-center gap-1 w-full">
+                    <div className="flex flex-col gap-1 w-full">
+                        <label
+                            className="cursor-pointer text-right w-full"
+                            htmlFor="icon">
+                            تصویر
+                        </label>
+                        <Input
+                            id="icon"
+                            type="file"
+                            name="icon"
+                            accept={process.env.NEXT_PUBLIC_VALID_FILE_TYPES}
+                            placeholder="آیکون"
+                            className="cursor-pointer w-full"
+                            onChange={handleFileChange}
+                        />
+                    </div>
+                    {/* Icon Error */}
+                    {iconError && (
+                        <p className="text-red-500 text-xs text-right r2l w-full">
+                            {iconError}
+                        </p>
+                    )}
+                </div>
+
+                {/* Icon Preview */}
+                {iconPreview && (
+                    <div className="w-full">
+                        <img
+                            src={iconPreview}
+                            alt="Preview"
+                            className="size-14 object-cover mx-auto"
+                        />
+                    </div>
+                )}
+
+                {/* Submit Button */}
+                <Button
+                    type="submit"
+                    disabled={!isFormValid || pending}
+                    className="r2l">
+                    {pending
+                        ? "لطفا صبر کنید ..."
+                        : props.initialData
+                        ? "ویرایش"
+                        : "ایجاد"}
+                </Button>
+            </Form>
+        );
 };
 
 export default CategoryForm;

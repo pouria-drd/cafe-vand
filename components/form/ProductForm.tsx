@@ -1,39 +1,31 @@
 "use client";
 
-import { Button, Input } from "../ui";
-import styles from "./form.module.css";
-import { useProductForm } from "@/hooks";
-import { Category, Product } from "@/types/panel";
+import { useProductForm } from "@/hooks/v1";
+import { Button, Form, Input, Modal } from "../ui";
+import { Category, ProductFormProps } from "@/types/panel";
 
-interface CreateProductFormProps {
-    type: "create";
-    category: Category | Category[];
-}
+type _ProductFormProps = ProductFormProps & { category: Category | Category[] };
 
-interface UpdateProductFormProps {
-    type: "update";
-    productSlug: string;
-    category: Category | Category[];
-    initialData: Product;
-}
-
-type ProductFormProps = CreateProductFormProps | UpdateProductFormProps;
-
-const ProductForm = (props: ProductFormProps) => {
+const ProductForm = (props: _ProductFormProps) => {
     const {
+        // variables
         name,
         slug,
-        price,
         error,
-        category,
+        price,
+        pending,
         isActive,
+        categoryId,
+        formErrors,
         isFormValid,
+        // functions
         setName,
         setSlug,
         setPrice,
-        setCategory,
+        resetForm,
         setIsActive,
         handleSubmit,
+        setCategoryId,
     } = useProductForm(props);
 
     const renderCategoryOptions = () => {
@@ -49,82 +41,266 @@ const ProductForm = (props: ProductFormProps) => {
             );
     };
 
-    return (
-        <form onSubmit={handleSubmit} className={`${styles.vandForm}`}>
-            <h1 className="font-bold text-xl sm:text-2xl text-right w-full r2l">
-                {props.type === "create"
-                    ? "ایجاد محصول"
-                    : `ویرایش ${props.initialData.name}`}
-            </h1>
+    if (props.type === "modal")
+        return (
+            <Modal
+                isOpen={props.isOpen}
+                onClose={() => {
+                    resetForm();
+                    props.onClose();
+                }}
+                title={
+                    props.initialData
+                        ? `ویرایش ${props.isOpen && props.initialData.name}`
+                        : "ایجاد محصول"
+                }>
+                <Form onSubmit={handleSubmit}>
+                    {/* Display server error at the top */}
+                    {error && (
+                        <p className="text-center text-red-500 text-xs r2l">
+                            {error}
+                        </p>
+                    )}
 
-            {error && (
-                <p className="text-center text-red-500 text-xs r2l">{error}</p>
-            )}
+                    {/* Name Input */}
+                    <Input
+                        required
+                        type="text"
+                        name="name"
+                        placeholder="نام محصول"
+                        value={name}
+                        onChange={setName}
+                    />
 
-            <Input
-                required
-                type="text"
-                name="name"
-                placeholder="نام محصول"
-                value={name}
-                onChange={setName}
-            />
+                    {formErrors.name && (
+                        <p className="absolute text-red-500 text-xs r2l">
+                            {formErrors.name}
+                        </p>
+                    )}
 
-            <Input
-                required
-                type="text"
-                name="slug"
-                value={slug}
-                placeholder="شناسه"
-                className="w-full"
-                onChange={(e) => setSlug(e.target.value)}
-            />
+                    {/* Slug Input */}
+                    <Input
+                        required
+                        type="text"
+                        name="slug"
+                        value={slug}
+                        placeholder="شناسه"
+                        className="w-full"
+                        onChange={(e) => setSlug(e.target.value)}
+                    />
 
-            <div className="flex items-center justify-between gap-4 w-full">
+                    {formErrors.slug && (
+                        <p className="absolute text-red-500 text-xs r2l">
+                            {formErrors.slug}
+                        </p>
+                    )}
+
+                    {/* Category Input */}
+                    <select
+                        className="border p-2 rounded-md"
+                        name="category"
+                        value={categoryId}
+                        onChange={(e) => setCategoryId(e.target.value)}>
+                        <option value="">انتخاب دسته</option>
+
+                        {renderCategoryOptions()}
+                    </select>
+
+                    {formErrors.categoryId && (
+                        <p className="absolute text-red-500 text-xs r2l">
+                            {formErrors.categoryId}
+                        </p>
+                    )}
+
+                    {/* Active Checkbox */}
+                    <div className="flex items-center justify-between gap-4 w-full">
+                        <div className="flex items-center gap-2">
+                            <input
+                                id="isActive"
+                                type="checkbox"
+                                name="isActive"
+                                checked={isActive}
+                                className="cursor-pointer size-4"
+                                onChange={(e) => setIsActive(e.target.checked)}
+                            />
+                            <label
+                                className="cursor-pointer"
+                                htmlFor="isActive">
+                                {isActive ? "فعال" : "غیرفعال"}
+                            </label>
+                        </div>
+                        <label className="cursor-pointer" htmlFor="isActive">
+                            وضعیت
+                        </label>
+                    </div>
+
+                    {formErrors.isActive && (
+                        <p className="absolute text-red-500 text-xs r2l">
+                            {formErrors.isActive}
+                        </p>
+                    )}
+
+                    {/* Price Input */}
+                    <div className="flex items-center justify-between gap-4 w-full">
+                        <Input
+                            id="price"
+                            required
+                            type="number"
+                            name="price"
+                            value={price}
+                            placeholder="قیمت"
+                            onChange={(e) => setPrice(e.target.value)}
+                        />
+
+                        <label htmlFor="price" className="cursor-pointer">
+                            قیمت
+                        </label>
+                    </div>
+
+                    {formErrors.newPrice && (
+                        <p className="absolute text-red-500 text-xs r2l">
+                            {formErrors.newPrice}
+                        </p>
+                    )}
+
+                    {/* Submit Button */}
+                    <Button type="submit" disabled={!isFormValid || pending}>
+                        {pending
+                            ? "لطفا صبر کنید ..."
+                            : props.initialData
+                            ? "ویرایش"
+                            : "ایجاد"}
+                    </Button>
+                </Form>
+            </Modal>
+        );
+    else {
+        return (
+            <Form onSubmit={handleSubmit} className="px-4 py-8">
+                {/* Title */}
+                <h1 className="font-bold text-xl sm:text-2xl text-right w-full r2l">
+                    {props.initialData
+                        ? `ویرایش ${props.initialData.name}`
+                        : "ایجاد محصول"}
+                </h1>
+
+                {/* Display server error at the top */}
+                {error && (
+                    <p className="text-center text-red-500 text-xs r2l">
+                        {error}
+                    </p>
+                )}
+
+                {/* Name Input */}
                 <Input
-                    id="price"
                     required
-                    type="number"
-                    name="price"
-                    value={price}
-                    placeholder="قیمت"
-                    onChange={(e) => setPrice(e.target.value)}
+                    type="text"
+                    name="name"
+                    placeholder="نام محصول"
+                    value={name}
+                    onChange={setName}
                 />
 
-                <label htmlFor="price" className="cursor-pointer">
-                    قیمت
-                </label>
-            </div>
+                {formErrors.name && (
+                    <p className="absolute text-red-500 text-xs r2l">
+                        {formErrors.name}
+                    </p>
+                )}
 
-            <select
-                className="border p-2 rounded-md"
-                name="category"
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}>
-                <option value="">انتخاب دسته</option>
-
-                {renderCategoryOptions()}
-            </select>
-
-            <div className="flex items-center justify-end gap-4 w-full">
-                <input
-                    id="isActive"
-                    type="checkbox"
-                    name="isActive"
-                    checked={isActive}
-                    className="cursor-pointer size-4"
-                    onChange={(e) => setIsActive(e.target.checked)}
+                {/* Slug Input */}
+                <Input
+                    required
+                    type="text"
+                    name="slug"
+                    value={slug}
+                    placeholder="شناسه"
+                    className="w-full"
+                    onChange={(e) => setSlug(e.target.value)}
                 />
-                <label className="cursor-pointer" htmlFor="isActive">
-                    فعال
-                </label>
-            </div>
 
-            <Button type="submit" disabled={!isFormValid}>
-                {props.type === "create" ? "ایجاد" : "ویرایش"}
-            </Button>
-        </form>
-    );
+                {formErrors.slug && (
+                    <p className="absolute text-red-500 text-xs r2l">
+                        {formErrors.slug}
+                    </p>
+                )}
+
+                {/* Category Input */}
+                <select
+                    className="border p-2 rounded-md"
+                    name="category"
+                    value={categoryId}
+                    onChange={(e) => setCategoryId(e.target.value)}>
+                    <option value="">انتخاب دسته</option>
+
+                    {renderCategoryOptions()}
+                </select>
+
+                {formErrors.categoryId && (
+                    <p className="absolute text-red-500 text-xs r2l">
+                        {formErrors.categoryId}
+                    </p>
+                )}
+
+                {/* Active Checkbox */}
+                <div className="flex items-center justify-between gap-4 w-full">
+                    <div className="flex items-center gap-2">
+                        <input
+                            id="isActive"
+                            type="checkbox"
+                            name="isActive"
+                            checked={isActive}
+                            className="cursor-pointer size-4"
+                            onChange={(e) => setIsActive(e.target.checked)}
+                        />
+                        <label className="cursor-pointer" htmlFor="isActive">
+                            {isActive ? "فعال" : "غیرفعال"}
+                        </label>
+                    </div>
+                    <label className="cursor-pointer" htmlFor="isActive">
+                        وضعیت
+                    </label>
+                </div>
+
+                {formErrors.isActive && (
+                    <p className="absolute text-red-500 text-xs r2l">
+                        {formErrors.isActive}
+                    </p>
+                )}
+
+                {/* Price Input */}
+                <div className="flex items-center justify-between gap-4 w-full">
+                    <Input
+                        id="price"
+                        required
+                        type="number"
+                        name="price"
+                        value={price}
+                        placeholder="قیمت"
+                        onChange={(e) => setPrice(e.target.value)}
+                    />
+
+                    <label htmlFor="price" className="cursor-pointer">
+                        قیمت
+                    </label>
+                </div>
+
+                {formErrors.newPrice && (
+                    <p className="absolute text-red-500 text-xs r2l">
+                        {formErrors.newPrice}
+                    </p>
+                )}
+
+                {/* Submit Button */}
+                <Button type="submit" disabled={!isFormValid || pending}>
+                    {pending
+                        ? "لطفا صبر کنید ..."
+                        : props.initialData
+                        ? "ویرایش"
+                        : "ایجاد"}
+                </Button>
+            </Form>
+        );
+    }
 };
 
 export default ProductForm;

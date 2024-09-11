@@ -7,14 +7,10 @@ export { default as MenuButton } from "./button/MenuButton";
 export { default as CloseButton } from "./button/CloseButton";
 
 export { default as Form } from "./form/Form";
-
 export { default as Input } from "./input/Input";
-
+export { default as Modal } from "./modal/Modal";
 export { default as CafeVandLogo } from "./logo/CafeVandLogo";
 export { default as LoadingSpinner } from "./spinner/LoadingSpinner";
-
-export { default as Modal } from "./modal/Modal";
-export { default as CategoryModalForm } from "./modal/CategoryModalForm";
 
 export { default as Table } from "./table/Table";
 export type { TableColumn } from "./table/Table";

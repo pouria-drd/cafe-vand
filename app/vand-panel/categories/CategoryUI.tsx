@@ -1,7 +1,8 @@
 "use client";
 
+import { Button } from "@/components/ui";
 import { Fragment, useState } from "react";
-import { Button, CategoryModalForm } from "@/components/ui";
+import { CategoryForm } from "@/components/form";
 
 const CategoryUI = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -19,8 +20,8 @@ const CategoryUI = () => {
                 </h1>
             </div>
 
-            <CategoryModalForm
-                type="create"
+            <CategoryForm
+                type="modal"
                 isOpen={isOpen}
                 onClose={() => setIsOpen(false)}
             />
