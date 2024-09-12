@@ -25,11 +25,11 @@ export async function deleteCategory(
     slug: string,
     options?: { timeout?: number }
 ): Promise<DeleteCategoryResult> {
-    // set delay for testing purposes (e.g., 2 seconds)
-    // await new Promise((resolve) => setTimeout(resolve, 6000));
-
     // Set default options for timeout
     const timeout = options?.timeout || 5000;
+
+    // set delay for testing purposes (e.g., 2 seconds)
+    // await new Promise((resolve) => setTimeout(resolve, 6000));
 
     // Ensure the slug is valid before making the request
     if (!slug || typeof slug !== "string" || slug.trim() === "") {

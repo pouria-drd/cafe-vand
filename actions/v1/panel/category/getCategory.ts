@@ -33,6 +33,9 @@ export async function getCategory(
     const revalidate =
         cache !== "no-cache" ? revalidateHours * 3600 : undefined; // Set revalidate only if cache is not 'no-cache'
 
+    // Introduce a delay for testing purposes (e.g., 2 seconds)
+    // await new Promise((resolve) => setTimeout(resolve, 2000));
+
     // Ensure the slug is valid before making the request
     if (!slug || typeof slug !== "string" || slug.trim() === "") {
         return { error: "اسلاگ نامعتبر است!" };

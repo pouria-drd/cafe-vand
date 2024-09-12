@@ -1,10 +1,10 @@
-import { fetchMenu } from "@/actions";
+import { getMenu } from "@/actions/v1";
 import { Menu } from "@/components/menu";
 import { MenuNavbar } from "@/components/navbar";
 
 async function HomePage() {
     // Fetch menu from the server
-    const result = await fetchMenu();
+    const result = await getMenu();
 
     return (
         <main className="pattern">

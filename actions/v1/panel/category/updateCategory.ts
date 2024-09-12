@@ -33,11 +33,11 @@ export async function updateCategory(
     props: CategoryFormData,
     options?: { timeout?: number }
 ): Promise<UpdateCategoryResult> {
-    // set delay for testing purposes (e.g., 2 seconds)
-    // await new Promise((resolve) => setTimeout(resolve, 6000));
-
     // Set default options for timeout
     const timeout = options?.timeout || 5000;
+
+    // set delay for testing purposes (e.g., 2 seconds)
+    // await new Promise((resolve) => setTimeout(resolve, 6000));
 
     // Retrieve the API base URL from environment variables and validate it
     const baseUrl = process.env.Base_API;

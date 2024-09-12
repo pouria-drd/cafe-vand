@@ -3,10 +3,10 @@
 import { useState } from "react";
 import styles from "./menu.module.css";
 import { MenuCategoryList, MenuProductList } from ".";
-import { FetchMenuResult, MenuCategory } from "@/types/menu";
+import { GetMenuResult, MenuCategory } from "@/types/menu";
 
 interface MenuProps {
-    result: FetchMenuResult;
+    result: GetMenuResult;
 }
 
 const Menu = (props: MenuProps) => {

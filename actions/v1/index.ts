@@ -1,3 +1,6 @@
+// Menu
+export { getMenu } from "./menu/getMenu";
+
 // Categories
 export { getCategory } from "./panel/category/getCategory";
 export { createCategory } from "./panel/category/createCategory";

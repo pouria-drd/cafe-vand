@@ -34,11 +34,11 @@ export async function createCategory(
     props: CategoryFormData,
     options?: { timeout?: number }
 ): Promise<CreateCategoryResult> {
-    // set delay for testing purposes (e.g., 2 seconds)
-    // await new Promise((resolve) => setTimeout(resolve, 6000));
-
     // Set default options for timeout
     const timeout = options?.timeout || 5000;
+
+    // set delay for testing purposes (e.g., 2 seconds)
+    // await new Promise((resolve) => setTimeout(resolve, 6000));
 
     // Ensure the category information is valid before making the request
     if (!props || !props.name || !props.slug || !props.icon) {

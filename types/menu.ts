@@ -25,4 +25,4 @@ interface Result<T> {
 }
 
 // API Result for Menu
-export type FetchMenuResult = Result<MenuCategory[]>;
+export type GetMenuResult = Result<MenuCategory[]>;
