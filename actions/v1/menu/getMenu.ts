@@ -7,8 +7,8 @@ import { GetMenuResult, MenuCategory } from "@/types/menu";
  *
  * @param options - Optional configuration for cache, timeout, and revalidation.
  * @param options.cache - Cache mode for the request (default is 'no-cache').
- * @param options.timeout - Timeout in milliseconds for the request (default is 10000ms).
- * @param options.revalidate - Number of hours after which to revalidate the data (default is 0.5 hour).
+ * @param options.timeout - Timeout in milliseconds for the request (default is 5000ms).
+ * @param options.revalidate - Number of hours after which to revalidate the data (default is 1 hour).
  * @returns {Promise<GetMenuResult>} An object containing either the array of categories or an error message.
  *
  * @example
@@ -27,9 +27,9 @@ export async function getMenu(options?: {
     revalidate?: number; // Number of hours for revalidation
 }): Promise<GetMenuResult> {
     // Set default options for cache, timeout, and revalidation
-    const timeout = options?.timeout || 10000;
+    const timeout = options?.timeout || 5000;
     const cache = options?.cache || "no-cache";
-    const revalidateHours = options?.revalidate || 0.5; // Default revalidation time is 1 hour
+    const revalidateHours = options?.revalidate || 1; // Default revalidation time is 1 hour
     const revalidate =
         cache !== "no-cache" ? revalidateHours * 3600 : undefined; // Set revalidate only if cache is not 'no-cache'
 

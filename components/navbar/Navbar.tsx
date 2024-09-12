@@ -6,7 +6,7 @@ import styles from "./navbar.module.css";
 import Sidebar from "../sidebar/Sidebar";
 import { CafeVandLogo, MenuButton } from "../ui";
 
-const PanelNavbar = () => {
+const Navbar = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
 
     return (
@@ -30,4 +30,4 @@ const PanelNavbar = () => {
     );
 };
 
-export default PanelNavbar;
+export default Navbar;

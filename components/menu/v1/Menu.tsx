@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import styles from "./menu.module.css";
-import { MenuCategoryList, MenuProductList } from ".";
 import { GetMenuResult, MenuCategory } from "@/types/menu";
+import { MenuCategoryList, MenuNavbar, MenuProductList } from ".";
 
 interface MenuProps {
     result: GetMenuResult;
@@ -31,7 +31,12 @@ const Menu = (props: MenuProps) => {
     };
 
     return (
-        <>
+        <section
+            className="transition-all mx-auto bg-bgImage bg-cover bg-center
+                flex flex-col items-center justify-between 
+                min-h-screen max-w-full sm:max-w-sm">
+            <MenuNavbar />
+
             <MenuProductList products={selectedCategory?.products} />
 
             <div className={`${styles.vandMenu} glass`}>
@@ -47,7 +52,7 @@ const Menu = (props: MenuProps) => {
                     />
                 )}
             </div>
-        </>
+        </section>
     );
 };
 

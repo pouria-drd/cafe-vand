@@ -1,5 +1,5 @@
-import { CafeVandLogo } from "../ui";
-import styles from "./navbar.module.css";
+import styles from "./menu.module.css";
+import { CafeVandLogo } from "@/components/ui";
 
 const MenuNavbar = () => {
     return (
