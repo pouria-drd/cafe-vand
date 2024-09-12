@@ -1,7 +1,7 @@
 "use client";
 
-import SidebarLink from "./SidebarLink";
 import { navItems } from "@/constants";
+import SidebarLink from "./SidebarLink";
 import { usePathname } from "next/navigation";
 import { motion, Variants, AnimatePresence } from "framer-motion";
 
@@ -14,10 +14,9 @@ const SidebarLinks = (props: SidebarLinksProps) => {
     const pathName = usePathname();
 
     const container: Variants = {
-        hidden: { opacity: 1, scale: 0 },
+        hidden: { opacity: 1 },
         visible: {
             opacity: 1,
-            scale: 1,
             transition: {
                 delayChildren: 0.2,
                 staggerChildren: 0.15,
@@ -41,11 +40,11 @@ const SidebarLinks = (props: SidebarLinksProps) => {
                                 pathName.startsWith(`${item.path}/`));
                         return (
                             <SidebarLink
-                                onClick={props.onClick}
                                 key={item.path}
                                 path={item.path}
                                 name={item.name}
                                 isActive={isActive}
+                                onClick={props.onClick}
                             />
                         );
                     })}

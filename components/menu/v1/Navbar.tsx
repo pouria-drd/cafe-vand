@@ -1,7 +1,7 @@
 import styles from "./menu.module.css";
 import { CafeVandLogo } from "@/components/ui";
 
-const MenuNavbar = () => {
+const Navbar = () => {
     return (
         <nav className={`${styles.vandMenuNavbar} glass`}>
             <CafeVandLogo />
@@ -9,4 +9,4 @@ const MenuNavbar = () => {
     );
 };
 
-export default MenuNavbar;
+export default Navbar;

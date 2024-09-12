@@ -1,6 +1,6 @@
 export { default as Menu } from "./Menu";
-export { default as MenuNavbar } from "./MenuNavbar";
-export { default as MenuProductList } from "./MenuProductList";
-export { default as MenuProductCard } from "./MenuProductCard";
-export { default as MenuCategoryCard } from "./MenuCategoryCard";
-export { default as MenuCategoryList } from "./MenuCategoryList";
+export { default as Navbar } from "./Navbar";
+export { default as ProductList } from "./ProductList";
+export { default as ProductCard } from "./ProductCard";
+export { default as CategoryCard } from "./CategoryCard";
+export { default as CategoryList } from "./CategoryList";

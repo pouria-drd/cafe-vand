@@ -42,10 +42,10 @@ const Sidebar = (props: SidebarProps) => {
         <AnimatePresence>
             {props.isOpen && (
                 <motion.aside
-                    variants={sidebarVariants}
+                    exit="exit"
                     initial="hidden"
                     animate="visible"
-                    exit="exit"
+                    variants={sidebarVariants}
                     className={`${styles.vandSidebar}`}
                     onClick={(e) => e.stopPropagation()} // Prevent click propagation
                 >
