@@ -17,3 +17,6 @@ export { getProductList } from "./panel/product/getProductList";
 
 // Prices
 export { deletePrice } from "./panel/price/deletePrice";
+
+// Auth
+export { loginUser } from "./auth/loginUser";

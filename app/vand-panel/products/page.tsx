@@ -8,7 +8,7 @@ export default async function ProductsPage() {
     const categories = await getCategoryList({ cache: "force-cache" });
 
     return (
-        <section className="bg-white flex flex-col gap-8 rounded p-4">
+        <div className="bg-white flex flex-col gap-8 rounded p-4">
             <ProductUI apiResult={categories} />
 
             <ProductTable
@@ -17,6 +17,6 @@ export default async function ProductsPage() {
                 products={products?.data}
                 category={categories.data}
             />
-        </section>
+        </div>
     );
 }

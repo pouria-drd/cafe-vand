@@ -1,3 +1,5 @@
+import styles from "./badge.module.css";
+
 interface BadgeProps {
     status: "active" | "inactive" | "pending" | "suspended";
     lang?: "en" | "fa"; // Adding support for English and Persian
@@ -31,10 +33,7 @@ const Badge = (props: BadgeProps) => {
     const language = props.lang || "fa";
 
     return (
-        <span
-            className={`flex items-center justify-center
-            text-center text-[10px] sm:text-xs px-2 py-1 min-w-12
-            rounded-md font-medium ${statusStyles[props.status]}`}>
+        <span className={`${styles.vandBadge} ${statusStyles[props.status]}`}>
             {statusTranslations[language][props.status]}
         </span>
     );

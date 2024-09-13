@@ -9,7 +9,7 @@ const productSchema = z.object({
     isActive: z.boolean(),
     name: z.string().min(3, "نام محصول الزامی است"),
     slug: z.string().min(3, "شناسه محصول الزامی است"),
-    categoryId: z.string().min(16, "شناسه دسته محصول الزامی است"),
+    categoryId: z.string().uuid("شناسه دسته محصول الزامی است"),
     newPrice: z.union([z.string(), z.number()]).refine(
         (val) => {
             if (typeof val === "string") {

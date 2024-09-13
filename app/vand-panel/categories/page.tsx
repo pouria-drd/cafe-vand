@@ -7,11 +7,11 @@ async function CategoriesPage() {
     const result = await getCategoryList({ cache: "force-cache" });
 
     return (
-        <section className="bg-white flex flex-col gap-8 rounded p-4">
+        <div className="bg-white flex flex-col gap-8 rounded p-4">
             <CategoryUI />
 
             <CategoryTable categories={result?.data} error={result?.error} />
-        </section>
+        </div>
     );
 }
 

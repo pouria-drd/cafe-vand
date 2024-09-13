@@ -18,11 +18,13 @@ export interface MenuCategory extends MenuEntityBase {
     products: MenuProduct[];
 }
 
-// Generic Result Structure
-interface Result<T> {
+/**
+ * Generic API result interface.
+ */
+interface APIResult<T> {
     data?: T;
     error?: string;
 }
 
 // API Result for Menu
-export type GetMenuResult = Result<MenuCategory[]>;
+export type GetMenuResult = APIResult<MenuCategory[]>;
