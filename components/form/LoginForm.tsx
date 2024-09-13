@@ -1,7 +1,7 @@
 "use client";
 
 import { useLoginForm } from "@/hooks/v1";
-import { Button, Form, Input, Message, Title } from "../ui";
+import { Button, Container, Form, Input, Message, Title } from "../ui";
 
 const LoginForm = () => {
     const {
@@ -19,13 +19,14 @@ const LoginForm = () => {
     return (
         <Form
             onSubmit={handleSubmit}
-            className="rounded shadow-lg px-6 py-8 max-w-full sm:max-w-xs">
+            className="justify-center rounded-lg 
+            shadow-lg px-8 py-12 max-w-full sm:max-w-xs">
             {/* Title */}
             <Title>ورود به حساب</Title>
             {error && <Message className="text-center">{error}</Message>}
 
             {/* Username Input */}
-            <div className="flex flex-col items-center justify-center gap-1 w-full">
+            <Container>
                 <Input
                     autoFocus
                     required
@@ -41,10 +42,10 @@ const LoginForm = () => {
                 {formErrors.username && (
                     <Message>{formErrors.username}</Message>
                 )}
-            </div>
+            </Container>
 
             {/* password Input */}
-            <div className="flex flex-col items-center justify-center gap-1 w-full">
+            <Container>
                 <Input
                     required
                     type="password"
@@ -58,13 +59,13 @@ const LoginForm = () => {
                 {formErrors.password && (
                     <Message>{formErrors.password}</Message>
                 )}
-            </div>
+            </Container>
 
             {/* Submit Button */}
             <Button
                 type="submit"
                 disabled={!isFormValid || pending}
-                className="r2l">
+                className="text-base r2l">
                 {pending ? "لطفا صبر کنید ..." : "ورود"}
             </Button>
         </Form>

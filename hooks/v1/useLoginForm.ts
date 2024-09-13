@@ -19,9 +19,6 @@ export const useLoginForm = () => {
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
 
-    // New state to track if the form has been touched or submitted
-    const [touched, setTouched] = useState<boolean>(false);
-
     // Validate form
     const validateForm = () => {
         const validation = loginSchema.safeParse({
@@ -54,18 +51,12 @@ export const useLoginForm = () => {
 
     // Form validity
     const isFormValid = useMemo(() => {
-        // Validate form only after form has been touched
-        if (touched) {
-            return validateForm();
-        }
-        return true; // If untouched, consider form valid initially
-    }, [username, password, touched]);
+        return validateForm();
+    }, [username, password]);
 
     // Handle form submission
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
-        setTouched(true); // Set touched state when user submits the form
 
         // Validate form before submission
         const isFormValid = validateForm();

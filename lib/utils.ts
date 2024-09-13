@@ -45,7 +45,7 @@ export const slugify = (text: string) => {
         .toString()
         .toLowerCase()
         .replace(/\s+/g, "-")
-        .replace(/[^\w\u0600-\u06FF-]+/g, "") // Handles both English and Persian characters
+        .replace(/[^\w\u0600-]+/g, "") // Handles both English and Persian characters
         .replace(/--+/g, "-")
         .replace(/^-+/, "")
         .replace(/-+$/, "");

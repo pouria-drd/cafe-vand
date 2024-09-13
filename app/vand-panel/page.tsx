@@ -1,10 +1,10 @@
 "use client";
 
-import { Button } from "@/components/ui";
 import { Category } from "@/types/panel";
 import { useEffect, useState } from "react";
 import { getCategoryList } from "@/actions/v1";
 import { AnimatePresence } from "framer-motion";
+import { Button, Message } from "@/components/ui";
 import { CategoryForm, ProductForm } from "@/components/form";
 
 function VandPanel() {
@@ -32,12 +32,11 @@ function VandPanel() {
         <div>
             <div className="bg-white flex flex-col gap-8 rounded w-full p-4">
                 <h1 className="text-xl sm:text-2xl text-right">دسترسی سریع</h1>
-                {error && (
-                    <p className="text-center text-red-500 text-xs r2l">
-                        {error}
-                    </p>
-                )}
+                {error && <Message className="text-center">{error}</Message>}
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                    <Button as="link" href="/">
+                        منو
+                    </Button>
                     <Button onClick={() => setIsProductModalOpen(true)}>
                         محصول جدید
                     </Button>
