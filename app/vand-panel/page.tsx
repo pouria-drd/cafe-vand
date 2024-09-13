@@ -4,6 +4,7 @@ import { Button } from "@/components/ui";
 import { Category } from "@/types/panel";
 import { useEffect, useState } from "react";
 import { getCategoryList } from "@/actions/v1";
+import { AnimatePresence } from "framer-motion";
 import { CategoryForm, ProductForm } from "@/components/form";
 
 function VandPanel() {
@@ -28,7 +29,7 @@ function VandPanel() {
     }, []);
 
     return (
-        <section>
+        <div>
             <div className="bg-white flex flex-col gap-8 rounded w-full p-4">
                 <h1 className="text-xl sm:text-2xl text-right">دسترسی سریع</h1>
                 {error && (
@@ -48,19 +49,24 @@ function VandPanel() {
                 </div>
             </div>
 
-            <ProductForm
-                type="modal"
-                category={categories}
-                isOpen={isProductModalOpen}
-                onClose={() => setIsProductModalOpen(false)}
-            />
-
-            <CategoryForm
-                type="modal"
-                isOpen={isCategoryModalOpen}
-                onClose={() => setIsCategoryModalOpen(false)}
-            />
-        </section>
+            <AnimatePresence>
+                {isProductModalOpen && (
+                    <ProductForm
+                        type="modal"
+                        category={categories}
+                        onClose={() => setIsProductModalOpen(false)}
+                    />
+                )}
+            </AnimatePresence>
+            <AnimatePresence>
+                {isCategoryModalOpen && (
+                    <CategoryForm
+                        type="modal"
+                        onClose={() => setIsCategoryModalOpen(false)}
+                    />
+                )}
+            </AnimatePresence>
+        </div>
     );
 }
 

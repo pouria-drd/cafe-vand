@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui";
 import { Fragment, useState } from "react";
+import { AnimatePresence } from "framer-motion";
 import { CategoryForm } from "@/components/form";
 
 const CategoryUI = () => {
@@ -19,12 +20,14 @@ const CategoryUI = () => {
                     آخرین دسته بندی ها
                 </h1>
             </div>
-
-            <CategoryForm
-                type="modal"
-                isOpen={isOpen}
-                onClose={() => setIsOpen(false)}
-            />
+            <AnimatePresence>
+                {isOpen && (
+                    <CategoryForm
+                        type="modal"
+                        onClose={() => setIsOpen(false)}
+                    />
+                )}
+            </AnimatePresence>
         </Fragment>
     );
 };

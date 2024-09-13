@@ -2,7 +2,7 @@
 
 import { useCategoryForm } from "@/hooks/v1";
 import { CategoryFormProps } from "@/types/panel";
-import { Button, Form, Input, Modal } from "../ui";
+import { Button, Form, Container, Input, Message, Modal } from "../ui";
 
 const CategoryForm = (props: CategoryFormProps) => {
     const {
@@ -13,7 +13,7 @@ const CategoryForm = (props: CategoryFormProps) => {
         pending,
         isActive,
         iconError,
-        formErrors, // Add this line to access field-specific errors
+        formErrors,
         iconPreview,
         isFormValid,
         // functions
@@ -25,159 +25,23 @@ const CategoryForm = (props: CategoryFormProps) => {
         handleFileChange,
     } = useCategoryForm(props);
 
-    if (props.type === "modal")
-        return (
-            <Modal
-                isOpen={props.isOpen}
-                onClose={() => {
-                    resetForm();
-                    props.onClose();
-                }}
-                title={
-                    props.initialData
-                        ? `ویرایش ${props.isOpen && props.initialData.name}`
-                        : "دسته بندی جدید"
-                }>
-                <Form onSubmit={handleSubmit}>
-                    {/* Display server error at the top */}
-                    {error && (
-                        <p className="text-center text-red-500 text-xs r2l">
-                            {error}
-                        </p>
-                    )}
-
-                    {/* Active Checkbox */}
-                    <div className="flex items-center justify-between gap-4 w-full">
-                        <div className="flex items-center gap-2">
-                            <input
-                                id="isActive"
-                                type="checkbox"
-                                name="isActive"
-                                checked={isActive}
-                                className="cursor-pointer size-4"
-                                onChange={(e) => setIsActive(e.target.checked)}
-                            />
-                            <label
-                                className="cursor-pointer"
-                                htmlFor="isActive">
-                                {isActive ? "فعال" : "غیرفعال"}
-                            </label>
-                        </div>
-                        <label className="cursor-pointer" htmlFor="isActive">
-                            وضعیت
-                        </label>
-                    </div>
-
-                    {/* Name Input */}
-                    <div className="flex flex-col items-center justify-center gap-1 w-full">
-                        <Input
-                            autoFocus
-                            required
-                            type="text"
-                            name="name"
-                            value={name}
-                            autoComplete="off"
-                            className="w-full"
-                            onChange={setName}
-                            placeholder="نام دسته"
-                        />
-                        {formErrors.name && (
-                            <p className="absolute text-red-500 text-xs r2l">
-                                {formErrors.name}
-                            </p>
-                        )}
-                    </div>
-
-                    {/* Slug Input */}
-                    <div className="flex flex-col items-center justify-center gap-1 w-full">
-                        <Input
-                            required
-                            type="text"
-                            name="slug"
-                            value={slug}
-                            autoComplete="off"
-                            className="w-full"
-                            placeholder="شناسه"
-                            onChange={(e) => setSlug(e.target.value)}
-                        />
-                        {formErrors.slug && (
-                            <p className="absolute text-red-500 text-xs r2l">
-                                {formErrors.slug}
-                            </p>
-                        )}
-                    </div>
-
-                    {/* Icon File Input */}
-                    <div className="flex flex-col items-center justify-center gap-1 w-full">
-                        <div className="flex flex-col gap-1 w-full">
-                            <label
-                                className="cursor-pointer text-right w-full"
-                                htmlFor="icon">
-                                تصویر
-                            </label>
-                            <Input
-                                id="icon"
-                                type="file"
-                                name="icon"
-                                accept={
-                                    process.env.NEXT_PUBLIC_VALID_FILE_TYPES
-                                }
-                                placeholder="آیکون"
-                                className="cursor-pointer w-full"
-                                onChange={handleFileChange}
-                            />
-                        </div>
-                        {/* Icon Error */}
-                        {iconError && (
-                            <p className="text-red-500 text-xs text-right r2l w-full">
-                                {iconError}
-                            </p>
-                        )}
-                    </div>
-
-                    {/* Icon Preview */}
-                    {iconPreview && (
-                        <div className="w-full">
-                            <img
-                                src={iconPreview}
-                                alt="Preview"
-                                className="size-14 object-cover mx-auto"
-                            />
-                        </div>
-                    )}
-
-                    {/* Submit Button */}
-                    <Button
-                        type="submit"
-                        disabled={!isFormValid || pending}
-                        className="r2l">
-                        {pending
-                            ? "لطفا صبر کنید ..."
-                            : props.initialData
-                            ? "ویرایش"
-                            : "ایجاد"}
-                    </Button>
-                </Form>
-            </Modal>
-        );
-
-    if (props.type === "form")
-        return (
+    return (
+        <Modal
+            onClose={() => {
+                resetForm();
+                props.onClose();
+            }}
+            title={
+                props.initialData
+                    ? `ویرایش ${props.initialData.name}`
+                    : "دسته بندی جدید"
+            }>
             <Form onSubmit={handleSubmit}>
-                {/* Title */}
-                <h1 className="font-bold text-xl sm:text-2xl text-right w-full r2l">
-                    {props.initialData
-                        ? `ویرایش ${props.initialData.name}`
-                        : "دسته بندی جدید"}
-                </h1>
-                {error && (
-                    <p className="text-center text-red-500 text-xs r2l">
-                        {error}
-                    </p>
-                )}
+                {/* Display server error at the top */}
+                {error && <Message className="text-center">{error}</Message>}
 
                 {/* Active Checkbox */}
-                <div className="flex items-center justify-between gap-4 w-full">
+                <Container className="flex-row justify-between gap-4">
                     <div className="flex items-center gap-2">
                         <input
                             id="isActive"
@@ -194,82 +58,68 @@ const CategoryForm = (props: CategoryFormProps) => {
                     <label className="cursor-pointer" htmlFor="isActive">
                         وضعیت
                     </label>
-                </div>
+                </Container>
 
                 {/* Name Input */}
-                <div className="flex flex-col items-center justify-center gap-1 w-full">
+                <Container>
                     <Input
-                        autoFocus
                         required
+                        autoFocus
                         type="text"
                         name="name"
                         value={name}
-                        autoComplete="off"
-                        className="w-full"
                         onChange={setName}
+                        autoComplete="off"
+                        className="w-full r2l"
                         placeholder="نام دسته"
                     />
-                    {formErrors.name && (
-                        <p className="absolute text-red-500 text-xs r2l">
-                            {formErrors.name}
-                        </p>
-                    )}
-                </div>
+                    {formErrors.name && <Message>{formErrors.name}</Message>}
+                </Container>
 
                 {/* Slug Input */}
-                <div className="flex flex-col items-center justify-center gap-1 w-full">
+                <Container>
                     <Input
                         required
                         type="text"
                         name="slug"
                         value={slug}
                         autoComplete="off"
-                        className="w-full"
                         placeholder="شناسه"
+                        className="w-full r2l"
                         onChange={(e) => setSlug(e.target.value)}
                     />
-                    {formErrors.slug && (
-                        <p className="absolute text-red-500 text-xs r2l">
-                            {formErrors.slug}
-                        </p>
-                    )}
-                </div>
+                    {formErrors.slug && <Message>{formErrors.slug}</Message>}
+                </Container>
 
                 {/* Icon File Input */}
-                <div className="flex flex-col items-center justify-center gap-1 w-full">
-                    <div className="flex flex-col gap-1 w-full">
-                        <label
-                            className="cursor-pointer text-right w-full"
-                            htmlFor="icon">
-                            تصویر
-                        </label>
-                        <Input
-                            id="icon"
-                            type="file"
-                            name="icon"
-                            accept={process.env.NEXT_PUBLIC_VALID_FILE_TYPES}
-                            placeholder="آیکون"
-                            className="cursor-pointer w-full"
-                            onChange={handleFileChange}
-                        />
-                    </div>
+                <Container>
+                    <label
+                        className="cursor-pointer text-right w-full"
+                        htmlFor="icon">
+                        تصویر
+                    </label>
+                    <Input
+                        id="icon"
+                        type="file"
+                        name="icon"
+                        placeholder="آیکون"
+                        onChange={handleFileChange}
+                        className="cursor-pointer w-full"
+                        accept={process.env.NEXT_PUBLIC_VALID_FILE_TYPES}
+                    />
                     {/* Icon Error */}
-                    {iconError && (
-                        <p className="text-red-500 text-xs text-right r2l w-full">
-                            {iconError}
-                        </p>
-                    )}
-                </div>
+                    {iconError && <Message>{iconError}</Message>}
+                </Container>
 
                 {/* Icon Preview */}
                 {iconPreview && (
-                    <div className="w-full">
+                    <Container className="bg-gray-50 border-2 border-dashed rounded-lg p-4">
                         <img
                             src={iconPreview}
                             alt="Preview"
-                            className="size-14 object-cover mx-auto"
+                            className="size-20 rounded"
                         />
-                    </div>
+                    </Container>
                 )}
 
                 {/* Submit Button */}
@@ -284,7 +134,8 @@ const CategoryForm = (props: CategoryFormProps) => {
                         : "ایجاد"}
                 </Button>
             </Form>
-        );
+        </Modal>
+    );
 };
 
 export default CategoryForm;

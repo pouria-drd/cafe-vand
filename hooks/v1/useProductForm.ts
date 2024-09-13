@@ -6,10 +6,9 @@ import { ProductFormData, ProductFormProps } from "@/types/panel";
 
 // Zod schema
 const productSchema = z.object({
-    isActive: z.boolean(),
-    name: z.string().min(3, "نام محصول الزامی است"),
-    slug: z.string().min(3, "شناسه محصول الزامی است"),
-    categoryId: z.string().uuid("شناسه دسته محصول الزامی است"),
+    name: z.string().min(3, { message: "نام محصول الزامی است" }),
+    slug: z.string().min(3, { message: "شناسه محصول الزامی است" }),
+    categoryId: z.string().uuid({ message: "شناسه دسته محصول الزامی است" }),
     newPrice: z.union([z.string(), z.number()]).refine(
         (val) => {
             if (typeof val === "string") {
@@ -27,13 +26,15 @@ export const useProductForm = (props: ProductFormProps) => {
     const [pending, setPending] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const [formErrors, setFormErrors] = useState<{
-        [key: string]: string | null;
+        slug: string;
+        name: string;
+        newPrice: string;
+        categoryId: string;
     }>({
-        name: null,
-        slug: null,
-        isActive: null,
-        newPrice: null,
-        categoryId: null,
+        slug: "",
+        name: "",
+        newPrice: "",
+        categoryId: "",
     });
 
     const [name, setName] = useState<string>(
@@ -45,7 +46,7 @@ export const useProductForm = (props: ProductFormProps) => {
     );
 
     const [price, setPrice] = useState<number | string>(
-        props.initialData ? props.initialData.price : 0
+        props.initialData ? props.initialData.price : ""
     );
 
     const [categoryId, setCategoryId] = useState<string>(
@@ -80,35 +81,44 @@ export const useProductForm = (props: ProductFormProps) => {
             name,
             slug,
             newPrice: price,
-            isActive,
             categoryId,
         });
 
         if (!validation.success) {
-            const errors: { [key: string]: string | null } = {};
+            // Clear the current errors
+            const newFormErrors = {
+                name: "",
+                slug: "",
+                newPrice: "",
+                categoryId: "",
+            };
 
-            // Access the ZodFormattedError object
-            const formattedErrors = validation.error.format();
-
-            // Extract and map errors
-            for (const [key, value] of Object.entries(formattedErrors)) {
-                if (Array.isArray(value) && value.length > 0) {
-                    errors[key] = value[0]; // Take the first message
-                } else {
-                    errors[key] = null;
+            // Map over Zod errors and assign them to formErrors
+            validation.error.errors.forEach((error) => {
+                if (error.path[0] === "slug") {
+                    newFormErrors.slug = error.message;
                 }
-            }
+                if (error.path[0] === "name") {
+                    newFormErrors.name = error.message;
+                }
 
-            setFormErrors(errors);
+                if (error.path[0] === "newPrice") {
+                    newFormErrors.newPrice = error.message;
+                }
+                if (error.path[0] === "categoryId") {
+                    newFormErrors.categoryId = error.message;
+                }
+            });
+
+            setFormErrors(newFormErrors); // Set errors into state
             return false;
         }
 
         setFormErrors({
-            name: null,
-            slug: null,
-            newPrice: null,
-            isActive: null,
-            categoryId: null,
+            name: "",
+            slug: "",
+            newPrice: "",
+            categoryId: "",
         });
         return true;
     };
@@ -116,15 +126,13 @@ export const useProductForm = (props: ProductFormProps) => {
     // Form validity
     const isFormValid = useMemo(() => {
         return validateForm();
-    }, [name, slug, price, categoryId, isActive]);
+    }, [name, slug, price, categoryId]);
 
     // Handle form submission
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        if (!isFormValid) {
-            return; // Prevent submission if form is not valid
-        }
+        if (!isFormValid) return;
 
         setPending(true);
 
@@ -136,6 +144,7 @@ export const useProductForm = (props: ProductFormProps) => {
             newPrice: price,
             categoryId: categoryId,
         };
+
         const result = props.initialData
             ? await updateProduct(props.initialData.slug, productData)
             : await createProduct(productData);
@@ -158,7 +167,7 @@ export const useProductForm = (props: ProductFormProps) => {
             setIsActive(props.initialData.isActive);
         } else {
             setName("");
-            setPrice(0);
+            setPrice("");
             setCategoryId("");
             setIsActive(true);
         }
@@ -167,11 +176,10 @@ export const useProductForm = (props: ProductFormProps) => {
         setPending(false);
         setIsNameEdited(false);
         setFormErrors({
-            name: null,
-            slug: null,
-            newPrice: null,
-            categoryId: null,
-            isActive: null,
+            name: "",
+            slug: "",
+            newPrice: "",
+            categoryId: "",
         });
     };
 

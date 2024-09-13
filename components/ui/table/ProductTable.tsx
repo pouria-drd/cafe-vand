@@ -1,14 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { Category, Product } from "@/types/panel";
 import { formatDate } from "@/lib/utils";
+import { Fragment, useState } from "react";
 import { deleteProduct } from "@/actions/v1";
 import { Badge, Table, TableColumn } from "..";
-import { BinIcon, EditIcon, EyeIcon } from "@/components/icons";
-import { Fragment, useState } from "react";
 import { ProductForm } from "@/components/form";
 import { AnimatePresence } from "framer-motion";
+import { Category, Product } from "@/types/panel";
+import { BinIcon, EditIcon, EyeIcon } from "@/components/icons";
 
 interface ProductTableProps {
     error?: string;
@@ -152,7 +152,6 @@ const ProductTable = (props: ProductTableProps) => {
                 {isOpen && selectedProduct && props.category && (
                     <ProductForm
                         type="modal"
-                        isOpen={isOpen}
                         category={props.category}
                         initialData={selectedProduct}
                         onClose={() => {

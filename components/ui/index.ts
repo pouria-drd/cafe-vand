@@ -14,6 +14,8 @@ export { default as Message } from "./message/Message";
 export { default as CafeVandLogo } from "./logo/CafeVandLogo";
 export { default as LoadingSpinner } from "./spinner/LoadingSpinner";
 
+export { default as Container } from "./container/Container";
+
 export { default as Table } from "./table/Table";
 export type { TableColumn } from "./table/Table";
 export { default as PriceTable } from "./table/PriceTable";

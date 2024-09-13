@@ -28,7 +28,7 @@ const LoginForm = () => {
             <div className="flex flex-col items-center justify-center gap-1 w-full">
                 <Input
                     autoFocus
-                    // required
+                    required
                     type="text"
                     name="username"
                     value={username}
@@ -46,7 +46,7 @@ const LoginForm = () => {
             {/* password Input */}
             <div className="flex flex-col items-center justify-center gap-1 w-full">
                 <Input
-                    // required
+                    required
                     type="password"
                     name="password"
                     value={password}

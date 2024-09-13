@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui";
 import { Fragment, useState } from "react";
 import { ProductForm } from "@/components/form";
+import { AnimatePresence } from "framer-motion";
 import { RetrieveCategoryListResult } from "@/types/panel";
 
 interface ProductUIProps {
@@ -26,14 +27,15 @@ const ProductUI = (props: ProductUIProps) => {
                     آخرین محصولات
                 </h1>
             </div>
-            {props.apiResult && props.apiResult.data && (
-                <ProductForm
-                    type="modal"
-                    isOpen={isOpen}
-                    category={props.apiResult.data}
-                    onClose={() => setIsOpen(false)}
-                />
-            )}
+            <AnimatePresence>
+                {isOpen && props.apiResult && props.apiResult.data && (
+                    <ProductForm
+                        type="modal"
+                        category={props.apiResult.data}
+                        onClose={() => setIsOpen(false)}
+                    />
+                )}
+            </AnimatePresence>
         </Fragment>
     );
 };

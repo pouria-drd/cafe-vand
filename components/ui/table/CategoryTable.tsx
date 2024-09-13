@@ -145,7 +145,6 @@ const CategoryTable = (props: CategoryTableProps) => {
                 {isOpen && selectedCategory && (
                     <CategoryForm
                         type="modal"
-                        isOpen={isOpen}
                         initialData={selectedCategory}
                         onClose={() => {
                             setIsOpen(false);

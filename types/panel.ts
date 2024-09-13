@@ -83,7 +83,6 @@ export interface CategoryFormData extends BaseFormData {
  * Base props for modals.
  */
 interface BaseModalProps {
-    isOpen: boolean;
     onClose: () => void;
 }
 
@@ -106,16 +105,12 @@ interface BaseModalFormProps<T> extends BaseModalProps {
 /**
  * Product form props including form and modal variants.
  */
-export type ProductFormProps =
-    | BaseFormProps<Product>
-    | BaseModalFormProps<Product>;
+export type ProductFormProps = BaseModalFormProps<Product>;
 
 /**
  * Category form props including form and modal variants.
  */
-export type CategoryFormProps =
-    | BaseFormProps<Category>
-    | BaseModalFormProps<Category>;
+export type CategoryFormProps = BaseModalFormProps<Category>;
 
 // API Results ----------------------------------------------------------
 

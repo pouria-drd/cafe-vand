@@ -16,8 +16,8 @@ const VALID_FILE_TYPES = (
 
 // Zod schema
 const categorySchema = z.object({
-    name: z.string().min(3, "نام دسته‌بندی الزامی است"),
-    slug: z.string().min(3, "شناسه دسته‌بندی الزامی است"),
+    name: z.string().min(3, { message: "نام دسته‌بندی الزامی است" }),
+    slug: z.string().min(3, { message: "شناسه دسته‌بندی الزامی است" }),
     isActive: z.boolean(),
     icon: z.string().optional(),
 });
@@ -26,13 +26,16 @@ export const useCategoryForm = (props: CategoryFormProps) => {
     const [pending, setPending] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const [formErrors, setFormErrors] = useState<{
-        [key: string]: string | null;
+        slug: string;
+        name: string;
+        icon: string;
     }>({
-        name: null,
-        slug: null,
-        icon: null,
+        slug: "",
+        name: "",
+        icon: "",
     });
-    const [iconError, setIconError] = useState<string | null>(null);
+
+    const [iconError, setIconError] = useState<string | null | undefined>(null);
     const [isNameEdited, setIsNameEdited] = useState<boolean>(false);
 
     // Initialize form states
@@ -102,26 +105,31 @@ export const useCategoryForm = (props: CategoryFormProps) => {
         });
 
         if (!validation.success) {
-            const errors: { [key: string]: string | null } = {};
+            // Clear the current errors
+            const newFormErrors = {
+                name: "",
+                slug: "",
+                icon: "",
+            };
 
-            // Access the ZodFormattedError object
-            const formattedErrors = validation.error.format();
-
-            // Extract and map errors
-            for (const [key, value] of Object.entries(formattedErrors)) {
-                if (Array.isArray(value) && value.length > 0) {
-                    // Assuming each value is a string
-                    errors[key] = value[0]; // Take the first message
-                } else {
-                    errors[key] = null;
+            // Map over Zod errors and assign them to formErrors
+            validation.error.errors.forEach((error) => {
+                if (error.path[0] === "slug") {
+                    newFormErrors.slug = error.message;
                 }
-            }
+                if (error.path[0] === "name") {
+                    newFormErrors.name = error.message;
+                }
+                if (error.path[0] === "icon") {
+                    newFormErrors.icon = error.message;
+                }
+            });
 
-            setFormErrors(errors);
+            setFormErrors(newFormErrors); // Set errors into state
             return false;
         }
 
-        setFormErrors({ name: null, slug: null, icon: null });
+        setFormErrors({ name: "", slug: "", icon: "" });
         return true;
     };
 
@@ -133,6 +141,7 @@ export const useCategoryForm = (props: CategoryFormProps) => {
     // Handle form submission
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
         if (!isFormValid) return;
 
         setPending(true);
@@ -176,7 +185,7 @@ export const useCategoryForm = (props: CategoryFormProps) => {
         setIconError(null);
         setIconPreview(null);
         setIsNameEdited(false);
-        setFormErrors({ name: null, slug: null, icon: null });
+        setFormErrors({ name: "", slug: "", icon: "" });
     };
 
     return {
