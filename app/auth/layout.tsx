@@ -5,12 +5,18 @@ export const metadata: Metadata = {
     description: "Cafe Vand Authentication",
 };
 
-interface VandPanelLayoutProps {
+interface AuthLayoutProps {
     children: React.ReactNode;
 }
 
-function AuthLayout(props: VandPanelLayoutProps) {
-    return <main className="bg-gray-100 p-4">{props.children}</main>;
+function AuthLayout({ children }: AuthLayoutProps) {
+    return (
+        <main
+            className="bg-loginBGMobile md:bg-loginBG bg-cover bg-center transition-all duration-150
+            flex items-center justify-center min-h-screen">
+            {children}
+        </main>
+    );
 }
 
 export default AuthLayout;

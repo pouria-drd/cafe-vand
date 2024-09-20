@@ -9,7 +9,9 @@ const config: Config = {
     theme: {
         extend: {
             backgroundImage: {
-                bgImage: "url('/images/bgImage.jpg')",
+                menuBG: "url('/images/menuBG.jpg')",
+                loginBG: "url('/images/loginBg.jpg')",
+                loginBGMobile: "url('/images/loginBgMobile.png')",
             },
             fontFamily: {
                 vazir: "Vazir",

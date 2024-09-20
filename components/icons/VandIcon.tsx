@@ -1,11 +1,11 @@
 import { IconProps } from ".";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/base";
 
 const VandIcon = (props: IconProps) => {
     return (
         <svg
             className={cn(
-                "size-10 text-vand-primary-main green-glow",
+                "transition-all text-vand-primary-main green-glow size-10 sm:size-11",
                 props.className
             )}
             version="1.0"

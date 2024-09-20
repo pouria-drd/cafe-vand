@@ -1,5 +1,0 @@
-.vandSidebar {
-    @apply bg-white sm:hidden
-    flex flex-col items-center justify-start gap-y-10
-    size-full fixed inset-0 z-50 right-0 px-6 py-10;
-}

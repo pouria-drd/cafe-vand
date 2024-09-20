@@ -1,5 +1,6 @@
 import { IconProps } from ".";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/base";
+
 const EditIcon = (props: IconProps) => {
     return (
         <svg

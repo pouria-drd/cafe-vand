@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/base";
 import { VandIcon } from "@/components/icons";
 
 interface CafeVandLogoProps {

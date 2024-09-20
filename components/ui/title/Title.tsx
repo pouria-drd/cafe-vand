@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/base";
 
 interface TitleProps {
     className?: string;
@@ -7,13 +7,13 @@ interface TitleProps {
 
 const Title = (props: TitleProps) => {
     return (
-        <h1
+        <h3
             className={cn(
-                "font-bold text-xl sm:text-2xl text-center w-full r2l",
+                "transition-all font-bold text-zinc-700 text-xl sm:text-[22px] text-center w-full r2l",
                 props.className
             )}>
             {props.children}
-        </h1>
+        </h3>
     );
 };
 

@@ -1,11 +1,28 @@
-import { LoginForm } from "@/components/form";
+"use client";
 
-const AuthPage = () => {
+import { Fragment, useState } from "react";
+import { LoginForm, VerifyLoginForm } from "@/components/forms/v1/auth";
+
+function AuthPage() {
+    const [otpId, setOtpId] = useState<string>("");
+
+    const handleContinue = (otpId: string) => {
+        setOtpId(otpId);
+    };
+
+    const handleTryAgain = () => {
+        setOtpId("");
+    };
+
     return (
-        <div className="flex items-center justify-center h-screen">
-            <LoginForm />
-        </div>
+        <Fragment>
+            {otpId ? (
+                <VerifyLoginForm otpId={otpId} onTryAgain={handleTryAgain} />
+            ) : (
+                <LoginForm onContinue={handleContinue} />
+            )}
+        </Fragment>
     );
-};
+}
 
 export default AuthPage;

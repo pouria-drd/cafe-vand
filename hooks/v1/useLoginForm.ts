@@ -1,94 +1,55 @@
-import { z } from "zod";
-import { loginUser } from "@/actions/v1";
-import { useMemo, useState } from "react";
-import { LoginUserFormData } from "@/types/auth";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { loginAction } from "@/actions/v1/authentication";
 
-const loginSchema = z.object({
-    username: z.string().min(3, { message: "نام کاربری الزامی است" }),
-    password: z.string().min(1, { message: "رمز عبور الزامی است" }),
-});
-
-export const useLoginForm = () => {
+export default function useLoginForm() {
+    const router = useRouter();
+    const [error, setError] = useState<string>("");
     const [pending, setPending] = useState<boolean>(false);
-    const [error, setError] = useState<string | null>(null);
-    const [formErrors, setFormErrors] = useState<LoginUserFormData>({
-        username: "",
-        password: "",
-    });
+    const [inputError, setInputError] = useState<LoginInputErrors>({});
 
+    const [otpId, setOtpId] = useState<string>("");
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
 
-    // Validate form
-    const validateForm = () => {
-        const validation = loginSchema.safeParse({
-            username,
-            password,
+    const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setError("");
+        setPending(true);
+        setInputError({});
+        const result = await loginAction({
+            data: {
+                username: username,
+                password: password,
+            },
         });
 
-        if (!validation.success) {
-            // Clear the current errors
-            const newFormErrors = { username: "", password: "" };
-
-            // Map over Zod errors and assign them to formErrors
-            validation.error.errors.forEach((error) => {
-                if (error.path[0] === "username") {
-                    newFormErrors.username = error.message;
-                }
-                if (error.path[0] === "password") {
-                    newFormErrors.password = error.message;
-                }
-            });
-
-            setFormErrors(newFormErrors); // Set errors into state
-            return false;
+        if (result.data?.success) {
+            router.push("/dashboard");
         }
 
-        // Clear errors if validation passes
-        setFormErrors({ username: "", password: "" });
-        return true;
-    };
+        if (result.data?.otpId) {
+            setOtpId(result.data.otpId);
+        }
 
-    // Form validity
-    const isFormValid = useMemo(() => {
-        return validateForm();
-    }, [username, password]);
-
-    // Handle form submission
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-
-        // Validate form before submission
-        const isFormValid = validateForm();
-        if (!isFormValid) return;
-
-        setPending(true);
-
-        const loginData: LoginUserFormData = {
-            username,
-            password,
-        };
-
-        const result = await loginUser(loginData);
-
-        setPending(false);
+        if (result.inputError) {
+            setInputError(result.inputError);
+        }
 
         if (result.error) {
             setError(result.error);
-        } else {
-            setError(null);
         }
+        setPending(false);
     };
-
     return {
+        otpId,
         error,
         pending,
         username,
         password,
-        formErrors,
-        isFormValid,
-        setUsername,
+        inputError,
+        handleLogin,
         setPassword,
-        handleSubmit,
+        setUsername,
     };
-};
+}
