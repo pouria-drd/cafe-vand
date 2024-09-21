@@ -43,9 +43,9 @@ const LoginForm = (props: LoginFormProps) => {
                 <Message>برای ادامه باید وارد حساب خود شوید</Message>
             </Container>
 
-            <Message status="error">{error}</Message>
+            {error && <Message status="error">{error}</Message>}
 
-            <Container>
+            <Container className="gap-3">
                 <Input
                     required
                     autoFocus
@@ -67,7 +67,11 @@ const LoginForm = (props: LoginFormProps) => {
                 />
             </Container>
 
-            <Button as="button" type="submit" waiting={pending}>
+            <Button
+                as="button"
+                type="submit"
+                waiting={pending}
+                className="mt-2">
                 ادامه
             </Button>
         </Form>

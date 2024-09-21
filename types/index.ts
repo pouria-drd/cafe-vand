@@ -1,4 +1,4 @@
-// Base types ----------------------------------------------------------------------
+// Models ----------------------------------------------------------------------
 interface Token {
     exp: number;
     iat: number;
@@ -25,7 +25,9 @@ interface APIResponse<TSuccess, TInputError> {
     inputError?: TInputError;
 }
 
-// Login types ---------------------------------------------------------------------
+// Forms -----------------------------------------------------------------------
+
+// login form
 interface LoginFormData {
     username: string;
     password: string;
@@ -40,7 +42,8 @@ interface LoginInputErrors {
     username?: string;
     password?: string;
 }
-// VerifyLogin types ---------------------------------------------------------------
+
+// VerifyLogin form
 interface VerifyLoginFormData {
     otpId: string;
     otpCode: string;

@@ -1,12 +1,7 @@
-"use client";
-
-import { Button } from "@/components/ui";
-
 function AdminPage() {
     return (
-        <div>
-            AdminPage
-            <Button as="logout-button" />
+        <div className="bg-slate-300">
+            <p>AdminPage</p>
         </div>
     );
 }

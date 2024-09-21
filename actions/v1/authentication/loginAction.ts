@@ -3,6 +3,7 @@
 import { cookies } from "next/headers";
 import { APIErrors, getBaseUrl } from "@/utils/base";
 import { validateLoginForm } from "@/libs/v1/zod/auth";
+import { getTokenName, getTokenLifetime } from "@/utils/base";
 
 interface LoginActionProps {
     data: LoginFormData;
@@ -35,6 +36,7 @@ export default async function loginAction(
     const timeoutId = setTimeout(() => controller.abort(), timeout);
 
     try {
+        // Set up url
         const baseUrl = getBaseUrl();
         const url = baseUrl + "authentication/login/";
 
@@ -68,34 +70,23 @@ export default async function loginAction(
             const accessToken = jsonResponse.access;
             const refreshToken = jsonResponse.refresh;
 
-            // Parse environment variables and provide defaults
-            const accessTokenMinutes = parseInt(
-                process.env.ACCESS_TOKEN_AGE || "10",
-                10
-            ); // default 10 minutes
-
-            const refreshTokenHours = parseInt(
-                process.env.REFRESH_TOKEN_AGE || "24",
-                10
-            ); // default 24 hours
-
             cookies().set({
                 path: "/",
                 secure: true,
                 httpOnly: true,
-                name: "access",
                 value: accessToken,
                 sameSite: "strict",
-                maxAge: 60 * accessTokenMinutes, // 10 minutes default
+                name: getTokenName("access"),
+                maxAge: getTokenLifetime("access"),
             });
             cookies().set({
                 path: "/",
                 secure: true,
                 httpOnly: true,
-                name: "refresh",
                 sameSite: "strict",
                 value: refreshToken,
-                maxAge: 60 * 60 * refreshTokenHours, // 1 day default
+                name: getTokenName("refresh"),
+                maxAge: getTokenLifetime("refresh"),
             });
 
             return { data: { success: "ورود به کافه وند انجام شد" } };

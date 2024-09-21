@@ -5,3 +5,4 @@ export { default as formatDate } from "./formatDate";
 export { default as getBaseUrl } from "./getBaseUrl ";
 export { default as getAppVersion } from "./appVersion";
 export { default as convertToBase64 } from "./convertToBase64";
+export { getTokenName, getTokenLifetime } from "./getTokenSetting";

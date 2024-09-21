@@ -17,6 +17,11 @@ export { default as LoadingSpinner } from "./spinner/LoadingSpinner";
 export { default as Input } from "./input/Input";
 export { default as MultiInputCode } from "./input/MultiInputCode";
 
+// user
+export { default as UserCard } from "./user/UserCard";
+export { default as UserProfile } from "./user/UserProfile";
+export { default as ProfileImage } from "./user/ProfileImage";
+
 // export { default as Table } from "./table/Table";
 // export type { TableColumn } from "./table/Table";
 // export { default as PriceTable } from "./table/PriceTable";

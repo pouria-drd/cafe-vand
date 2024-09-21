@@ -1,16 +1,17 @@
-import { getUserFromToken } from "./utils/auth/token";
+import { getTokenName } from "./utils/base";
+import { getSession } from "./actions/v1/session";
 import { NextResponse, type NextRequest } from "next/server";
 
 export async function middleware(request: NextRequest) {
     // Get access cookies
-    const refreshToken = request.cookies.get("refresh")?.value;
+    const refreshToken = request.cookies.get(getTokenName("refresh"))?.value;
 
     // If refreshToken is not set, redirect to unauthorized page
     if (!refreshToken) {
         return NextResponse.redirect(new URL("/unauthorized", request.url));
     }
 
-    const user: User | null = getUserFromToken(refreshToken);
+    const user = await getSession();
 
     if (!user) {
         return NextResponse.redirect(new URL("/unauthorized", request.url));

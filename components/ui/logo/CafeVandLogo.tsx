@@ -13,12 +13,12 @@ const CafeVandLogo = (props: CafeVandLogoProps) => {
             href={props.href || "/"}
             className="flex items-center gap-2 w-fit">
             <span>
-                <VandIcon className="size-10 sm:size-12 transition-all" />
+                <VandIcon className="size-10 sm:size-11 transition-all" />
             </span>
 
             <h1
                 className={cn(
-                    "text-vand-secondary-main text-2xl sm:text-3xl font-bold font-sans transition-all",
+                    "transition-all text-zinc-700 hover:text-zinc-800 text-2xl sm:text-[28px] font-bold font-sans",
                     props.className
                 )}>
                 Cafe Vand

@@ -1,9 +1,10 @@
 "use server";
 
 import { cookies } from "next/headers";
+import { convertTokenToUser } from "../token";
 import { APIErrors, getBaseUrl } from "@/utils/base";
-import { getUserFromToken } from "@/utils/auth/token";
 import { validateVerifyLoginForm } from "@/libs/v1/zod/auth";
+import { getTokenName, getTokenLifetime } from "@/utils/base";
 
 interface verifyLoginActionProps {
     data: VerifyLoginFormData;
@@ -19,7 +20,7 @@ export default async function verifyLoginAction(
     props: verifyLoginActionProps
 ): Promise<APIResponse<VerifyLoginSuccessData, VerifyLoginInputErrors>> {
     // Set default options for timeout
-    const timeout = 5000;
+    const timeout = props.timeout || 5000;
 
     // Validate form fields
     const validatedFields = validateVerifyLoginForm(props.data);
@@ -66,37 +67,26 @@ export default async function verifyLoginAction(
             const accessToken = jsonResponse.access;
             const refreshToken = jsonResponse.refresh;
 
-            // Parse environment variables and provide defaults
-            const accessTokenMinutes = parseInt(
-                process.env.ACCESS_TOKEN_AGE || "10",
-                10
-            ); // default 10 minutes
-
-            const refreshTokenHours = parseInt(
-                process.env.REFRESH_TOKEN_AGE || "24",
-                10
-            ); // default 24 hours
-
             cookies().set({
                 path: "/",
                 secure: true,
                 httpOnly: true,
-                name: "access",
                 value: accessToken,
                 sameSite: "strict",
-                maxAge: 60 * accessTokenMinutes, // 10 minutes default
+                name: getTokenName("access"),
+                maxAge: getTokenLifetime("access"),
             });
             cookies().set({
                 path: "/",
                 secure: true,
                 httpOnly: true,
-                name: "refresh",
                 sameSite: "strict",
                 value: refreshToken,
-                maxAge: 60 * 60 * refreshTokenHours, // 1 day default
+                name: getTokenName("refresh"),
+                maxAge: getTokenLifetime("refresh"),
             });
 
-            const user = getUserFromToken(refreshToken);
+            const user = await convertTokenToUser(refreshToken);
 
             if (!user) {
                 return { error: "خطا در ورود به کافه وند." };

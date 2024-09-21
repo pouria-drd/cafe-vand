@@ -8,7 +8,7 @@ const Container = (props: InputContainerProps) => {
     return (
         <div
             className={cn(
-                "flex flex-col items-center justify-center gap-1 w-full",
+                "flex flex-col items-center justify-center gap-1 truncate w-full max-w-full",
                 props.className
             )}>
             {props.children}

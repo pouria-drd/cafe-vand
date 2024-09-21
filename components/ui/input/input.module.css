@@ -1,7 +1,7 @@
 .vandInput {
     @apply transition-all duration-150 border-none outline outline-1
     focus:outline-none focus:ring-2 focus:ring-vand-primary-main 
-    text-sm placeholder:text-sm rounded-md px-3 py-2 w-full;
+    text-zinc-700 text-sm placeholder:text-sm rounded-md px-3 py-2 w-full;
 }
 
 .vandInputLabel {

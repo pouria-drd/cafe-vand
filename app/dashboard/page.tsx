@@ -1,13 +1,5 @@
-"use client";
-
-import { Button } from "@/components/ui";
-
 function DashboardPage() {
-    return (
-        <div>
-            DashboardPage <Button as="logout-button" />
-        </div>
-    );
+    return <div>DashboardPage</div>;
 }
 
 export default DashboardPage;

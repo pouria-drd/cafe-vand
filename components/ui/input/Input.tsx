@@ -1,8 +1,8 @@
 "use client";
 
+import React from "react";
 import { cn } from "@/utils/base";
 import styles from "./input.module.css";
-import React, { Fragment } from "react";
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
     error?: string;
@@ -14,7 +14,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
     ({ error, label, className, ...restProps }, ref) => {
         return (
-            <Fragment>
+            <div className="flex flex-col gap-1 w-full">
                 {label && (
                     <label className={`${styles.vandInputLabel} r2l`}>
                         {label}
@@ -35,7 +35,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
                         {error}
                     </span>
                 )}
-            </Fragment>
+            </div>
         );
     }
 );

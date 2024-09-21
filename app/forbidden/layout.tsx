@@ -10,7 +10,11 @@ interface ForbiddenLayoutProps {
 }
 
 function ForbiddenLayout({ children }: ForbiddenLayoutProps) {
-    return <main>{children}</main>;
+    return (
+        <main className="bg-gray-100 flex flex-col items-center justify-center min-h-screen p-4">
+            {children}
+        </main>
+    );
 }
 
 export default ForbiddenLayout;
