@@ -14,5 +14,6 @@ export { default as UserIcon } from "./UserIcon";
 export { default as CloseIcon } from "./CloseIcon";
 export { default as LogoutIcon } from "./LogoutIcon";
 export { default as SearchIcon } from "./SearchIcon";
+export { default as UserPlusIcon } from "./UserPlusIcon";
 export { default as VandMiniIcon } from "./VandMiniIcon";
 export { default as ChevronRightIcon } from "./ChevronRightIcon";

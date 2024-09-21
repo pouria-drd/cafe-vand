@@ -12,6 +12,7 @@ export { default as Modal } from "./modal/Modal";
 export { default as Message } from "./message/Message";
 export { default as Container } from "./container/Container";
 export { default as CafeVandLogo } from "./logo/CafeVandLogo";
+export { default as QuickAccess } from "./quick-access/QuickAccess";
 export { default as LoadingSpinner } from "./spinner/LoadingSpinner";
 
 export { default as Input } from "./input/Input";
