@@ -53,13 +53,13 @@ const Sidebar = (props: SidebarProps) => {
             onClick={(e) => e.stopPropagation()} // Prevent click propagation
         >
             <Container>
-                <div className="flex items-center justify-between w-full">
+                <Container className="flex-row justify-between">
                     <CloseButton onClick={props.onClick} />
                     <VandIcon />
-                </div>
+                </Container>
 
                 <LinkList
-                    className="flex flex-col items-center w-full gap-2"
+                    className="flex flex-col items-center w-full gap-2 mt-8"
                     data={
                         props.user.isAdmin
                             ? [...NavLinks, ...AdminNavLinks]
@@ -82,9 +82,9 @@ const Sidebar = (props: SidebarProps) => {
                     }}
                 />
             </Container>
-
-            <UserCard className="shadow-none static" user={props.user} />
-
+            <Container className="flex-1 justify-end">
+                <UserCard className="shadow-none static" user={props.user} />
+            </Container>
             <AppVersion className="right-6" />
         </motion.aside>
     );

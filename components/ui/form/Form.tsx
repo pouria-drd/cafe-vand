@@ -13,7 +13,10 @@ const Form = (props: FormProps) => {
     return (
         <form
             onSubmit={props.onSubmit}
-            className={cn(`${styles.vandForm}`, props.className)}>
+            className={cn(
+                `${styles.vandForm} bg-white glass`,
+                props.className
+            )}>
             {props.children}
         </form>
     );

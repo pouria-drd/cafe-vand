@@ -14,7 +14,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
     ({ error, label, className, ...restProps }, ref) => {
         return (
-            <div className="flex flex-col gap-1 w-full">
+            <div className="flex flex-col gap-1 w-full p-0.5">
                 {label && (
                     <label className={`${styles.vandInputLabel} r2l`}>
                         {label}

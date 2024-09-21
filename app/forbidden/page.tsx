@@ -1,6 +1,17 @@
+"use client";
+
 import Link from "next/link";
+import { useEffect } from "react";
+import { logoutAction } from "@/actions/v1/authentication";
 
 function ForbiddenPage() {
+    useEffect(() => {
+        const logout = async () => {
+            await logoutAction();
+        };
+        logout();
+    }, []);
+
     return (
         <div className="bg-white flex flex-col items-center justify-center gap-4 rounded-lg px-6 py-8">
             <h1 className="text-zinc-700 text-4xl font-bold">403 خطای</h1>

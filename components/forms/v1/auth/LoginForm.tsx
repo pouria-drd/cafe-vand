@@ -36,7 +36,7 @@ const LoginForm = (props: LoginFormProps) => {
     }, [otpId]);
 
     return (
-        <Form onSubmit={handleLogin}>
+        <Form onSubmit={handleLogin} className="bg-white/80">
             <VandIcon />
             <Container className="gap-1">
                 <Title>ورود به کافه وند</Title>

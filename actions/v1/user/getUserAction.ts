@@ -1,7 +1,7 @@
 "use server";
 
-import { getValidToken } from "../token";
-import { getBaseUrl, getTokenLifetime } from "@/utils/base";
+import { getBaseUrl } from "@/utils/base";
+import { getTokenLifetime, getValidToken } from "../token";
 
 /**
  * This action is used to get the user from the refresh token.
@@ -24,7 +24,7 @@ export default async function getUserAction(
         // Send a POST request to login the user with JSON body
         const response = await fetch(url, {
             // cache: "force-cache",
-            next: { revalidate: getTokenLifetime("access") },
+            next: { revalidate: await getTokenLifetime("access") },
             method: "GET",
             headers: {
                 Authorization: `Bearer ${validAccessToken}`,

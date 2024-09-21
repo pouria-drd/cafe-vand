@@ -1,8 +1,9 @@
 "use server";
 
 import { cookies } from "next/headers";
+import { getBaseUrl } from "@/utils/base";
 import { logoutAction } from "../authentication";
-import { getBaseUrl, getTokenLifetime, getTokenName } from "@/utils/base";
+import { getTokenLifetime, getTokenName } from ".";
 
 /**
  * This function retrieves a valid access token from the cookies.
@@ -12,8 +13,8 @@ import { getBaseUrl, getTokenLifetime, getTokenName } from "@/utils/base";
  * @returns The access token or null if the access token is not valid.
  */
 async function getValidToken(timeout: number = 10000): Promise<string | null> {
-    const accessToken = cookies().get(getTokenName("access"))?.value;
-    const refreshToken = cookies().get(getTokenName("refresh"))?.value;
+    const accessToken = cookies().get(await getTokenName("access"))?.value;
+    const refreshToken = cookies().get(await getTokenName("refresh"))?.value;
 
     if (!refreshToken) {
         return null;
@@ -61,8 +62,8 @@ async function getValidToken(timeout: number = 10000): Promise<string | null> {
                 httpOnly: true,
                 sameSite: "strict",
                 value: jsonResponse.access,
-                name: getTokenName("access"),
-                maxAge: getTokenLifetime("access"),
+                name: await getTokenName("access"),
+                maxAge: await getTokenLifetime("access"),
             });
             return jsonResponse.access;
         }

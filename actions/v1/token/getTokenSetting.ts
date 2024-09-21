@@ -1,3 +1,5 @@
+"use server";
+
 /**
  * This function returns the token name based on the token type.
  * It throws an error if the token name is not set in the environment variables.
@@ -5,7 +7,9 @@
  * @returns The token name.
  * @throws An error if the token name is not set in the environment variables.
  */
-export function getTokenName(tokenType: "access" | "refresh") {
+export async function getTokenName(
+    tokenType: "access" | "refresh"
+): Promise<string> {
     if (tokenType === "access") {
         const accessName = process.env.ACCESS_TOKEN_NAME;
         if (!accessName) {
@@ -32,7 +36,9 @@ export function getTokenName(tokenType: "access" | "refresh") {
  * @returns The token lifetime.
  * @throws An error if the token lifetime is not set in the environment variables.
  */
-export function getTokenLifetime(tokenType: "access" | "refresh"): number {
+export async function getTokenLifetime(
+    tokenType: "access" | "refresh"
+): Promise<number> {
     if (tokenType === "access") {
         const accessLifetime = process.env.ACCESS_TOKEN_LIFETIME;
         if (!accessLifetime) {

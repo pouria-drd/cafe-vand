@@ -1,8 +1,7 @@
 "use server";
 
 import { cookies } from "next/headers";
-import { getTokenName } from "@/utils/base";
-import { convertTokenToUser } from "../token";
+import { convertTokenToUser, getTokenName } from "../token";
 
 /**
  * This action is used to get the user from the refresh token.
@@ -11,7 +10,7 @@ import { convertTokenToUser } from "../token";
  */
 export default async function getSession(): Promise<User | null> {
     // const accessToken = cookies().get("access")?.value;
-    const refreshToken = cookies().get(getTokenName("refresh"))?.value;
+    const refreshToken = cookies().get(await getTokenName("refresh"))?.value;
 
     if (!refreshToken) {
         return null;

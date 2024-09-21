@@ -3,8 +3,8 @@
 import { cookies } from "next/headers";
 import { convertTokenToUser } from "../token";
 import { APIErrors, getBaseUrl } from "@/utils/base";
+import { getTokenLifetime, getTokenName } from "../token";
 import { validateVerifyLoginForm } from "@/libs/v1/zod/auth";
-import { getTokenName, getTokenLifetime } from "@/utils/base";
 
 interface verifyLoginActionProps {
     data: VerifyLoginFormData;
@@ -73,8 +73,8 @@ export default async function verifyLoginAction(
                 httpOnly: true,
                 value: accessToken,
                 sameSite: "strict",
-                name: getTokenName("access"),
-                maxAge: getTokenLifetime("access"),
+                name: await getTokenName("access"),
+                maxAge: await getTokenLifetime("access"),
             });
             cookies().set({
                 path: "/",
@@ -82,8 +82,8 @@ export default async function verifyLoginAction(
                 httpOnly: true,
                 sameSite: "strict",
                 value: refreshToken,
-                name: getTokenName("refresh"),
-                maxAge: getTokenLifetime("refresh"),
+                name: await getTokenName("refresh"),
+                maxAge: await getTokenLifetime("refresh"),
             });
 
             const user = await convertTokenToUser(refreshToken);

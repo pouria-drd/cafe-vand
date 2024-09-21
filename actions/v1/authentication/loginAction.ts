@@ -3,7 +3,7 @@
 import { cookies } from "next/headers";
 import { APIErrors, getBaseUrl } from "@/utils/base";
 import { validateLoginForm } from "@/libs/v1/zod/auth";
-import { getTokenName, getTokenLifetime } from "@/utils/base";
+import { getTokenLifetime, getTokenName } from "../token";
 
 interface LoginActionProps {
     data: LoginFormData;
@@ -76,8 +76,8 @@ export default async function loginAction(
                 httpOnly: true,
                 value: accessToken,
                 sameSite: "strict",
-                name: getTokenName("access"),
-                maxAge: getTokenLifetime("access"),
+                name: await getTokenName("access"),
+                maxAge: await getTokenLifetime("access"),
             });
             cookies().set({
                 path: "/",
@@ -85,8 +85,8 @@ export default async function loginAction(
                 httpOnly: true,
                 sameSite: "strict",
                 value: refreshToken,
-                name: getTokenName("refresh"),
-                maxAge: getTokenLifetime("refresh"),
+                name: await getTokenName("refresh"),
+                maxAge: await getTokenLifetime("refresh"),
             });
 
             return { data: { success: "ورود به کافه وند انجام شد" } };
