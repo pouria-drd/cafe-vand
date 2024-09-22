@@ -47,10 +47,9 @@ async function deleteCategoryAction(
             return { error: "invalid-credentials" };
         }
 
-        const jsonResponse = await response.json();
-
         // Handle HTTP error responses
         if (!response.ok) {
+            const jsonResponse = await response.json();
             const errorMsg = await APIErrors(response, jsonResponse);
             if (errorMsg) return { error: errorMsg };
             else return { inputError: jsonResponse };
@@ -62,6 +61,7 @@ async function deleteCategoryAction(
         revalidatePath("/admin");
         revalidatePath("/admin/products");
         revalidatePath("/admin/categories");
+        revalidatePath(`/admin/categories/${slug}`);
 
         return { data: "مورد حذف شد" };
     } catch (error) {
@@ -69,7 +69,7 @@ async function deleteCategoryAction(
         clearTimeout(timeoutId);
 
         // Log error for debugging in development.
-        // console.error(error);
+        // console.error( error);
 
         return { error: "خطای غیرمنتظره‌ در حذف رخ داد!" };
     }

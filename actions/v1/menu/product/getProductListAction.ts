@@ -4,13 +4,13 @@ import { APIErrors, getBaseUrl } from "@/utils/base";
 import { getTokenLifetime, getValidToken } from "../../token";
 
 /**
- * This action is used to get a list of categories.
- * It returns the list of categories or the input errors if the list is not retrieved.
- * @returns The list of categories or the input errors if the list is not retrieved.
+ * This action is used to get a list of products.
+ * It returns the list of products or the input errors if the list is not retrieved.
+ * @returns The list of products or the input errors if the list is not retrieved.
  */
-async function getCategoryListAction(
+async function getProductListAction(
     timeout: number = 10000
-): Promise<APIResponse<Category[], string | "invalid-credentials">> {
+): Promise<APIResponse<Product[], string | "invalid-credentials">> {
     // Get a valid access token
     const validAccessToken = await getValidToken();
 
@@ -25,8 +25,8 @@ async function getCategoryListAction(
     try {
         // Set up url
         const baseUrl = getBaseUrl();
-        const url = baseUrl + "menu/categories/";
-        // Send a GET request to retrieve the categories
+        const url = baseUrl + "menu/products/";
+        // Send a GET request to retrieve the products
         const response = await fetch(url, {
             method: "GET",
             headers: {
@@ -51,7 +51,7 @@ async function getCategoryListAction(
         }
 
         const jsonResponse = await response.json();
-        return { data: jsonResponse as Category[] };
+        return { data: jsonResponse as Product[] };
     } catch (error) {
         // Ensure the timeout is cleared even in case of error
         clearTimeout(timeoutId);
@@ -63,4 +63,4 @@ async function getCategoryListAction(
     }
 }
 
-export default getCategoryListAction;
+export default getProductListAction;

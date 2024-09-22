@@ -4,13 +4,17 @@ import { APIErrors, getBaseUrl } from "@/utils/base";
 import { getTokenLifetime, getValidToken } from "../../token";
 
 /**
- * This action is used to get a list of categories.
- * It returns the list of categories or the input errors if the list is not retrieved.
- * @returns The list of categories or the input errors if the list is not retrieved.
+ * This action is used to get a single category.
+ * It returns the category data and the input errors if the category is not retrieved.
+ * @param slug - The slug of the category to retrieve.
+ * @param revalidate - Whether to revalidate the paths after the category is retrieved.
+ * @returns The category data or the input errors if the category is not retrieved.
  */
-async function getCategoryListAction(
+async function getCategoryAction(
+    slug: string,
+    revalidate: boolean = true,
     timeout: number = 10000
-): Promise<APIResponse<Category[], string | "invalid-credentials">> {
+): Promise<APIResponse<CategoryDetail, string | "invalid-credentials">> {
     // Get a valid access token
     const validAccessToken = await getValidToken();
 
@@ -25,15 +29,17 @@ async function getCategoryListAction(
     try {
         // Set up url
         const baseUrl = getBaseUrl();
-        const url = baseUrl + "menu/categories/";
-        // Send a GET request to retrieve the categories
+        const url = baseUrl + "menu/categories/" + slug + "/";
+        // Send a GET request to retrieve the category
         const response = await fetch(url, {
             method: "GET",
             headers: {
                 Authorization: `Bearer ${validAccessToken}`,
             },
             signal: controller.signal,
-            next: { revalidate: await getTokenLifetime("access") },
+            ...(revalidate && {
+                next: { revalidate: await getTokenLifetime("access") },
+            }),
         });
 
         // Clear the timeout if the request completes on time
@@ -51,7 +57,7 @@ async function getCategoryListAction(
         }
 
         const jsonResponse = await response.json();
-        return { data: jsonResponse as Category[] };
+        return { data: jsonResponse as CategoryDetail };
     } catch (error) {
         // Ensure the timeout is cleared even in case of error
         clearTimeout(timeoutId);
@@ -63,4 +69,4 @@ async function getCategoryListAction(
     }
 }
 
-export default getCategoryListAction;
+export default getCategoryAction;

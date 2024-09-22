@@ -1,11 +1,13 @@
 import { slugify } from "@/utils/base";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import {
     createProductAction,
     updateProductAction,
 } from "@/actions/v1/menu/product";
 
 const useProductForm = (props: ProductFormProps) => {
+    const router = useRouter();
     const [pending, setPending] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const [inputError, setInputError] = useState<ProductInputErrors>({});
@@ -19,7 +21,7 @@ const useProductForm = (props: ProductFormProps) => {
     );
 
     const [price, setPrice] = useState<number | string>(
-        props.initialData ? props.initialData.price : ""
+        props.initialData?.price ? props.initialData.price : ""
     );
 
     const [categoryId, setCategoryId] = useState<string>(
@@ -69,6 +71,11 @@ const useProductForm = (props: ProductFormProps) => {
                 : await createProductAction(productData);
 
             setPending(false);
+
+            if (!result || result.error === "invalid-credentials") {
+                router.push("/unauthorized");
+                return;
+            }
 
             if (result.error) {
                 setError(result.error);

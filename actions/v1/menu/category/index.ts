@@ -1,3 +1,4 @@
+export { default as getCategoryAction } from "./getCategoryAction";
 export { default as createCategoryAction } from "./createCategoryAction";
 export { default as updateCategoryAction } from "./updateCategoryAction";
 export { default as deleteCategoryAction } from "./deleteCategoryAction";

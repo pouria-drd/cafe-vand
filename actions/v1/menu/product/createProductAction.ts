@@ -57,10 +57,9 @@ async function createProductAction(
             return { error: "invalid-credentials" };
         }
 
-        const jsonResponse = await response.json();
-
         // Handle HTTP error responses
         if (!response.ok) {
+            const jsonResponse = await response.json();
             const errorMsg = await APIErrors(response, jsonResponse);
             if (errorMsg) return { error: errorMsg };
             else return { inputError: jsonResponse };
@@ -73,6 +72,7 @@ async function createProductAction(
         revalidatePath("/admin/products");
         revalidatePath("/admin/categories");
 
+        const jsonResponse = await response.json();
         return { data: { product: jsonResponse } };
     } catch (error) {
         // Ensure the timeout is cleared even in case of error
