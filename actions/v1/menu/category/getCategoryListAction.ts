@@ -1,16 +1,16 @@
 "use server";
 
 import { APIErrors, getBaseUrl } from "@/utils/base";
-import { getTokenLifetime, getValidToken } from "../token";
+import { getTokenLifetime, getValidToken } from "../../token";
 
 /**
- * This action is used to get the user from the refresh token.
- * If the refresh token is not present, it will return null.
- * @returns The user object or null if the user is not found.
+ * This action is used to get a list of categories.
+ * It returns the list of categories or the input errors if the list is not retrieved.
+ * @returns The list of categories or the input errors if the list is not retrieved.
  */
-export default async function getUserAction(
+async function getCategoryListAction(
     timeout: number = 10000
-): Promise<APIResponse<User, string | "invalid-credentials">> {
+): Promise<APIResponse<Category[], string | "invalid-credentials">> {
     // Get a valid access token
     const validAccessToken = await getValidToken();
 
@@ -25,10 +25,9 @@ export default async function getUserAction(
     try {
         // Set up url
         const baseUrl = getBaseUrl();
-        const url = baseUrl + "users/me/";
-        // Send a POST request to login the user with JSON body
+        const url = baseUrl + "menu/categories/";
+        // Send a GET request to retrieve the categories
         const response = await fetch(url, {
-            // cache: "force-cache",
             method: "GET",
             headers: {
                 Authorization: `Bearer ${validAccessToken}`,
@@ -40,6 +39,10 @@ export default async function getUserAction(
         // Clear the timeout if the request completes on time
         clearTimeout(timeoutId);
 
+        if (response.status === 401 || response.status === 403) {
+            return { error: "invalid-credentials" };
+        }
+
         const jsonResponse = await response.json();
 
         // Handle HTTP error responses
@@ -47,7 +50,8 @@ export default async function getUserAction(
             const errorMsg = await APIErrors(response, jsonResponse);
             return { error: errorMsg || "An unexpected error occurred" };
         }
-        return { data: jsonResponse as User };
+
+        return { data: jsonResponse as Category[] };
     } catch (error) {
         // Ensure the timeout is cleared even in case of error
         clearTimeout(timeoutId);
@@ -58,3 +62,5 @@ export default async function getUserAction(
         return { error: "An unexpected error occurred" };
     }
 }
+
+export default getCategoryListAction;

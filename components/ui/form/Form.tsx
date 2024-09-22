@@ -14,7 +14,7 @@ const Form = (props: FormProps) => {
         <form
             onSubmit={props.onSubmit}
             className={cn(
-                `${styles.vandForm} bg-white glass`,
+                `${styles.vandForm} bg-white glass px-6 py-8 w-80 max-w-80`,
                 props.className
             )}>
             {props.children}

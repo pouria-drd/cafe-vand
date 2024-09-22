@@ -8,13 +8,28 @@ interface QuickAccessProps {
     className?: string;
     onClick?: () => void;
     children?: React.ReactNode;
-    variant?: "red" | "sky" | "teal" | "blue" | "green" | "purple" | "yellow";
+    variant?:
+        | "red"
+        | "sky"
+        | "teal"
+        | "blue"
+        | "green"
+        | "orange"
+        | "purple"
+        | "yellow";
 }
 
 const QuickAccess = (props: QuickAccessProps) => {
     // Map the variant names to the corresponding classes
     const variantClasses: Record<
-        "red" | "sky" | "teal" | "blue" | "green" | "purple" | "yellow",
+        | "red"
+        | "sky"
+        | "teal"
+        | "blue"
+        | "green"
+        | "orange"
+        | "purple"
+        | "yellow",
         string
     > = {
         red: "bg-red-500",
@@ -22,6 +37,7 @@ const QuickAccess = (props: QuickAccessProps) => {
         teal: "bg-teal-600",
         blue: "bg-blue-600",
         green: "bg-green-700",
+        orange: "bg-orange-500",
         purple: "bg-indigo-500",
         yellow: "bg-yellow-500",
     };

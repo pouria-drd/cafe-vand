@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect } from "react";
-import { useLoginForm } from "@/hooks/v1";
 import { VandIcon } from "@/components/icons";
+import { useLoginForm } from "@/hooks/v1/auth";
 import {
     Button,
     Container,

@@ -1,7 +1,7 @@
 "use client";
 
 import { VandIcon } from "../../../icons";
-import { useVerifyLoginForm } from "@/hooks/v1";
+import { useVerifyLoginForm } from "@/hooks/v1/auth";
 import {
     Button,
     Container,
@@ -27,7 +27,7 @@ const VerifyLoginForm = (props: VerifyLoginFormProps) => {
     } = useVerifyLoginForm(props);
 
     return (
-        <Form onSubmit={handleVerifyLogin}>
+        <Form onSubmit={handleVerifyLogin} className="bg-white/80">
             <VandIcon />
             <Container className="gap-1">
                 <Title>ورود خود را تایید کنید</Title>

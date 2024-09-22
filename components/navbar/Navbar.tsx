@@ -20,11 +20,11 @@ const Navbar = () => {
 
     useEffect(() => {
         const fetchUser = async () => {
-            const user = await getUserAction();
-            if (!user) {
+            const result = await getUserAction();
+            if (result.data) {
+                setUser(result.data);
+            } else if (result.error === "invalid-credentials") {
                 router.push("/unauthorized");
-            } else {
-                setUser(user);
             }
         };
         fetchUser();

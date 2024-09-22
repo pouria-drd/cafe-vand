@@ -10,13 +10,17 @@ export async function middleware(request: NextRequest) {
 
     // If refreshToken is not set, redirect to unauthorized page
     if (!refreshToken) {
-        return NextResponse.redirect(new URL("/unauthorized", request.url));
+        return NextResponse.redirect(new URL("/unauthorized", request.url), {
+            status: 303,
+        });
     }
 
     const user = await getSession();
 
     if (!user) {
-        return NextResponse.redirect(new URL("/unauthorized", request.url));
+        return NextResponse.redirect(new URL("/unauthorized", request.url), {
+            status: 303,
+        });
     }
 
     // Check if the user is trying to access an admin route
@@ -24,7 +28,9 @@ export async function middleware(request: NextRequest) {
     const isAdminRoute = pathname.startsWith("/admin");
 
     if (isAdminRoute && !user.isAdmin) {
-        return NextResponse.redirect(new URL("/forbidden", request.url));
+        return NextResponse.redirect(new URL("/forbidden", request.url), {
+            status: 303,
+        });
     }
 
     // Otherwise, let the request through

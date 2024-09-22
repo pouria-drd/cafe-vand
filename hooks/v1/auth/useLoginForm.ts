@@ -39,6 +39,7 @@ export default function useLoginForm() {
         if (result.error) {
             setError(result.error);
         }
+
         setPending(false);
     };
     return {
