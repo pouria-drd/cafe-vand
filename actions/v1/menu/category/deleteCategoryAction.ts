@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { getValidToken } from "../../token";
 import { APIErrors, getBaseUrl } from "@/utils/base";
 
@@ -54,6 +55,13 @@ async function deleteCategoryAction(
             if (errorMsg) return { error: errorMsg };
             else return { inputError: jsonResponse };
         }
+
+        // Revalidate paths
+        revalidatePath("/");
+        revalidatePath("/menu");
+        revalidatePath("/admin");
+        revalidatePath("/admin/products");
+        revalidatePath("/admin/categories");
 
         return { data: "مورد حذف شد" };
     } catch (error) {

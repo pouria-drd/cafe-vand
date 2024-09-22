@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { getValidToken } from "../../token";
 import { APIErrors, getBaseUrl } from "@/utils/base";
 import { validateCategoryForm } from "@/libs/v1/zod/menu";
@@ -64,6 +65,13 @@ async function createCategoryAction(
             if (errorMsg) return { error: errorMsg };
             else return { inputError: jsonResponse };
         }
+
+        // Revalidate paths
+        revalidatePath("/");
+        revalidatePath("/menu");
+        revalidatePath("/admin");
+        revalidatePath("/admin/products");
+        revalidatePath("/admin/categories");
 
         return { data: { category: jsonResponse } };
     } catch (error) {
