@@ -17,6 +17,18 @@
     @apply bg-gray-400;
 }
 
+.vand-green-scroll::-webkit-scrollbar {
+    @apply bg-vand-primary-4 w-1.5 h-1.5;
+}
+
+.vand-green-scroll::-webkit-scrollbar-thumb:horizontal {
+    @apply bg-vand-primary-main;
+}
+
+.vand-green-scroll::-webkit-scrollbar-thumb:vertical {
+    @apply bg-vand-primary-main;
+}
+
 * {
     scroll-behavior: smooth;
     @apply font-vazir;

@@ -3,12 +3,7 @@
 import Link from "next/link";
 import { cn } from "@/utils/base";
 import { LoadingSpinner } from "..";
-import {
-    ReactNode,
-    ButtonHTMLAttributes,
-    AnchorHTMLAttributes,
-    useState,
-} from "react";
+import { ReactNode, ButtonHTMLAttributes, AnchorHTMLAttributes } from "react";
 
 // Define button props when 'as' is 'button'
 interface AsButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {

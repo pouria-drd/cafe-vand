@@ -1,13 +1,13 @@
 const baseAdminPath = "/admin";
 
-export const NavLinks = [
+export const UserNavLinks: NavLink[] = [
     {
         name: "داشبورد",
         path: "/dashboard",
     },
 ];
 
-export const AdminNavLinks = [
+export const AdminNavLinks: NavLink[] = [
     {
         name: "خانه",
         path: baseAdminPath,

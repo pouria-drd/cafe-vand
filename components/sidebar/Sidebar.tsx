@@ -4,7 +4,7 @@ import styles from "./sidebar.module.css";
 import LinkList from "../navbar/LinkList";
 import { usePathname } from "next/navigation";
 import { motion, Variants } from "framer-motion";
-import { AdminNavLinks, NavLinks } from "@/constants/routes";
+import { AdminNavLinks, UserNavLinks } from "@/constants/routes";
 import { AppVersion, CloseButton, Container, UserCard } from "../ui";
 
 interface SidebarProps {
@@ -62,8 +62,8 @@ const Sidebar = (props: SidebarProps) => {
                     className="flex flex-col items-center w-full gap-2 mt-8"
                     data={
                         props.user.isAdmin
-                            ? [...NavLinks, ...AdminNavLinks]
-                            : NavLinks
+                            ? [...UserNavLinks, ...AdminNavLinks]
+                            : UserNavLinks
                     }
                     renderItem={(link, index) => {
                         const isActive =

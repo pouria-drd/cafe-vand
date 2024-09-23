@@ -9,7 +9,7 @@ import { AnimatePresence } from "framer-motion";
 import { getUserAction } from "@/actions/v1/user";
 import { Fragment, useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import { AdminNavLinks, NavLinks } from "@/constants/routes";
+import { AdminNavLinks, UserNavLinks } from "@/constants/routes";
 import { CafeVandLogo, Container, MenuButton, UserProfile } from "../ui";
 
 const Navbar = () => {
@@ -40,8 +40,8 @@ const Navbar = () => {
                         className="flex-row-reverse"
                         data={
                             user?.isAdmin
-                                ? [...NavLinks, ...AdminNavLinks]
-                                : NavLinks
+                                ? [...UserNavLinks, ...AdminNavLinks]
+                                : UserNavLinks
                         }
                         renderItem={(link, index) => {
                             const isActive =
