@@ -5,7 +5,7 @@ import Navbar from "./Navbar";
 import { useState } from "react";
 import { Products } from "../product";
 import { Categories } from "../category";
-import { InstagramIcon, PhoneIcon, WebIcon } from "@/components/icons";
+import { InstagramIcon, PhoneIcon } from "@/components/icons";
 
 interface MenuProps {
     result: APIResponse<CategoryDetail[], string>;
@@ -29,37 +29,27 @@ const Menu = (props: MenuProps) => {
                 onSelect={onSelect}
                 selectedCategory={selectedCategory}
             />
-            <div className="bg-black/60 glass flex flex-col gap-2 w-full py-2">
+            <div className="flex flex-col gap-px w-full pt-2">
                 <p className="text-white w-full text-center">
                     از بهم ریختگی رویاها تا درآمیختن ایده‌ها
                 </p>
-                <div className="flex items-center justify-between gap-4 px-4 w-fulls">
+                <div className="flex items-center justify-center gap-4 px-4 w-fulls">
                     <Link
-                        className="text-vand-primary-main flex items-center gap-2 w-fit"
-                        href="/"
-                        target="_blank">
-                        <span className="bg-vand-primary-main text-white rounded-md p-1">
-                            <WebIcon className="size-4" />
-                        </span>
-
-                        <span>cafevand.ir</span>
-                    </Link>
-                    <Link
-                        className="text-vand-primary-main flex items-center gap-2 w-fit"
+                        className="text-white flex items-center gap-2 w-fit"
                         href={
                             "https://www.instagram.com/cafevand.ir?igsh=NmdkbTJ6cXd1dWlw"
                         }
                         target="_blank">
-                        <span className="bg-vand-primary-main text-white rounded-md p-1">
-                            <InstagramIcon className="size-4" />
+                        <span className=" text-white rounded-md p-1">
+                            <InstagramIcon className="size-5" />
                         </span>
 
                         <span>cafevand.ir</span>
                     </Link>
                     <Link
-                        className="text-vand-primary-main flex items-center gap-2 w-fit"
+                        className="text-white flex items-center gap-2 w-fit"
                         href="tel:02136260926">
-                        <span className="bg-vand-primary-main text-white rounded-md p-1">
+                        <span className="text-white rounded-md p-1">
                             <PhoneIcon className="size-4" />
                         </span>
                         <span>021-36260926</span>

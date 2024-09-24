@@ -13,7 +13,7 @@ const Categories = (props: CategoriesProps) => {
     const categories = props.categories || [];
 
     return (
-        <div className="bg-black/25 flex items-center px-3 min-h-24">
+        <div className="bg-black/25 flex items-center px-3 min-h-24 pb-8 rounded-b-[30px]">
             {categories.length === 0 ? (
                 <Message status="warning">موردی برای نمایش وجود ندارد</Message>
             ) : (
